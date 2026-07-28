@@ -1,0 +1,8 @@
+<Solution>
+  <Project Path="Nms.Api/Nms.Api.csproj" />
+  <Project Path="Nms.Application/Nms.Application.csproj" />
+  <Project Path="Nms.Domain/Nms.Domain.csproj" />
+  <Project Path="Nms.Infrastructure/Nms.Infrastructure.csproj" />
+  <Project Path="Nms.IntegrationTests/Nms.IntegrationTests.csproj" />
+  <Project Path="Nms.UnitTests/Nms.UnitTests.csproj" />
+</Solution>
