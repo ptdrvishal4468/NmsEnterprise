@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿namespace Nms.Domain.Common;
 
-namespace Nms.Domain.Common
+/// <summary>
+/// Contract enforced on all multi-tenant entities to guarantee logical data isolation.
+/// </summary>
+public interface IMustHaveTenant
 {
-    internal class IMustHaveTenant
-    {
-    }
+    public Guid TenantId { get; set; }
 }

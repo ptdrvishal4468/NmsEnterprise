@@ -1,10 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿namespace Nms.Domain.Enums;
 
-namespace Nms.Domain.Enums
+public enum DeviceType
 {
-    internal class DeviceType
-    {
-    }
+    Unknown = 0,
+    Router = 1,
+    Switch = 2,
+    Firewall = 3,
+    WirelessController = 4,
+    AccessPoint = 5,
+    LinuxServer = 6,
+    WindowsServer = 7,
+    StorageDevice = 8,
+    IotDevice = 9,
+    Printer = 10
 }

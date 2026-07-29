@@ -12,11 +12,13 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="7.0.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Nms.Application\Nms.Application.csproj" />
     <ProjectReference Include="..\Nms.Infrastructure\Nms.Infrastructure.csproj" />
+    <ProjectReference Include="..\Nms.Domain\Nms.Domain.csproj" />
   </ItemGroup>
 
 </Project>

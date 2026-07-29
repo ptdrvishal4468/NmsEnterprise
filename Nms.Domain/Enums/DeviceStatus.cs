@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿namespace Nms.Domain.Enums;
 
-namespace Nms.Domain.Enums
+public enum DeviceStatus
 {
-    internal class DeviceStatus
-    {
-    }
+    Unknown = 0,
+    Online = 1,
+    Offline = 2,
+    Degraded = 3,
+    Unreachable = 4
 }

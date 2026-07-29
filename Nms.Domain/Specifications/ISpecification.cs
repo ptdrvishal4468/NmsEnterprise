@@ -1,10 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Linq.Expressions;
 
-namespace Nms.Domain.Specifications
+namespace Nms.Domain.Specifications;
+
+/// <summary>
+/// Specification interface defining query criteria, projections, and ordering logic.
+/// </summary>
+public interface ISpecification<T>
 {
-    internal class ISpecification
-    {
-    }
+    Expression<Func<T, bool>>? Criteria { get; }
+    List<Expression<Func<T, object>>> Includes { get; }
+    Expression<Func<T, object>>? OrderBy { get; }
+    Expression<Func<T, object>>? OrderByDescending { get; }
+    int Take { get; }
+    int Skip { get; }
+    bool IsPagingEnabled { get; }
 }

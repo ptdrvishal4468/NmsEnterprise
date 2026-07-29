@@ -1,10 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using Nms.Domain.Entities;
+using Nms.Domain.Enums;
 
-namespace Nms.Domain.Interfaces
+namespace Nms.Domain.Interfaces;
+
+/// <summary>
+/// Dedicated repository contract for complex device aggregate queries.
+/// </summary>
+public interface IDeviceRepository : IGenericRepository<Device, Guid>
 {
-    internal class IDeviceRepository
-    {
-    }
+    Task<Device?> GetByIpAddressAsync(string ipAddress, CancellationToken cancellationToken = default);
+    Task<IReadOnlyList<Device>> GetDevicesByStatusAsync(DeviceStatus status, CancellationToken cancellationToken = default);
+    Task<IReadOnlyList<Device>> GetActiveDevicesForPollingAsync(CancellationToken cancellationToken = default);
+    Task<bool> ExistsByIpAddressAsync(string ipAddress, CancellationToken cancellationToken = default);
 }
