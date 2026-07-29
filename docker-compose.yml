@@ -1,0 +1,38 @@
+
+services:
+  # --------------------------------------------------------------------------
+  # 1. SQL Server Express Container
+  # --------------------------------------------------------------------------
+  nms.database:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: nms_sql_server
+    environment:
+      - ACCEPT_EULA=Y
+      - MSSQL_SA_PASSWORD=YourSecurePass123!
+      - MSSQL_PID=Express
+    ports:
+      - "1433:1433"
+    volumes:
+      - sqlserver_data:/var/opt/mssql/data
+    restart: always
+
+  # --------------------------------------------------------------------------
+  # 2. .NET 10 NMS API Service
+  # --------------------------------------------------------------------------
+  nms.api:
+    image: nms-api:latest
+    container_name: nms_api
+    build:
+      context: .
+      dockerfile: Nms.Api/Dockerfile
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__DefaultConnection=Server=nms.database,1433;Database=NmsEnterpriseDb;User Id=sa;Password=YourSecurePass123!;TrustServerCertificate=True;
+    ports:
+      - "5000:8080"
+    depends_on:
+      - nms.database
+    restart: on-failure
+
+volumes:
+  sqlserver_data:
