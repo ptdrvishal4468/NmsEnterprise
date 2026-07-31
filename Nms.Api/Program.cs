@@ -1,3 +1,4 @@
+using Nms.Api.HostedServices;
 using Nms.Application;
 using Nms.Infrastructure;
 
@@ -6,6 +7,9 @@ var builder = WebApplication.CreateBuilder(args);
 // Bootstrap Application & Infrastructure Layers
 builder.Services.AddApplicationLayer();
 builder.Services.AddInfrastructureLayer(builder.Configuration);
+
+// Register SNMP Polling Hosted Service
+builder.Services.AddHostedService<SnmpPollingBackgroundService>();
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
@@ -24,3 +28,5 @@ app.UseAuthorization();
 app.MapControllers();
 
 await app.RunAsync();
+
+public partial class Program { }
