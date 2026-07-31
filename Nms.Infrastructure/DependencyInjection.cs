@@ -5,7 +5,9 @@ using Nms.Application.Common.Interfaces;
 using Nms.Domain.Interfaces;
 using Nms.Infrastructure.Data;
 using Nms.Infrastructure.Data.Interceptors;
+using Nms.Infrastructure.Data.Repositories;
 using Nms.Infrastructure.Security;
+using Nms.Infrastructure.Telemetry;
 
 namespace Nms.Infrastructure;
 
@@ -18,14 +20,14 @@ public static class DependencyInjection
         // 1. Interceptors
         services.AddScoped<AuditableEntityInterceptor>();
 
-        // 2. DbContext
+        // 2. DbContext - Standard SQL Server Registration
         services.AddDbContext<NmsDbContext>((sp, options) =>
         {
             var interceptor = sp.GetRequiredService<AuditableEntityInterceptor>();
             options.UseSqlServer(
-                configuration.GetConnectionString("DefaultConnection"),
-                b => b.MigrationsAssembly(typeof(NmsDbContext).Assembly.FullName))
-                   .AddInterceptors(interceptor);
+                    configuration.GetConnectionString("DefaultConnection"),
+                    b => b.MigrationsAssembly(typeof(NmsDbContext).Assembly.GetName().Name))
+                .AddInterceptors(interceptor);
         });
 
         // 3. UnitOfWork
@@ -37,6 +39,11 @@ public static class DependencyInjection
         // 5. Security Services
         services.AddSingleton<IPasswordHasher, PasswordHasher>();
         services.AddSingleton<IJwtTokenGenerator, JwtTokenGenerator>();
+
+        // 6. Telemetry Registrations
+        services.AddScoped<ISnmpCollectorService, SnmpCollectorService>();
+        services.AddScoped<ITelemetryEngine, TelemetryEngine>();
+        services.AddScoped<IDeviceMetricRepository, DeviceMetricRepository>();
 
         return services;
     }
