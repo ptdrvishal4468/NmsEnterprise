@@ -10,7 +10,9 @@ public class DeviceMetricRawConfiguration : IEntityTypeConfiguration<DeviceMetri
     {
         builder.ToTable("DeviceMetricsRaw");
 
-        builder.HasKey(m => m.Id);
+        // PK MUST be Non-Clustered so TimestampUtc can hold the Clustered Index
+        builder.HasKey(m => m.Id)
+               .IsClustered(false);
 
         builder.Property(m => m.CpuUtilization)
                .HasPrecision(5, 2)
@@ -26,13 +28,11 @@ public class DeviceMetricRawConfiguration : IEntityTypeConfiguration<DeviceMetri
         builder.Property(m => m.TimestampUtc)
                .IsRequired();
 
-        // Clustered Index on TimestampUtc for fast time-series analytical queries
+        // Clustered Index on TimestampUtc for time-series range queries
         builder.HasIndex(m => m.TimestampUtc)
                .IsClustered(true);
 
-        builder.HasOne<Device>()
-               .WithMany()
-               .HasForeignKey(m => m.DeviceId)
-               .OnDelete(DeleteBehavior.Cascade);
+        // Non-Clustered Index for filtering by Device
+        builder.HasIndex(m => m.DeviceId);
     }
 }

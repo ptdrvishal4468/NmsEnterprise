@@ -6,6 +6,7 @@ services:
   nms.database:
     image: mcr.microsoft.com/mssql/server:2022-latest
     container_name: nms_sql_server
+    user: "0:0" # Grants root privileges to initialize master.mdf on Docker Desktop Windows volumes
     environment:
       - ACCEPT_EULA=Y
       - MSSQL_SA_PASSWORD=YourSecurePass123!
