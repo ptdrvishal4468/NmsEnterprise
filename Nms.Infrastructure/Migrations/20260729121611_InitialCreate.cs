@@ -134,27 +134,28 @@ namespace Nms.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "DeviceMetricsRaw",
-                columns: table => new
-                {
-                    Id = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    DeviceId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    CpuUtilization = table.Column<decimal>(type: "decimal(5,2)", precision: 5, scale: 2, nullable: false),
-                    RamUtilization = table.Column<decimal>(type: "decimal(5,2)", precision: 5, scale: 2, nullable: false),
-                    LatencyMs = table.Column<int>(type: "int", nullable: false),
-                    TimestampUtc = table.Column<DateTime>(type: "datetime2", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_DeviceMetricsRaw", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_DeviceMetricsRaw_Devices_DeviceId",
-                        column: x => x.DeviceId,
-                        principalTable: "Devices",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
+    name: "DeviceMetricsRaw",
+    columns: table => new
+    {
+        Id = table.Column<long>(type: "bigint", nullable: false)
+            .Annotation("SqlServer:Identity", "1, 1"),
+        DeviceId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+        CpuUtilization = table.Column<decimal>(type: "decimal(5,2)", precision: 5, scale: 2, nullable: false),
+        RamUtilization = table.Column<decimal>(type: "decimal(5,2)", precision: 5, scale: 2, nullable: false),
+        LatencyMs = table.Column<int>(type: "int", nullable: false),
+        TimestampUtc = table.Column<DateTime>(type: "datetime2", nullable: false)
+    },
+    constraints: table =>
+    {
+        table.PrimaryKey("PK_DeviceMetricsRaw", x => x.Id)
+             .Annotation("SqlServer:Clustered", false); // <-- Correct EF Core Migration syntax for non-clustered PK
+        table.ForeignKey(
+            name: "FK_DeviceMetricsRaw_Devices_DeviceId",
+            column: x => x.DeviceId,
+            principalTable: "Devices",
+            principalColumn: "Id",
+            onDelete: ReferentialAction.Cascade);
+    });
 
             migrationBuilder.CreateTable(
                 name: "RolePermissions",

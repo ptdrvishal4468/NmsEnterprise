@@ -1,11 +1,12 @@
-﻿using Nms.Application.Common.Interfaces;
+﻿using MediatR;
+using Nms.Application.Common.Interfaces;
 using Nms.Application.Users.Dtos;
 using Nms.Domain.Entities;
 using Nms.Domain.Interfaces;
 
 namespace Nms.Application.Users.Commands.CreateUser;
 
-public class CreateUserCommandHandler
+public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand, CreateUserResponseDto>
 {
     private readonly IUnitOfWork _unitOfWork;
     private readonly IPasswordHasher _passwordHasher;
@@ -16,7 +17,7 @@ public class CreateUserCommandHandler
         _passwordHasher = passwordHasher;
     }
 
-    public async Task<CreateUserResponseDto> HandleAsync(CreateUserCommand command, CancellationToken cancellationToken = default)
+    public async Task<CreateUserResponseDto> Handle(CreateUserCommand command, CancellationToken cancellationToken)
     {
         // Hash raw password securely using BCrypt
         var passwordHash = _passwordHasher.HashPassword(command.Password);
