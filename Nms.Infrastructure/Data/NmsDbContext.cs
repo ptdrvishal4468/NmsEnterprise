@@ -1,5 +1,6 @@
 ﻿using System.Reflection;
 using Microsoft.EntityFrameworkCore;
+using Nms.Application.Common.Interfaces;
 using Nms.Domain.Common;
 using Nms.Domain.Entities;
 
@@ -7,6 +8,8 @@ namespace Nms.Infrastructure.Data;
 
 public class NmsDbContext : DbContext
 {
+    private readonly ITenantContext? _tenantContext;
+
     public DbSet<Tenant> Tenants => Set<Tenant>();
     public DbSet<User> Users => Set<User>();
     public DbSet<Role> Roles => Set<Role>();
@@ -18,7 +21,12 @@ public class NmsDbContext : DbContext
     public DbSet<DeviceMetricRaw> DeviceMetricsRaw => Set<DeviceMetricRaw>();
     public DbSet<AuditLog> AuditLogs => Set<AuditLog>();
 
-    public NmsDbContext(DbContextOptions<NmsDbContext> options) : base(options) { }
+    public NmsDbContext(
+        DbContextOptions<NmsDbContext> options,
+        ITenantContext? tenantContext = null) : base(options)
+    {
+        _tenantContext = tenantContext;
+    }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -26,5 +34,23 @@ public class NmsDbContext : DbContext
 
         // Automatically apply all IEntityTypeConfiguration classes in this assembly
         modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+
+        // Apply Global Multi-Tenant Query Filter on all entities implementing IMustHaveTenant
+        foreach (var entityType in modelBuilder.Model.GetEntityTypes())
+        {
+            if (typeof(IMustHaveTenant).IsAssignableFrom(entityType.ClrType))
+            {
+                var method = typeof(NmsDbContext)
+                    .GetMethod(nameof(ConfigureTenantFilter), BindingFlags.NonPublic | BindingFlags.Instance)?
+                    .MakeGenericMethod(entityType.ClrType);
+
+                method?.Invoke(this, new object[] { modelBuilder });
+            }
+        }
+    }
+
+    private void ConfigureTenantFilter<TEntity>(ModelBuilder modelBuilder) where TEntity : class, IMustHaveTenant
+    {
+        modelBuilder.Entity<TEntity>().HasQueryFilter(e => _tenantContext != null && _tenantContext.IsResolved && e.TenantId == _tenantContext.TenantId);
     }
 }

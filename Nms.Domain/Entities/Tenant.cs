@@ -21,6 +21,14 @@ public class Tenant : BaseEntity<Guid>
         CreatedAtUtc = DateTime.UtcNow;
     }
 
+    public void UpdateName(string newName)
+    {
+        if (string.IsNullOrWhiteSpace(newName))
+            throw new ArgumentException("Tenant name cannot be empty.", nameof(newName));
+
+        Name = newName.Trim();
+    }
+
     public void Deactivate() => IsActive = false;
     public void Activate() => IsActive = true;
 }

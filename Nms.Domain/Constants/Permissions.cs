@@ -36,6 +36,14 @@ public static class Permissions
         public const string Export = "Telemetry.Export";
     }
 
+    public static class Tenants
+    {
+        public const string View = "Tenants.View";
+        public const string Create = "Tenants.Create";
+        public const string Update = "Tenants.Update";
+        public const string Delete = "Tenants.Delete";
+    }
+
     /// <summary>
     /// Helper method to retrieve all predefined permissions for seeding and validation.
     /// </summary>
@@ -46,7 +54,8 @@ public static class Permissions
             Users.View, Users.Create, Users.Update, Users.Delete, Users.ManageRoles,
             Roles.View, Roles.Create, Roles.Update, Roles.Delete, Roles.AssignPermissions,
             Devices.View, Devices.Create, Devices.Update, Devices.Delete, Devices.Control,
-            Telemetry.View, Telemetry.Poll, Telemetry.Export
+            Telemetry.View, Telemetry.Poll, Telemetry.Export,
+            Tenants.View, Tenants.Create, Tenants.Update, Tenants.Delete
         };
     }
 }
