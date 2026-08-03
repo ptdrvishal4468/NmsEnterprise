@@ -25,5 +25,7 @@ public class TenantConfiguration : IEntityTypeConfiguration<Tenant>
         builder.Property(t => t.CreatedAtUtc)
                .IsRequired()
                .HasDefaultValueSql("SYSUTCDATETIME()");
+
+        builder.HasIndex(t => t.IsActive);
     }
 }

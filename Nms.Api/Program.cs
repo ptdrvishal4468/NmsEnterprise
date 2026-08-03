@@ -1,4 +1,5 @@
 using Nms.Api.HostedServices;
+using Nms.Api.Middleware;
 using Nms.Application;
 using Nms.Infrastructure;
 
@@ -23,8 +24,20 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
+if (!app.Environment.IsEnvironment("Testing"))
+{
+    app.UseHttpsRedirection();
+}
+
+// 1. Authentication MUST execute first to extract User Claims from JWT
+app.UseAuthentication();
+
+// 2. TenantResolverMiddleware MUST execute after Authentication so it can extract tenant_id claims
+app.UseMiddleware<TenantResolverMiddleware>();
+
+// 3. Authorization executes after TenantContext is established
 app.UseAuthorization();
+
 app.MapControllers();
 
 await app.RunAsync();

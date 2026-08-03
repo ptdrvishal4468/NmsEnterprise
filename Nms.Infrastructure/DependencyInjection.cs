@@ -9,6 +9,7 @@ using Nms.Infrastructure.Data.Interceptors;
 using Nms.Infrastructure.Data.Repositories;
 using Nms.Infrastructure.Security;
 using Nms.Infrastructure.Telemetry;
+using Nms.Infrastructure.Tenants;
 
 namespace Nms.Infrastructure;
 
@@ -18,6 +19,12 @@ public static class DependencyInjection
         this IServiceCollection services,
         IConfiguration configuration)
     {
+        // 0. HttpContext & Multi-Tenant Core Services
+        services.AddHttpContextAccessor();
+        services.AddScoped<TenantContext>();
+        services.AddScoped<ITenantContext>(sp => sp.GetRequiredService<TenantContext>());
+        services.AddScoped<ITenantResolver, HttpTenantResolver>();
+
         // 1. Interceptors
         services.AddScoped<AuditableEntityInterceptor>();
 
@@ -30,7 +37,6 @@ public static class DependencyInjection
                     sqlOptions =>
                     {
                         sqlOptions.MigrationsAssembly(typeof(NmsDbContext).Assembly.GetName().Name);
-                        // Enables automatic retry handling for transient connection drops
                         sqlOptions.EnableRetryOnFailure(
                             maxRetryCount: 5,
                             maxRetryDelay: TimeSpan.FromSeconds(10),
@@ -39,7 +45,12 @@ public static class DependencyInjection
                 .AddInterceptors(interceptor);
         });
 
-        // 3. UnitOfWork
+        // 3. Repositories & UnitOfWork
+        services.AddScoped(typeof(IGenericRepository<,>), typeof(GenericRepository<,>));
+        services.AddScoped<ITenantRepository, TenantRepository>();
+        services.AddScoped<IDeviceRepository, DeviceRepository>();
+        services.AddScoped<IDeviceMetricRepository, DeviceMetricRepository>();
+        services.AddScoped<IRolePermissionRepository, RolePermissionRepository>();
         services.AddScoped<IUnitOfWork, UnitOfWork>();
 
         // 4. Bind JwtSettings
@@ -54,8 +65,6 @@ public static class DependencyInjection
         // 6. Telemetry Registrations
         services.AddScoped<ISnmpCollectorService, SnmpCollectorService>();
         services.AddScoped<ITelemetryEngine, TelemetryEngine>();
-        services.AddScoped<IDeviceMetricRepository, DeviceMetricRepository>();
-        services.AddScoped<IRolePermissionRepository, RolePermissionRepository>();
 
         return services;
     }
