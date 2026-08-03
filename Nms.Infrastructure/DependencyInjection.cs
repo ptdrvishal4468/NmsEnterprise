@@ -39,7 +39,11 @@ public static class DependencyInjection
                 .AddInterceptors(interceptor);
         });
 
-        // 3. UnitOfWork
+        // 3. Repositories & UnitOfWork
+        services.AddScoped(typeof(IGenericRepository<,>), typeof(GenericRepository<,>));
+        services.AddScoped<IDeviceRepository, DeviceRepository>();
+        services.AddScoped<IDeviceMetricRepository, DeviceMetricRepository>();
+        services.AddScoped<IRolePermissionRepository, RolePermissionRepository>();
         services.AddScoped<IUnitOfWork, UnitOfWork>();
 
         // 4. Bind JwtSettings
@@ -54,8 +58,6 @@ public static class DependencyInjection
         // 6. Telemetry Registrations
         services.AddScoped<ISnmpCollectorService, SnmpCollectorService>();
         services.AddScoped<ITelemetryEngine, TelemetryEngine>();
-        services.AddScoped<IDeviceMetricRepository, DeviceMetricRepository>();
-        services.AddScoped<IRolePermissionRepository, RolePermissionRepository>();
 
         return services;
     }
