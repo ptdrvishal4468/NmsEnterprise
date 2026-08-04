@@ -1,6 +1,13 @@
 ﻿using FluentValidation;
+using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using Nms.Application.Auth.Commands.Login;
+using Nms.Application.Common.Behaviors;
+using Nms.Application.Devices.Commands.CreateDevice;
+using Nms.Application.Devices.Commands.DeleteDevice;
+using Nms.Application.Devices.Commands.UpdateDevice;
+using Nms.Application.Devices.Queries.GetDeviceById;
+using Nms.Application.Devices.Queries.GetDevicesPaged;
 using Nms.Application.Telemetry.Commands.PollDevice;
 using Nms.Application.Telemetry.Commands.ProcessTelemetryData;
 using Nms.Application.Telemetry.Queries.GetDeviceMetrics;
@@ -20,8 +27,12 @@ public static class DependencyInjection
         // Automatic FluentValidation registration
         services.AddValidatorsFromAssembly(assembly);
 
-        // MediatR Registration
-        services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(assembly));
+        // MediatR Registration with Validation Pipeline Behavior
+        services.AddMediatR(cfg =>
+        {
+            cfg.RegisterServicesFromAssembly(assembly);
+            cfg.AddBehavior(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
+        });
 
         // Auth Command Handlers
         services.AddScoped<LoginCommandHandler>();
@@ -31,6 +42,13 @@ public static class DependencyInjection
         services.AddScoped<UpdateUserRolesCommandHandler>();
         services.AddScoped<GetUserByIdQueryHandler>();
         services.AddScoped<GetUsersPagedQueryHandler>();
+
+        // Device Command & Query Handlers
+        services.AddScoped<CreateDeviceCommandHandler>();
+        services.AddScoped<UpdateDeviceCommandHandler>();
+        services.AddScoped<DeleteDeviceCommandHandler>();
+        services.AddScoped<GetDeviceByIdQueryHandler>();
+        services.AddScoped<GetDevicesPagedQueryHandler>();
 
         // Telemetry Command & Query Handlers
         services.AddScoped<PollDeviceCommandHandler>();

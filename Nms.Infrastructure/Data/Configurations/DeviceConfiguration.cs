@@ -27,6 +27,31 @@ public class DeviceConfiguration : IEntityTypeConfiguration<Device>
                .HasMaxLength(45)
                .IsUnicode(false);
 
+        builder.Property(d => d.Hostname)
+               .HasMaxLength(255);
+
+        builder.Property(d => d.Vendor)
+               .HasMaxLength(100);
+
+        builder.Property(d => d.Model)
+               .HasMaxLength(100);
+
+        builder.Property(d => d.SerialNumber)
+               .HasMaxLength(100);
+
+        builder.Property(d => d.FirmwareVersion)
+               .HasMaxLength(100);
+
+        builder.Property(d => d.MacAddress)
+               .HasMaxLength(17)
+               .IsUnicode(false);
+
+        builder.Property(d => d.Site)
+               .HasMaxLength(100);
+
+        builder.Property(d => d.Location)
+               .HasMaxLength(200);
+
         builder.Property(d => d.DeviceType)
                .IsRequired()
                .HasConversion<int>();
@@ -39,11 +64,19 @@ public class DeviceConfiguration : IEntityTypeConfiguration<Device>
                .HasMaxLength(100);
 
         builder.Property(d => d.Status)
-       .IsRequired()
-       .HasConversion<int>()
-       .HasDefaultValue(DeviceStatus.Unknown);
+               .IsRequired()
+               .HasConversion<int>()
+               .HasDefaultValue(DeviceStatus.Unknown);
+
+        // Indexes
+        builder.HasIndex(d => new { d.TenantId, d.IpAddress })
+               .IsUnique();
 
         builder.HasIndex(d => new { d.TenantId, d.Status });
+
+        builder.HasIndex(d => new { d.TenantId, d.SerialNumber });
+
+        builder.HasIndex(d => new { d.TenantId, d.DeviceType });
 
         builder.HasOne<Tenant>()
                .WithMany()

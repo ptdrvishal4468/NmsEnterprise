@@ -32,10 +32,13 @@ if (!app.Environment.IsEnvironment("Testing"))
 // 1. Authentication MUST execute first to extract User Claims from JWT
 app.UseAuthentication();
 
-// 2. TenantResolverMiddleware MUST execute after Authentication so it can extract tenant_id claims
+// 2. Register Global Exception Handling Middleware AT THE VERY TOP of the pipeline
+app.UseMiddleware<GlobalExceptionHandlingMiddleware>();
+
+// 3. TenantResolverMiddleware MUST execute after Authentication so it can extract tenant_id claims
 app.UseMiddleware<TenantResolverMiddleware>();
 
-// 3. Authorization executes after TenantContext is established
+// 4. Authorization executes after TenantContext is established
 app.UseAuthorization();
 
 app.MapControllers();

@@ -25,7 +25,11 @@ jobs:
 
       - name: Restore Dependencies
         run: dotnet restore NmsEnterprise.slnx
-
+      
+      # [NEW CI/CD ENHANCEMENT] Verify code formatting compliance
+      - name: Verify Code Formatting
+        run: dotnet format NmsEnterprise.slnx --verify-no-changes --verbosity diagnostic
+        
       - name: Build Solution
         run: dotnet build NmsEnterprise.slnx --no-restore --configuration Release
 
