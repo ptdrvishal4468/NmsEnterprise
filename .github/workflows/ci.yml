@@ -25,16 +25,30 @@ jobs:
 
       - name: Restore Dependencies
         run: dotnet restore NmsEnterprise.slnx
-      
+
       # [NEW CI/CD ENHANCEMENT] Verify code formatting compliance
       - name: Verify Code Formatting
         run: dotnet format NmsEnterprise.slnx --verify-no-changes --verbosity diagnostic
-        
+
       - name: Build Solution
         run: dotnet build NmsEnterprise.slnx --no-restore --configuration Release
 
+      # [PHASE 21 ENHANCEMENT] Added Coverlet code coverage collection
       - name: Execute Unit and Integration Tests
-        run: dotnet test NmsEnterprise.slnx --no-build --configuration Release --verbosity normal
+        run: >
+          dotnet test NmsEnterprise.slnx 
+          --no-build 
+          --configuration Release 
+          --verbosity normal 
+          --collect:"XPlat Code Coverage" 
+          --results-directory ./TestResults
+
+      - name: Upload Test Coverage Artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-coverage-results
+          path: ./TestResults
 
   auto-merge-to-develop:
     name: Auto-Merge Feature to Develop

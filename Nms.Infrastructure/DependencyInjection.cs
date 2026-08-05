@@ -4,6 +4,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Nms.Application.Common.Interfaces;
 using Nms.Domain.Interfaces;
+using Nms.Infrastructure.Connectivity;
 using Nms.Infrastructure.Data;
 using Nms.Infrastructure.Data.Interceptors;
 using Nms.Infrastructure.Data.Repositories;
@@ -65,6 +66,12 @@ public static class DependencyInjection
         // 6. Telemetry Registrations
         services.AddScoped<ISnmpCollectorService, SnmpCollectorService>();
         services.AddScoped<ITelemetryEngine, TelemetryEngine>();
+
+        // 7. Connectivity Services & Adapters
+        // Connectivity Services & Adapters
+        services.AddTransient<IConnectionAdapter, IcmpConnectionAdapter>();
+        services.AddTransient<IConnectionAdapter, SnmpConnectionAdapter>();
+        services.AddTransient<IConnectionAdapterFactory, ConnectionAdapterFactory>();
 
         return services;
     }
