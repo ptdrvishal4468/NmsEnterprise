@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Nms.Application.Common.Models;
 using Nms.Application.Devices.Commands.CreateDevice;
 using Nms.Application.Devices.Commands.DeleteDevice;
+using Nms.Application.Devices.Commands.TestDeviceConnectivity;
 using Nms.Application.Devices.Commands.UpdateDevice;
 using Nms.Application.Devices.Dtos;
 using Nms.Application.Devices.Queries.GetDeviceById;
@@ -99,5 +100,26 @@ public class DevicesController : ControllerBase
         }
 
         return NoContent();
+    }
+
+    /// <summary>
+    /// Tests network connectivity to a managed device using a specified protocol.
+    /// </summary>
+    /// <param name="id">Target Device ID</param>
+    /// <param name="protocol">Protocol to test (e.g., Icmp, SnmpV2c)</param>
+    /// <param name="timeoutMs">Timeout in milliseconds (Default: 3000ms)</param>
+    /// <param name="cancellationToken">Cancellation Token</param>
+    /// <returns>Device connection result status and latency</returns>
+    [HttpPost("{id:guid}/test-connection")]
+    [HasPermission(Permissions.Devices.View)]
+    public async Task<ActionResult<DeviceConnectionResultDto>> TestConnection(
+        Guid id,
+        [FromQuery] NetworkProtocol protocol = NetworkProtocol.Icmp,
+        [FromQuery] int timeoutMs = 3000,
+        CancellationToken cancellationToken = default)
+    {
+        var command = new TestDeviceConnectivityCommand(id, protocol, timeoutMs);
+        var result = await _mediator.Send(command, cancellationToken);
+        return Ok(result);
     }
 }
