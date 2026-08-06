@@ -9,6 +9,7 @@ using Nms.Infrastructure.Data;
 using Nms.Infrastructure.Data.Interceptors;
 using Nms.Infrastructure.Data.Repositories;
 using Nms.Infrastructure.Security;
+using Nms.Infrastructure.Snmp;
 using Nms.Infrastructure.Telemetry;
 using Nms.Infrastructure.Tenants;
 
@@ -63,7 +64,12 @@ public static class DependencyInjection
         services.AddSingleton<IAuthorizationPolicyProvider, PermissionAuthorizationPolicyProvider>();
         services.AddScoped<IAuthorizationHandler, PermissionAuthorizationHandler>();
 
-        // 6. Telemetry Registrations
+        // 6. Telemetry & SNMP Infrastructure Registrations
+        services.AddScoped<ISnmpCollectorService, SnmpCollectorService>();
+        services.AddScoped<ITelemetryEngine, TelemetryEngine>();
+
+        services.AddSingleton<IOidCatalog, OidCatalog>();
+        services.AddTransient<ISnmpClientFactory, SnmpClientFactory>();
         services.AddScoped<ISnmpCollectorService, SnmpCollectorService>();
         services.AddScoped<ITelemetryEngine, TelemetryEngine>();
 
