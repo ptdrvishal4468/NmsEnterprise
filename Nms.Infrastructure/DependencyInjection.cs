@@ -53,6 +53,7 @@ public static class DependencyInjection
         services.AddScoped<IDeviceRepository, DeviceRepository>();
         services.AddScoped<IDeviceMetricRepository, DeviceMetricRepository>();
         services.AddScoped<IRolePermissionRepository, RolePermissionRepository>();
+        services.AddScoped<IReachabilityHistoryRepository, ReachabilityHistoryRepository>();
         services.AddScoped<IUnitOfWork, UnitOfWork>();
 
         // 4. Bind JwtSettings
@@ -75,9 +76,11 @@ public static class DependencyInjection
 
         // 7. Connectivity Services & Adapters
         // Connectivity Services & Adapters
+        services.AddTransient<IIcmpPingService, IcmpPingService>();
         services.AddTransient<IConnectionAdapter, IcmpConnectionAdapter>();
         services.AddTransient<IConnectionAdapter, SnmpConnectionAdapter>();
         services.AddTransient<IConnectionAdapterFactory, ConnectionAdapterFactory>();
+
 
         return services;
     }

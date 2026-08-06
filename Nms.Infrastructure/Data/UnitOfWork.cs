@@ -10,11 +10,13 @@ public class UnitOfWork : IUnitOfWork
     private IDbContextTransaction? _transaction;
 
     public IDeviceRepository Devices { get; }
+    public IReachabilityHistoryRepository ReachabilityHistories { get; }
 
     public UnitOfWork(NmsDbContext context)
     {
         _context = context;
         Devices = new DeviceRepository(_context);
+        ReachabilityHistories = new ReachabilityHistoryRepository(_context);
     }
 
     public async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)

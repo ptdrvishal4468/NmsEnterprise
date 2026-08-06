@@ -36,12 +36,14 @@ jobs:
       - name: Build Solution
         run: dotnet build NmsEnterprise.slnx --no-restore --configuration Release
 
+      # [PHASE 23 ENHANCEMENT] Execute Tests with TRX Logger Output
       - name: Execute Unit and Integration Tests
         run: >
           dotnet test NmsEnterprise.slnx 
           --no-build 
           --configuration Release 
           --verbosity normal 
+          --logger "trx;LogFileName=test-results.trx"
           --collect:"XPlat Code Coverage" 
           --results-directory ./TestResults
 
