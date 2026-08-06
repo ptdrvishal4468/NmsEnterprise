@@ -9,8 +9,9 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddApplicationLayer();
 builder.Services.AddInfrastructureLayer(builder.Configuration);
 
-// Register SNMP Polling Hosted Service
+// Register Hosted Services
 builder.Services.AddHostedService<SnmpPollingBackgroundService>();
+builder.Services.AddHostedService<IcmpPollingBackgroundService>();
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
