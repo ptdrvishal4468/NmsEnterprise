@@ -66,6 +66,15 @@ jobs:
             echo "Coverage summary file was not generated for this run." >> $GITHUB_STEP_SUMMARY
           fi
 
+      # [RESTORED] Upload Test Coverage Artifacts
+      - name: Upload Test Coverage Artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-coverage-results
+          path: ./TestResults
+          if-no-files-found: warn
+
   auto-merge-to-develop:
     name: Auto-Merge Feature to Develop
     needs: build-and-test
