@@ -16,7 +16,7 @@ jobs:
       - name: Checkout Source Code
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0 # Fetches full history for seamless merging
+          fetch-depth: 0
 
       - name: Setup .NET 10 SDK
         uses: actions/setup-dotnet@v4
@@ -26,14 +26,16 @@ jobs:
       - name: Restore Dependencies
         run: dotnet restore NmsEnterprise.slnx
 
-      # [NEW CI/CD ENHANCEMENT] Verify code formatting compliance
+      # [PHASE 22 ENHANCEMENT] Automated Security & Vulnerability Dependency Audit
+      - name: Audit Dependency Vulnerabilities
+        run: dotnet list NmsEnterprise.slnx package --vulnerable --include-transitive
+
       - name: Verify Code Formatting
         run: dotnet format NmsEnterprise.slnx --verify-no-changes --verbosity diagnostic
 
       - name: Build Solution
         run: dotnet build NmsEnterprise.slnx --no-restore --configuration Release
 
-      # [PHASE 21 ENHANCEMENT] Added Coverlet code coverage collection
       - name: Execute Unit and Integration Tests
         run: >
           dotnet test NmsEnterprise.slnx 
@@ -42,6 +44,21 @@ jobs:
           --verbosity normal 
           --collect:"XPlat Code Coverage" 
           --results-directory ./TestResults
+
+      # [PHASE 21 ENHANCEMENT] Code Coverage Summary Generation
+      - name: Generate Code Coverage Summary
+        uses: irongut/CodeCoverageSummary@v1.3.0
+        if: always()
+        with:
+          filename: ./TestResults/**/coverage.cobertura.xml
+          badge: true
+          fail_below_min: false
+          format: markdown
+          output: file
+
+      - name: Publish Coverage Summary to GitHub Step Summary
+        if: always()
+        run: cat code-coverage-summary.md >> $GITHUB_STEP_SUMMARY
 
       - name: Upload Test Coverage Artifacts
         if: always()
