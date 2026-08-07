@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Nms.Application.Common.Models;
 using Nms.Application.Devices.Commands.CreateDevice;
 using Nms.Application.Devices.Commands.DeleteDevice;
+using Nms.Application.Devices.Commands.ExecuteSshCommand;
 using Nms.Application.Devices.Commands.TestDeviceConnectivity;
 using Nms.Application.Devices.Commands.UpdateDevice;
 using Nms.Application.Devices.Dtos;
@@ -119,6 +120,23 @@ public class DevicesController : ControllerBase
         CancellationToken cancellationToken = default)
     {
         var command = new TestDeviceConnectivityCommand(id, protocol, timeoutMs);
+        var result = await _mediator.Send(command, cancellationToken);
+        return Ok(result);
+    }
+
+
+    [HttpPost("{id:guid}/ssh/execute")]
+    [HasPermission(Permissions.Devices.View)] // Protected via RBAC pipeline
+    public async Task<ActionResult<SshExecutionResultDto>> ExecuteSshCommand(
+    Guid id,
+    [FromBody] ExecuteSshCommand command,
+    CancellationToken cancellationToken)
+    {
+        if (id != command.DeviceId)
+        {
+            return BadRequest("Device ID in URL route does not match request body parameter.");
+        }
+
         var result = await _mediator.Send(command, cancellationToken);
         return Ok(result);
     }
