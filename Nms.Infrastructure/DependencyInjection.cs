@@ -10,6 +10,7 @@ using Nms.Infrastructure.Data.Interceptors;
 using Nms.Infrastructure.Data.Repositories;
 using Nms.Infrastructure.Security;
 using Nms.Infrastructure.Snmp;
+using Nms.Infrastructure.Ssh;
 using Nms.Infrastructure.Telemetry;
 using Nms.Infrastructure.Tenants;
 
@@ -75,11 +76,12 @@ public static class DependencyInjection
         services.AddScoped<ITelemetryEngine, TelemetryEngine>();
 
         // 7. Connectivity Services & Adapters
-        // Connectivity Services & Adapters
         services.AddTransient<IIcmpPingService, IcmpPingService>();
         services.AddTransient<IConnectionAdapter, IcmpConnectionAdapter>();
         services.AddTransient<IConnectionAdapter, SnmpConnectionAdapter>();
         services.AddTransient<IConnectionAdapterFactory, ConnectionAdapterFactory>();
+        services.AddSingleton<ISshClientFactory, SshClientFactory>();
+        services.AddTransient<IConnectionAdapter, SshConnectionAdapter>();
 
 
         return services;

@@ -33,6 +33,13 @@ jobs:
       - name: Verify Code Formatting
         run: dotnet format NmsEnterprise.slnx --verify-no-changes --verbosity diagnostic
 
+      # [PHASE 24 ENHANCEMENT] Static Code & Security Analysis
+      - name: Install Roslynator CLI
+        run: dotnet tool install -g Roslynator.DotNet.CLI
+
+      - name: Run Static Code & Security Analysis
+        run: roslynator analyze NmsEnterprise.slnx --severity-level warning  
+
       - name: Build Solution
         run: dotnet build NmsEnterprise.slnx --no-restore --configuration Release
 
