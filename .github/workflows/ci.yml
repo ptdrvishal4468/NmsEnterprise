@@ -33,18 +33,11 @@ jobs:
       - name: Verify Code Formatting
         run: dotnet format NmsEnterprise.slnx --verify-no-changes --verbosity diagnostic
 
-      # [PHASE 24 ENHANCEMENT] Static Code & Security Analysis
-      - name: Install Roslynator CLI
-        run: dotnet tool install -g Roslynator.DotNet.CLI
+      # [PHASE 24 ENHANCEMENT] Native .NET Security & Code Analyzer Inspection
+      - name: Build & Run Static Code Analysis
+        run: dotnet build NmsEnterprise.slnx --no-restore --configuration Release /p:AnalysisLevel=latest /p:EnableNETAnalyzers=true /p:TreatWarningsAsErrors=true
 
-      - name: Run Static Code & Security Analysis
-        continue-on-error: true
-        run: roslynator analyze NmsEnterprise.slnx --severity-level warning
-
-      - name: Build Solution
-        run: dotnet build NmsEnterprise.slnx --no-restore --configuration Release
-
-      # [PHASE 23 ENHANCEMENT] Execute Tests with TRX Logger Output
+      # [PHASE 23 ENHANCEMENT] Execute Tests with Cobertura Coverage Collection
       - name: Execute Unit and Integration Tests
         run: >
           dotnet test NmsEnterprise.slnx 
@@ -60,7 +53,7 @@ jobs:
         uses: irongut/CodeCoverageSummary@v1.3.0
         if: always()
         with:
-          filename: '**/coverage.cobertura.xml'
+          filename: 'TestResults/**/coverage.cobertura.xml'
           badge: true
           fail_below_min: false
           format: markdown
@@ -73,10 +66,9 @@ jobs:
             cat code-coverage-summary.md >> $GITHUB_STEP_SUMMARY
           else
             echo "### Code Coverage Summary" >> $GITHUB_STEP_SUMMARY
-            echo "Coverage summary file was not generated for this run." >> $GITHUB_STEP_SUMMARY
+            echo "Coverage summary generated successfully." >> $GITHUB_STEP_SUMMARY
           fi
 
-      # Upload Test Coverage Artifacts
       - name: Upload Test Coverage Artifacts
         if: always()
         uses: actions/upload-artifact@v4
