@@ -30,6 +30,10 @@ jobs:
       - name: Audit Dependency Vulnerabilities
         run: dotnet list NmsEnterprise.slnx package --vulnerable --include-transitive
 
+      # [PHASE 25 ENHANCEMENT] Automated Deprecated Dependency Inspection
+      - name: Audit Deprecated Dependencies
+        run: dotnet list NmsEnterprise.slnx package --deprecated --include-transitive 
+
       - name: Verify Code Formatting
         run: dotnet format NmsEnterprise.slnx --verify-no-changes --verbosity diagnostic
 
