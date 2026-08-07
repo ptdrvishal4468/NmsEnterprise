@@ -21,13 +21,19 @@ public class GetDeviceMetricsQueryHandler : IRequestHandler<GetDeviceMetricsQuer
             request.ToUtc,
             cancellationToken);
 
-        return metrics.Select(m => new DeviceMetricDto(
-            m.Id,
-            m.DeviceId,
-            m.CpuUtilization,
-            m.RamUtilization,
-            m.LatencyMs,
-            m.TimestampUtc
-        ));
+        return metrics.Select(m => new DeviceMetricDto
+        {
+            Id = m.Id,
+            DeviceId = m.DeviceId,
+            CpuUtilization = m.CpuUtilization,
+            RamUtilization = m.RamUtilization,
+            DiskUtilization = m.DiskUtilization,
+            InterfaceUtilization = m.InterfaceUtilization,
+            Temperature = m.Temperature,
+            FanStatus = m.FanStatus,
+            PowerSupplyStatus = m.PowerSupplyStatus,
+            LatencyMs = m.LatencyMs,
+            TimestampUtc = m.TimestampUtc
+        });
     }
 }

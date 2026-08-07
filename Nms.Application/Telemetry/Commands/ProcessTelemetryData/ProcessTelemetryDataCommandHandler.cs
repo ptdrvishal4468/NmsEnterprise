@@ -9,21 +9,25 @@ public class ProcessTelemetryDataCommandHandler : IRequestHandler<ProcessTelemet
 {
     private readonly ITelemetryEngine _telemetryEngine;
     private readonly IDeviceMetricRepository _metricRepository;
+    private readonly ITenantContext _tenantContext;
     private readonly IUnitOfWork _unitOfWork;
 
     public ProcessTelemetryDataCommandHandler(
         ITelemetryEngine telemetryEngine,
         IDeviceMetricRepository metricRepository,
+        ITenantContext tenantContext,
         IUnitOfWork unitOfWork)
     {
         _telemetryEngine = telemetryEngine;
         _metricRepository = metricRepository;
+        _tenantContext = tenantContext;
         _unitOfWork = unitOfWork;
     }
 
     public async Task<bool> Handle(ProcessTelemetryDataCommand request, CancellationToken cancellationToken)
     {
-        IEnumerable<DeviceMetricRaw> metrics = _telemetryEngine.ProcessPollResult(request.PollResult);
+        var tenantId = _tenantContext.TenantId;
+        IEnumerable<DeviceMetricRaw> metrics = _telemetryEngine.ProcessPollResult(tenantId, request.PollResult);
 
         if (!metrics.Any())
         {

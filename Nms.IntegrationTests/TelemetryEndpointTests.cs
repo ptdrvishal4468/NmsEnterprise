@@ -68,8 +68,10 @@ public class TelemetryEndpointTests : IClassFixture<TestWebApplicationFactory>
         // Assert
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
-        var metrics = await response.Content.ReadFromJsonAsync<IEnumerable<DeviceMetricDto>>();
-        Assert.NotNull(metrics);
+        var result = await response.Content.ReadFromJsonAsync<MetricQueryResultDto>();
+        Assert.NotNull(result);
+        Assert.Equal(deviceId, result.DeviceId);
+        Assert.NotNull(result.Metrics);
     }
 }
 

@@ -30,7 +30,7 @@ public class SnmpCollectorService : ISnmpCollectorService
         {
             var ipAddress = IPAddress.Parse(device.IpAddress);
             var endpoint = new IPEndPoint(ipAddress, DefaultSnmpPort);
-            var community = new OctetString("public"); // Default community string
+            var community = new OctetString("public");
 
             var variableList = oids.Select(oid => new Variable(new ObjectIdentifier(oid))).ToList();
 
@@ -49,7 +49,8 @@ public class SnmpCollectorService : ISnmpCollectorService
 
             foreach (var variable in response)
             {
-                result.OidValues[variable.Id.ToString()] = variable.Data.ToString();
+                string key = variable.Id.ToString().TrimStart('.');
+                result.OidValues[key] = variable.Data.ToString();
             }
         }
         catch (Exception ex)

@@ -12,4 +12,12 @@ public interface IOidCatalog
     Oid SystemLocation { get; }
     Oid IfTable { get; }
     Oid IfNumber { get; }
+
+    // Phase 25 Telemetry Additions
+    Oid CiscoCpu5Min { get; }
+    Oid HostMemoryUsed { get; }
+    Oid DiskUtilization { get; }
+    Oid Temperature { get; }
+    Oid FanStatus { get; }
+    Oid PowerSupplyStatus { get; }
 }

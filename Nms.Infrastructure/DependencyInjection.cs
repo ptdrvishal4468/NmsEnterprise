@@ -67,9 +67,6 @@ public static class DependencyInjection
         services.AddScoped<IAuthorizationHandler, PermissionAuthorizationHandler>();
 
         // 6. Telemetry & SNMP Infrastructure Registrations
-        services.AddScoped<ISnmpCollectorService, SnmpCollectorService>();
-        services.AddScoped<ITelemetryEngine, TelemetryEngine>();
-
         services.AddSingleton<IOidCatalog, OidCatalog>();
         services.AddTransient<ISnmpClientFactory, SnmpClientFactory>();
         services.AddScoped<ISnmpCollectorService, SnmpCollectorService>();
@@ -82,7 +79,6 @@ public static class DependencyInjection
         services.AddTransient<IConnectionAdapterFactory, ConnectionAdapterFactory>();
         services.AddSingleton<ISshClientFactory, SshClientFactory>();
         services.AddTransient<IConnectionAdapter, SshConnectionAdapter>();
-
 
         return services;
     }

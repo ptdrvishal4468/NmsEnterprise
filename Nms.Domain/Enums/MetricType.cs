@@ -10,5 +10,7 @@ public enum MetricType
     PacketLoss = 6,
     Latency = 7,
     Uptime = 8,
-    Temperature = 9
+    Temperature = 9,
+    FanStatus = 10,
+    PowerSupplyStatus = 11
 }

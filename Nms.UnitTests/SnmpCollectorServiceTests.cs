@@ -29,7 +29,11 @@ public class SnmpCollectorServiceTests
         IEnumerable<string> oids = new List<string>
         {
             OidConstants.CiscoCpu5Min,
-            OidConstants.HostMemoryUsed
+            OidConstants.HostMemoryUsed,
+            OidConstants.DiskUtilization,
+            OidConstants.CiscoEnvMonTemperature,
+            OidConstants.CiscoEnvMonFanStatus,
+            OidConstants.CiscoEnvMonSupplyStatus
         };
 
         // Act
