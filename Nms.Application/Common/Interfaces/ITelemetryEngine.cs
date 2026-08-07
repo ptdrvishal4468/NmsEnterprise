@@ -5,5 +5,5 @@ namespace Nms.Application.Common.Interfaces;
 
 public interface ITelemetryEngine
 {
-    IEnumerable<DeviceMetricRaw> ProcessPollResult(SnmpPollResult pollResult);
+    IEnumerable<DeviceMetricRaw> ProcessPollResult(Guid tenantId, SnmpPollResult pollResult);
 }

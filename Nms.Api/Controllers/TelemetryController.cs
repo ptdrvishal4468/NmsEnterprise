@@ -24,7 +24,7 @@ public class TelemetryController : ControllerBase
     }
 
     /// <summary>
-    /// Manually triggers an SNMP poll for a given device and OID list.
+    /// Manually triggers an SNMP poll for a given device and optional OID list.
     /// </summary>
     [HttpPost("poll")]
     [HasPermission(Permissions.Telemetry.Poll)]
@@ -36,7 +36,7 @@ public class TelemetryController : ControllerBase
     }
 
     /// <summary>
-    /// Processes and persists raw SNMP poll data into telemetry metrics.
+    /// Processes and persists raw SNMP poll data into normalized telemetry metrics.
     /// </summary>
     [HttpPost("process")]
     [HasPermission(Permissions.Telemetry.Poll)]
@@ -52,7 +52,7 @@ public class TelemetryController : ControllerBase
     /// </summary>
     [HttpGet("devices/{deviceId:guid}/metrics")]
     [HasPermission(Permissions.Telemetry.View)]
-    [ProducesResponseType(typeof(IEnumerable<DeviceMetricDto>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(MetricQueryResultDto), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetDeviceMetrics(
         [FromRoute] Guid deviceId,
         [FromQuery] DateTime fromUtc,
@@ -60,7 +60,16 @@ public class TelemetryController : ControllerBase
         CancellationToken cancellationToken)
     {
         var query = new GetDeviceMetricsQuery(deviceId, fromUtc, toUtc);
-        var metrics = await _mediator.Send(query, cancellationToken);
-        return Ok(metrics);
+        var metrics = (await _mediator.Send(query, cancellationToken)).ToList();
+
+        var response = new MetricQueryResultDto(
+            deviceId,
+            fromUtc,
+            toUtc,
+            metrics.Count,
+            metrics
+        );
+
+        return Ok(response);
     }
 }

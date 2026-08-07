@@ -2,6 +2,8 @@
 
 public record MetricQueryResultDto(
     Guid DeviceId,
-    IEnumerable<DeviceMetricDto> Metrics,
-    int TotalRecords
+    DateTime FromUtc,
+    DateTime ToUtc,
+    int TotalRecords,
+    IEnumerable<DeviceMetricDto> Metrics
 );

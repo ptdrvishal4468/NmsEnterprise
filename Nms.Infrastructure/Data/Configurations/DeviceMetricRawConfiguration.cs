@@ -14,12 +14,36 @@ public class DeviceMetricRawConfiguration : IEntityTypeConfiguration<DeviceMetri
         builder.HasKey(m => m.Id)
                .IsClustered(false);
 
+        builder.Property(m => m.TenantId)
+               .IsRequired();
+
+        builder.Property(m => m.DeviceId)
+               .IsRequired();
+
         builder.Property(m => m.CpuUtilization)
                .HasPrecision(5, 2)
                .IsRequired();
 
         builder.Property(m => m.RamUtilization)
                .HasPrecision(5, 2)
+               .IsRequired();
+
+        builder.Property(m => m.DiskUtilization)
+               .HasPrecision(5, 2)
+               .IsRequired();
+
+        builder.Property(m => m.InterfaceUtilization)
+               .HasPrecision(5, 2)
+               .IsRequired();
+
+        builder.Property(m => m.Temperature)
+               .HasPrecision(5, 2)
+               .IsRequired();
+
+        builder.Property(m => m.FanStatus)
+               .IsRequired();
+
+        builder.Property(m => m.PowerSupplyStatus)
                .IsRequired();
 
         builder.Property(m => m.LatencyMs)
@@ -32,7 +56,7 @@ public class DeviceMetricRawConfiguration : IEntityTypeConfiguration<DeviceMetri
         builder.HasIndex(m => m.TimestampUtc)
                .IsClustered(true);
 
-        // Non-Clustered Index for filtering by Device
-        builder.HasIndex(m => m.DeviceId);
+        // Composite Non-Clustered Index for tenant-isolated device time-series queries
+        builder.HasIndex(m => new { m.TenantId, m.DeviceId, m.TimestampUtc });
     }
 }

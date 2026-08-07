@@ -63,7 +63,7 @@ public class SnmpPollingBackgroundService : BackgroundService
             try
             {
                 // 1. Trigger Poll
-                var pollCommand = new PollDeviceCommand(device, DefaultOids);
+                var pollCommand = new PollDeviceCommand(device.Id, DefaultOids);
                 var pollResult = await mediator.Send(pollCommand, cancellationToken);
 
                 if (pollResult.IsSuccess)
