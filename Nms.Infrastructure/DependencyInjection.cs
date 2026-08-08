@@ -8,6 +8,7 @@ using Nms.Infrastructure.Connectivity;
 using Nms.Infrastructure.Data;
 using Nms.Infrastructure.Data.Interceptors;
 using Nms.Infrastructure.Data.Repositories;
+using Nms.Infrastructure.Polling;
 using Nms.Infrastructure.Security;
 using Nms.Infrastructure.Snmp;
 using Nms.Infrastructure.Ssh;
@@ -52,6 +53,7 @@ public static class DependencyInjection
         services.AddScoped(typeof(IGenericRepository<,>), typeof(GenericRepository<,>));
         services.AddScoped<ITenantRepository, TenantRepository>();
         services.AddScoped<IDeviceRepository, DeviceRepository>();
+        services.AddScoped<IPollProfileRepository, PollProfileRepository>();
         services.AddScoped<IDeviceMetricRepository, DeviceMetricRepository>();
         services.AddScoped<IRolePermissionRepository, RolePermissionRepository>();
         services.AddScoped<IReachabilityHistoryRepository, ReachabilityHistoryRepository>();
@@ -66,11 +68,13 @@ public static class DependencyInjection
         services.AddSingleton<IAuthorizationPolicyProvider, PermissionAuthorizationPolicyProvider>();
         services.AddScoped<IAuthorizationHandler, PermissionAuthorizationHandler>();
 
-        // 6. Telemetry & SNMP Infrastructure Registrations
+        // 6. Telemetry, Polling & SNMP Infrastructure Registrations
         services.AddSingleton<IOidCatalog, OidCatalog>();
         services.AddTransient<ISnmpClientFactory, SnmpClientFactory>();
         services.AddScoped<ISnmpCollectorService, SnmpCollectorService>();
         services.AddScoped<ITelemetryEngine, TelemetryEngine>();
+        services.AddSingleton<IPollingQueue, PollingQueue>();
+        services.AddScoped<IPollScheduler, PollScheduler>();
 
         // 7. Connectivity Services & Adapters
         services.AddTransient<IIcmpPingService, IcmpPingService>();

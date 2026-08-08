@@ -18,9 +18,11 @@ public class NmsDbContext : DbContext
     public DbSet<UserRole> UserRoles => Set<UserRole>();
     public DbSet<RefreshToken> RefreshTokens => Set<RefreshToken>();
     public DbSet<Device> Devices => Set<Device>();
+    public DbSet<PollProfile> PollProfiles => Set<PollProfile>();
     public DbSet<DeviceMetricRaw> DeviceMetricsRaw => Set<DeviceMetricRaw>();
     public DbSet<AuditLog> AuditLogs => Set<AuditLog>();
     public DbSet<DeviceReachabilityHistory> DeviceReachabilityHistories => Set<DeviceReachabilityHistory>();
+
     public NmsDbContext(
         DbContextOptions<NmsDbContext> options,
         ITenantContext? tenantContext = null) : base(options)
