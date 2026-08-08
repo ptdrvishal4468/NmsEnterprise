@@ -25,6 +25,9 @@ public class Device : AuditableEntity<Guid>, IMustHaveTenant
     public DeviceStatus Status { get; private set; } = DeviceStatus.Unknown;
     public DateTime? LastSeenUtc { get; private set; }
 
+    public Guid? PollProfileId { get; private set; }
+    public PollProfile? PollProfile { get; private set; }
+
     // EF Core private constructor
     private Device() { }
 
@@ -114,5 +117,10 @@ public class Device : AuditableEntity<Guid>, IMustHaveTenant
         SnmpV3User = username;
         SnmpV3AuthKeyEncrypted = encryptedAuthKey;
         SnmpV3PrivKeyEncrypted = encryptedPrivKey;
+    }
+
+    public void AssignPollProfile(Guid? pollProfileId)
+    {
+        PollProfileId = pollProfileId;
     }
 }

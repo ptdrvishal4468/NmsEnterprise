@@ -82,5 +82,11 @@ public class DeviceConfiguration : IEntityTypeConfiguration<Device>
                .WithMany()
                .HasForeignKey(d => d.TenantId)
                .OnDelete(DeleteBehavior.Cascade);
+
+        // PollProfile Relationship
+        builder.HasOne(d => d.PollProfile)
+               .WithMany(p => p.Devices)
+               .HasForeignKey(d => d.PollProfileId)
+               .OnDelete(DeleteBehavior.SetNull);
     }
 }
