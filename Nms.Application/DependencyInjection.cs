@@ -8,6 +8,10 @@ using Nms.Application.Devices.Commands.DeleteDevice;
 using Nms.Application.Devices.Commands.UpdateDevice;
 using Nms.Application.Devices.Queries.GetDeviceById;
 using Nms.Application.Devices.Queries.GetDevicesPaged;
+using Nms.Application.Discovery.Commands.ImportDiscoveredDevice;
+using Nms.Application.Discovery.Commands.StartDiscoveryScan;
+using Nms.Application.Discovery.Queries.GetDiscoveryJobById;
+using Nms.Application.Discovery.Services;
 using Nms.Application.Telemetry.Commands.PollDevice;
 using Nms.Application.Telemetry.Commands.ProcessTelemetryData;
 using Nms.Application.Telemetry.Queries.GetDeviceMetrics;
@@ -54,6 +58,13 @@ public static class DependencyInjection
         services.AddScoped<PollDeviceCommandHandler>();
         services.AddScoped<ProcessTelemetryDataCommandHandler>();
         services.AddScoped<GetDeviceMetricsQueryHandler>();
+
+        // Discovery Services & Handlers
+        services.AddScoped<DuplicateDetector>();
+        services.AddScoped<DeviceDiscoveryEngine>();
+        services.AddScoped<StartDiscoveryScanCommandHandler>();
+        services.AddScoped<ImportDiscoveredDeviceCommandHandler>();
+        services.AddScoped<GetDiscoveryJobByIdQueryHandler>();
 
         return services;
     }
