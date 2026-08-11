@@ -58,6 +58,13 @@ public static class Permissions
         public const string Poll = "Interfaces.Poll";
     }
 
+    public static class Health
+    {
+        public const string View = "Health.View";
+        public const string History = "Health.History";
+        public const string Evaluate = "Health.Evaluate";
+    }
+
     /// <summary>
     /// Helper method to retrieve all predefined permissions for seeding and validation.
     /// </summary>
@@ -71,7 +78,8 @@ public static class Permissions
             Telemetry.View, Telemetry.Poll, Telemetry.Export,
             Tenants.View, Tenants.Create, Tenants.Update, Tenants.Delete,
             Discovery.Scan, Discovery.View, Discovery.Import,
-            Interfaces.View, Interfaces.Manage, Interfaces.Poll
+            Interfaces.View, Interfaces.Manage, Interfaces.Poll,
+            Health.View, Health.History, Health.Evaluate
         };
     }
 }
