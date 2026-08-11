@@ -22,6 +22,8 @@ public class NmsDbContext : DbContext
     public DbSet<DeviceMetricRaw> DeviceMetricsRaw => Set<DeviceMetricRaw>();
     public DbSet<AuditLog> AuditLogs => Set<AuditLog>();
     public DbSet<DeviceReachabilityHistory> DeviceReachabilityHistories => Set<DeviceReachabilityHistory>();
+    public DbSet<DiscoveryJob> DiscoveryJobs => Set<DiscoveryJob>();
+    public DbSet<DiscoveredDeviceCandidate> DiscoveredDeviceCandidates => Set<DiscoveredDeviceCandidate>();
 
     public NmsDbContext(
         DbContextOptions<NmsDbContext> options,

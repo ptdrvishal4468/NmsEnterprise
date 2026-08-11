@@ -44,6 +44,13 @@ public static class Permissions
         public const string Delete = "Tenants.Delete";
     }
 
+    public static class Discovery
+    {
+        public const string Scan = "Discovery.Scan";
+        public const string View = "Discovery.View";
+        public const string Import = "Discovery.Import";
+    }
+
     /// <summary>
     /// Helper method to retrieve all predefined permissions for seeding and validation.
     /// </summary>
@@ -55,7 +62,8 @@ public static class Permissions
             Roles.View, Roles.Create, Roles.Update, Roles.Delete, Roles.AssignPermissions,
             Devices.View, Devices.Create, Devices.Update, Devices.Delete, Devices.Control,
             Telemetry.View, Telemetry.Poll, Telemetry.Export,
-            Tenants.View, Tenants.Create, Tenants.Update, Tenants.Delete
+            Tenants.View, Tenants.Create, Tenants.Update, Tenants.Delete,
+            Discovery.Scan, Discovery.View, Discovery.Import
         };
     }
 }

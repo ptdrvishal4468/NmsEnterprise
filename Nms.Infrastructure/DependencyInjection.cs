@@ -57,6 +57,7 @@ public static class DependencyInjection
         services.AddScoped<IDeviceMetricRepository, DeviceMetricRepository>();
         services.AddScoped<IRolePermissionRepository, RolePermissionRepository>();
         services.AddScoped<IReachabilityHistoryRepository, ReachabilityHistoryRepository>();
+        services.AddScoped<IDiscoveryJobRepository, DiscoveryJobRepository>();
         services.AddScoped<IUnitOfWork, UnitOfWork>();
 
         // 4. Bind JwtSettings
