@@ -76,6 +76,7 @@ public static class DependencyInjection
         services.AddScoped<ITelemetryEngine, TelemetryEngine>();
         services.AddSingleton<IPollingQueue, PollingQueue>();
         services.AddScoped<IPollScheduler, PollScheduler>();
+        services.AddScoped<INetworkInterfaceRepository, NetworkInterfaceRepository>();
 
         // 7. Connectivity Services & Adapters
         services.AddTransient<IIcmpPingService, IcmpPingService>();
