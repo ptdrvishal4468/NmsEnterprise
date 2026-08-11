@@ -3,6 +3,7 @@ using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using Nms.Application.Auth.Commands.Login;
 using Nms.Application.Common.Behaviors;
+using Nms.Application.Common.Interfaces;
 using Nms.Application.Devices.Commands.CreateDevice;
 using Nms.Application.Devices.Commands.DeleteDevice;
 using Nms.Application.Devices.Commands.UpdateDevice;
@@ -12,6 +13,7 @@ using Nms.Application.Discovery.Commands.ImportDiscoveredDevice;
 using Nms.Application.Discovery.Commands.StartDiscoveryScan;
 using Nms.Application.Discovery.Queries.GetDiscoveryJobById;
 using Nms.Application.Discovery.Services;
+using Nms.Application.Health.Services;
 using Nms.Application.Telemetry.Commands.PollDevice;
 using Nms.Application.Telemetry.Commands.ProcessTelemetryData;
 using Nms.Application.Telemetry.Queries.GetDeviceMetrics;
@@ -66,6 +68,8 @@ public static class DependencyInjection
         services.AddScoped<ImportDiscoveredDeviceCommandHandler>();
         services.AddScoped<GetDiscoveryJobByIdQueryHandler>();
 
+
+        services.AddScoped<IDeviceHealthCalculator, DeviceHealthCalculator>();
         return services;
     }
 }
