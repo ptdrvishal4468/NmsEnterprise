@@ -78,6 +78,8 @@ public static class DependencyInjection
         services.AddScoped<IPollScheduler, PollScheduler>();
         services.AddScoped<INetworkInterfaceRepository, NetworkInterfaceRepository>();
         services.AddScoped<IDeviceHealthHistoryRepository, DeviceHealthHistoryRepository>();
+        services.AddScoped<IAlertRuleRepository, AlertRuleRepository>();
+        services.AddScoped<IAlertRepository, AlertRepository>();
 
         // 7. Connectivity Services & Adapters
         services.AddTransient<IIcmpPingService, IcmpPingService>();

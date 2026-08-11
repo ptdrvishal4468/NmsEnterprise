@@ -27,6 +27,9 @@ public class NmsDbContext : DbContext
     public DbSet<NetworkInterface> NetworkInterfaces => Set<NetworkInterface>();
     public DbSet<NetworkInterfaceHistory> NetworkInterfaceHistories => Set<NetworkInterfaceHistory>();
     public DbSet<DeviceHealthHistory> DeviceHealthHistories => Set<DeviceHealthHistory>();
+    public DbSet<AlertRule> AlertRules => Set<AlertRule>();
+    public DbSet<Alert> Alerts => Set<Alert>();
+    public DbSet<AlertHistory> AlertHistories => Set<AlertHistory>();
 
     public NmsDbContext(
         DbContextOptions<NmsDbContext> options,

@@ -11,17 +11,20 @@ public class ProcessTelemetryDataCommandHandler : IRequestHandler<ProcessTelemet
     private readonly IDeviceMetricRepository _metricRepository;
     private readonly ITenantContext _tenantContext;
     private readonly IUnitOfWork _unitOfWork;
+    private readonly IAlertEvaluationEngine _alertEvaluationEngine;
 
     public ProcessTelemetryDataCommandHandler(
         ITelemetryEngine telemetryEngine,
         IDeviceMetricRepository metricRepository,
         ITenantContext tenantContext,
-        IUnitOfWork unitOfWork)
+        IUnitOfWork unitOfWork,
+        IAlertEvaluationEngine alertEvaluationEngine)
     {
         _telemetryEngine = telemetryEngine;
         _metricRepository = metricRepository;
         _tenantContext = tenantContext;
         _unitOfWork = unitOfWork;
+        _alertEvaluationEngine = alertEvaluationEngine;
     }
 
     public async Task<bool> Handle(ProcessTelemetryDataCommand request, CancellationToken cancellationToken)
@@ -36,6 +39,13 @@ public class ProcessTelemetryDataCommandHandler : IRequestHandler<ProcessTelemet
 
         await _metricRepository.AddBulkAsync(metrics, cancellationToken);
         await _unitOfWork.SaveChangesAsync(cancellationToken);
+
+        // Trigger Phase 30 Alert Engine threshold evaluation
+        await _alertEvaluationEngine.EvaluateMetricsAsync(
+            tenantId,
+            request.PollResult.DeviceId,
+            metrics,
+            cancellationToken);
 
         return true;
     }

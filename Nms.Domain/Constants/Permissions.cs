@@ -65,6 +65,14 @@ public static class Permissions
         public const string Evaluate = "Health.Evaluate";
     }
 
+    public static class Alerts
+    {
+        public const string View = "Alerts.View";
+        public const string ManageRules = "Alerts.ManageRules";
+        public const string Acknowledge = "Alerts.Acknowledge";
+        public const string Suppress = "Alerts.Suppress";
+        public const string Resolve = "Alerts.Resolve";
+    }
     /// <summary>
     /// Helper method to retrieve all predefined permissions for seeding and validation.
     /// </summary>
@@ -79,7 +87,8 @@ public static class Permissions
             Tenants.View, Tenants.Create, Tenants.Update, Tenants.Delete,
             Discovery.Scan, Discovery.View, Discovery.Import,
             Interfaces.View, Interfaces.Manage, Interfaces.Poll,
-            Health.View, Health.History, Health.Evaluate
+            Health.View, Health.History, Health.Evaluate,
+            Alerts.View, Alerts.ManageRules, Alerts.Acknowledge, Alerts.Suppress, Alerts.Resolve
         };
     }
 }
