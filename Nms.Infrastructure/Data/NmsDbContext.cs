@@ -24,6 +24,8 @@ public class NmsDbContext : DbContext
     public DbSet<DeviceReachabilityHistory> DeviceReachabilityHistories => Set<DeviceReachabilityHistory>();
     public DbSet<DiscoveryJob> DiscoveryJobs => Set<DiscoveryJob>();
     public DbSet<DiscoveredDeviceCandidate> DiscoveredDeviceCandidates => Set<DiscoveredDeviceCandidate>();
+    public DbSet<NetworkInterface> NetworkInterfaces => Set<NetworkInterface>();
+    public DbSet<NetworkInterfaceHistory> NetworkInterfaceHistories => Set<NetworkInterfaceHistory>();
 
     public NmsDbContext(
         DbContextOptions<NmsDbContext> options,

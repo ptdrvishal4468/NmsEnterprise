@@ -51,6 +51,13 @@ public static class Permissions
         public const string Import = "Discovery.Import";
     }
 
+    public static class Interfaces
+    {
+        public const string View = "Interfaces.View";
+        public const string Manage = "Interfaces.Manage";
+        public const string Poll = "Interfaces.Poll";
+    }
+
     /// <summary>
     /// Helper method to retrieve all predefined permissions for seeding and validation.
     /// </summary>
@@ -63,7 +70,8 @@ public static class Permissions
             Devices.View, Devices.Create, Devices.Update, Devices.Delete, Devices.Control,
             Telemetry.View, Telemetry.Poll, Telemetry.Export,
             Tenants.View, Tenants.Create, Tenants.Update, Tenants.Delete,
-            Discovery.Scan, Discovery.View, Discovery.Import
+            Discovery.Scan, Discovery.View, Discovery.Import,
+            Interfaces.View, Interfaces.Manage, Interfaces.Poll
         };
     }
 }
