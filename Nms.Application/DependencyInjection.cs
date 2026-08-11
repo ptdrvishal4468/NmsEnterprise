@@ -1,6 +1,7 @@
 ﻿using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
+using Nms.Application.Alerts.Services;
 using Nms.Application.Auth.Commands.Login;
 using Nms.Application.Common.Behaviors;
 using Nms.Application.Common.Interfaces;
@@ -70,6 +71,7 @@ public static class DependencyInjection
 
 
         services.AddScoped<IDeviceHealthCalculator, DeviceHealthCalculator>();
+        services.AddScoped<IAlertEvaluationEngine, AlertEvaluationEngine>();
         return services;
     }
 }
