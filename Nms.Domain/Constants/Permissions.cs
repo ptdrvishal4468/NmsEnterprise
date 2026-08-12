@@ -80,6 +80,14 @@ public static class Permissions
         public const string ManageTemplates = "Notifications.ManageTemplates";
         public const string SendTest = "Notifications.SendTest";
     }
+
+    // Inside public static class Permissions
+    public static class Events
+    {
+        public const string View = "Events.View";
+        public const string Record = "Events.Record";
+        public const string Manage = "Events.Manage";
+    }
     /// <summary>
     /// Helper method to retrieve all predefined permissions for seeding and validation.
     /// </summary>
@@ -96,7 +104,8 @@ public static class Permissions
             Interfaces.View, Interfaces.Manage, Interfaces.Poll,
             Health.View, Health.History, Health.Evaluate,
             Alerts.View, Alerts.ManageRules, Alerts.Acknowledge, Alerts.Suppress, Alerts.Resolve,
-            Notifications.View, Notifications.ManageTemplates, Notifications.SendTest
+            Notifications.View, Notifications.ManageTemplates, Notifications.SendTest,
+            Events.View, Events.Record, Events.Manage
         };
     }
 }

@@ -115,6 +115,9 @@ public static class DependencyInjection
         services.AddSingleton<ISmsProvider>(sp => sp.GetRequiredService<NullSmsProvider>());
         services.AddScoped<INotificationProvider>(sp => sp.GetRequiredService<NullSmsProvider>());
 
+        // 12. Device Event Repository
+        services.AddScoped<IEventRepository, EventRepository>();
+
         return services;
     }
 }
