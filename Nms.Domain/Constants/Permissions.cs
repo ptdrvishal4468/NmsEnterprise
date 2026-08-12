@@ -88,6 +88,13 @@ public static class Permissions
         public const string Record = "Events.Record";
         public const string Manage = "Events.Manage";
     }
+
+    public static class Syslog
+    {
+        public const string View = "Syslog.View";
+        public const string Search = "Syslog.Search";
+        public const string Manage = "Syslog.Manage";
+    }
     /// <summary>
     /// Helper method to retrieve all predefined permissions for seeding and validation.
     /// </summary>
@@ -105,7 +112,8 @@ public static class Permissions
             Health.View, Health.History, Health.Evaluate,
             Alerts.View, Alerts.ManageRules, Alerts.Acknowledge, Alerts.Suppress, Alerts.Resolve,
             Notifications.View, Notifications.ManageTemplates, Notifications.SendTest,
-            Events.View, Events.Record, Events.Manage
+            Events.View, Events.Record, Events.Manage,
+            Syslog.View, Syslog.Search, Syslog.Manage
         };
     }
 }

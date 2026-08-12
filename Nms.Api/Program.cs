@@ -12,6 +12,7 @@ builder.Services.AddInfrastructureLayer(builder.Configuration);
 // Register Hosted Services
 builder.Services.AddHostedService<SnmpPollingBackgroundService>();
 builder.Services.AddHostedService<IcmpPollingBackgroundService>();
+builder.Services.AddHostedService<SyslogListenerBackgroundService>();
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
