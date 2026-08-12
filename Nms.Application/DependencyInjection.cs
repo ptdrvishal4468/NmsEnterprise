@@ -15,6 +15,13 @@ using Nms.Application.Discovery.Commands.StartDiscoveryScan;
 using Nms.Application.Discovery.Queries.GetDiscoveryJobById;
 using Nms.Application.Discovery.Services;
 using Nms.Application.Health.Services;
+using Nms.Application.Notifications.Commands.CreateNotificationTemplate;
+using Nms.Application.Notifications.Commands.DeleteNotificationTemplate;
+using Nms.Application.Notifications.Commands.SendTestNotification;
+using Nms.Application.Notifications.Commands.UpdateNotificationTemplate;
+using Nms.Application.Notifications.Queries.GetNotificationLogsPaged;
+using Nms.Application.Notifications.Queries.GetNotificationTemplatesPaged;
+using Nms.Application.Notifications.Services;
 using Nms.Application.Telemetry.Commands.PollDevice;
 using Nms.Application.Telemetry.Commands.ProcessTelemetryData;
 using Nms.Application.Telemetry.Queries.GetDeviceMetrics;
@@ -69,9 +76,20 @@ public static class DependencyInjection
         services.AddScoped<ImportDiscoveredDeviceCommandHandler>();
         services.AddScoped<GetDiscoveryJobByIdQueryHandler>();
 
-
+        // Health & Alert Services
         services.AddScoped<IDeviceHealthCalculator, DeviceHealthCalculator>();
         services.AddScoped<IAlertEvaluationEngine, AlertEvaluationEngine>();
+
+        // Notification Services & Handlers
+        services.AddScoped<INotificationTemplateEngine, NotificationTemplateEngine>();
+        services.AddScoped<INotificationDispatcher, NotificationDispatcher>();
+        services.AddScoped<CreateNotificationTemplateCommandHandler>();
+        services.AddScoped<UpdateNotificationTemplateCommandHandler>();
+        services.AddScoped<DeleteNotificationTemplateCommandHandler>();
+        services.AddScoped<SendTestNotificationCommandHandler>();
+        services.AddScoped<GetNotificationTemplatesPagedQueryHandler>();
+        services.AddScoped<GetNotificationLogsPagedQueryHandler>();
+
         return services;
     }
 }

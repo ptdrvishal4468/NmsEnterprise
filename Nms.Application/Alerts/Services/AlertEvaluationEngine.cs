@@ -9,15 +9,18 @@ public class AlertEvaluationEngine : IAlertEvaluationEngine
 {
     private readonly IAlertRuleRepository _ruleRepository;
     private readonly IAlertRepository _alertRepository;
+    private readonly INotificationDispatcher _notificationDispatcher;
     private readonly IUnitOfWork _unitOfWork;
 
     public AlertEvaluationEngine(
         IAlertRuleRepository ruleRepository,
         IAlertRepository alertRepository,
+        INotificationDispatcher notificationDispatcher,
         IUnitOfWork unitOfWork)
     {
         _ruleRepository = ruleRepository;
         _alertRepository = alertRepository;
+        _notificationDispatcher = notificationDispatcher;
         _unitOfWork = unitOfWork;
     }
 
@@ -28,6 +31,8 @@ public class AlertEvaluationEngine : IAlertEvaluationEngine
 
         var latestMetric = metrics.OrderByDescending(m => m.TimestampUtc).FirstOrDefault();
         if (latestMetric == null) return;
+
+        var alertsToNotify = new List<Alert>();
 
         foreach (var rule in rules)
         {
@@ -52,6 +57,7 @@ public class AlertEvaluationEngine : IAlertEvaluationEngine
                         message);
 
                     await _alertRepository.AddAsync(alert, cancellationToken);
+                    alertsToNotify.Add(alert);
                 }
                 else
                 {
@@ -65,11 +71,17 @@ public class AlertEvaluationEngine : IAlertEvaluationEngine
                 {
                     existingAlert.Resolve();
                     _alertRepository.Update(existingAlert);
+                    alertsToNotify.Add(existingAlert);
                 }
             }
         }
 
         await _unitOfWork.SaveChangesAsync(cancellationToken);
+
+        foreach (var alert in alertsToNotify)
+        {
+            await _notificationDispatcher.DispatchAlertNotificationAsync(alert, cancellationToken);
+        }
     }
 
     private static decimal GetMetricValueByType(DeviceMetricRaw metric, MetricType metricType)
