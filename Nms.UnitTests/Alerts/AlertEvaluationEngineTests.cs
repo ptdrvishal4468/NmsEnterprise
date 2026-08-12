@@ -1,5 +1,6 @@
 ﻿using Moq;
 using Nms.Application.Alerts.Services;
+using Nms.Application.Common.Interfaces;
 using Nms.Domain.Entities;
 using Nms.Domain.Enums;
 using Nms.Domain.Interfaces;
@@ -11,16 +12,21 @@ public class AlertEvaluationEngineTests
 {
     private readonly Mock<IAlertRuleRepository> _ruleRepoMock = new();
     private readonly Mock<IAlertRepository> _alertRepoMock = new();
+    private readonly Mock<INotificationDispatcher> _notificationDispatcherMock = new();
     private readonly Mock<IUnitOfWork> _unitOfWorkMock = new();
     private readonly AlertEvaluationEngine _sut;
 
     public AlertEvaluationEngineTests()
     {
-        _sut = new AlertEvaluationEngine(_ruleRepoMock.Object, _alertRepoMock.Object, _unitOfWorkMock.Object);
+        _sut = new AlertEvaluationEngine(
+            _ruleRepoMock.Object,
+            _alertRepoMock.Object,
+            _notificationDispatcherMock.Object,
+            _unitOfWorkMock.Object);
     }
 
     [Fact]
-    public async Task EvaluateMetricsAsync_WhenThresholdBreachedAndNoActiveAlert_CreatesNewAlert()
+    public async Task EvaluateMetricsAsync_WhenThresholdBreachedAndNoActiveAlert_CreatesNewAlertAndDispatchesNotification()
     {
         // Arrange
         var tenantId = Guid.NewGuid();
@@ -41,6 +47,7 @@ public class AlertEvaluationEngineTests
         // Assert
         _alertRepoMock.Verify(a => a.AddAsync(It.Is<Alert>(x => x.MetricValue == 85m && x.Severity == AlertSeverity.Critical), It.IsAny<CancellationToken>()), Times.Once);
         _unitOfWorkMock.Verify(u => u.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Once);
+        _notificationDispatcherMock.Verify(n => n.DispatchAlertNotificationAsync(It.IsAny<Alert>(), It.IsAny<CancellationToken>()), Times.Once);
     }
 
     [Fact]
@@ -67,10 +74,11 @@ public class AlertEvaluationEngineTests
         _alertRepoMock.Verify(a => a.Update(It.Is<Alert>(x => x.MetricValue == 88m)), Times.Once);
         _alertRepoMock.Verify(a => a.AddAsync(It.IsAny<Alert>(), It.IsAny<CancellationToken>()), Times.Never);
         _unitOfWorkMock.Verify(u => u.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Once);
+        _notificationDispatcherMock.Verify(n => n.DispatchAlertNotificationAsync(It.IsAny<Alert>(), It.IsAny<CancellationToken>()), Times.Never);
     }
 
     [Fact]
-    public async Task EvaluateMetricsAsync_WhenThresholdNotBreachedAndActiveAlertExists_ResolvesAlert()
+    public async Task EvaluateMetricsAsync_WhenThresholdNotBreachedAndActiveAlertExists_ResolvesAlertAndDispatchesNotification()
     {
         // Arrange
         var tenantId = Guid.NewGuid();
@@ -93,5 +101,6 @@ public class AlertEvaluationEngineTests
         Assert.Equal(AlertState.Resolved, existingAlert.State);
         _alertRepoMock.Verify(a => a.Update(existingAlert), Times.Once);
         _unitOfWorkMock.Verify(u => u.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Once);
+        _notificationDispatcherMock.Verify(n => n.DispatchAlertNotificationAsync(It.IsAny<Alert>(), It.IsAny<CancellationToken>()), Times.Once);
     }
 }

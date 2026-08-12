@@ -8,6 +8,8 @@ using Nms.Infrastructure.Connectivity;
 using Nms.Infrastructure.Data;
 using Nms.Infrastructure.Data.Interceptors;
 using Nms.Infrastructure.Data.Repositories;
+using Nms.Infrastructure.Notifications.Options;
+using Nms.Infrastructure.Notifications.Providers;
 using Nms.Infrastructure.Polling;
 using Nms.Infrastructure.Security;
 using Nms.Infrastructure.Snmp;
@@ -88,6 +90,30 @@ public static class DependencyInjection
         services.AddTransient<IConnectionAdapterFactory, ConnectionAdapterFactory>();
         services.AddSingleton<ISshClientFactory, SshClientFactory>();
         services.AddTransient<IConnectionAdapter, SshConnectionAdapter>();
+
+        // 8. Bind Notification Options & Repositories
+        services.Configure<NotificationOptions>(configuration.GetSection(NotificationOptions.SectionName));
+        services.AddScoped<INotificationTemplateRepository, NotificationTemplateRepository>();
+        services.AddScoped<INotificationLogRepository, NotificationLogRepository>();
+
+        // 9. Shared HttpClient for HTTP Providers
+        services.AddScoped(sp => new HttpClient());
+
+        // 10. Provider Implementations
+        services.AddScoped<EmailNotificationProvider>();
+        services.AddScoped<WebhookNotificationProvider>();
+        services.AddScoped<TeamsNotificationProvider>();
+        services.AddScoped<SlackNotificationProvider>();
+
+        services.AddScoped<INotificationProvider>(sp => sp.GetRequiredService<EmailNotificationProvider>());
+        services.AddScoped<INotificationProvider>(sp => sp.GetRequiredService<WebhookNotificationProvider>());
+        services.AddScoped<INotificationProvider>(sp => sp.GetRequiredService<TeamsNotificationProvider>());
+        services.AddScoped<INotificationProvider>(sp => sp.GetRequiredService<SlackNotificationProvider>());
+
+        // 11. SMS Gateway Abstraction
+        services.AddSingleton<NullSmsProvider>();
+        services.AddSingleton<ISmsProvider>(sp => sp.GetRequiredService<NullSmsProvider>());
+        services.AddScoped<INotificationProvider>(sp => sp.GetRequiredService<NullSmsProvider>());
 
         return services;
     }
