@@ -14,6 +14,8 @@ using Nms.Infrastructure.Polling;
 using Nms.Infrastructure.Security;
 using Nms.Infrastructure.Snmp;
 using Nms.Infrastructure.Ssh;
+using Nms.Infrastructure.Syslog;
+using Nms.Infrastructure.Syslog.Options;
 using Nms.Infrastructure.Telemetry;
 using Nms.Infrastructure.Tenants;
 
@@ -117,6 +119,13 @@ public static class DependencyInjection
 
         // 12. Device Event Repository
         services.AddScoped<IEventRepository, EventRepository>();
+
+        // 13. Syslog Message Repository
+        services.Configure<SyslogOptions>(configuration.GetSection(SyslogOptions.SectionName));
+        services.AddSingleton<ISyslogParser, SyslogParser>();
+        services.AddSingleton<SyslogUdpReceiver>();
+        services.AddSingleton<ISyslogReceiver>(sp => sp.GetRequiredService<SyslogUdpReceiver>());
+        services.AddScoped<ISyslogRepository, SyslogRepository>();
 
         return services;
     }

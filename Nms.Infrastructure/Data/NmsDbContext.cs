@@ -33,6 +33,11 @@ public class NmsDbContext : DbContext
     public DbSet<NotificationTemplate> NotificationTemplates => Set<NotificationTemplate>();
     public DbSet<NotificationLog> NotificationLogs => Set<NotificationLog>();
     public DbSet<DeviceEvent> DeviceEvents => Set<DeviceEvent>();
+    public DbSet<SyslogMessage> SyslogMessages => Set<SyslogMessage>();
+
+
+
+
     public NmsDbContext(
         DbContextOptions<NmsDbContext> options,
         ITenantContext? tenantContext = null) : base(options)

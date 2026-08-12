@@ -23,6 +23,9 @@ using Nms.Application.Notifications.Commands.UpdateNotificationTemplate;
 using Nms.Application.Notifications.Queries.GetNotificationLogsPaged;
 using Nms.Application.Notifications.Queries.GetNotificationTemplatesPaged;
 using Nms.Application.Notifications.Services;
+using Nms.Application.Syslog.Commands.IngestSyslogMessage;
+using Nms.Application.Syslog.Queries.GetSyslogById;
+using Nms.Application.Syslog.Queries.GetSyslogsPaged;
 using Nms.Application.Telemetry.Commands.PollDevice;
 using Nms.Application.Telemetry.Commands.ProcessTelemetryData;
 using Nms.Application.Telemetry.Queries.GetDeviceMetrics;
@@ -90,6 +93,11 @@ public static class DependencyInjection
         services.AddScoped<SendTestNotificationCommandHandler>();
         services.AddScoped<GetNotificationTemplatesPagedQueryHandler>();
         services.AddScoped<GetNotificationLogsPagedQueryHandler>();
+
+        // Syslog Command & Query Handlers
+        services.AddScoped<IngestSyslogMessageCommandHandler>();
+        services.AddScoped<GetSyslogsPagedQueryHandler>();
+        services.AddScoped<GetSyslogByIdQueryHandler>();
 
 
         services.AddScoped<IEventPublisher, EventPublisher>();

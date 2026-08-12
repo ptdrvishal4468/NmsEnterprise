@@ -49,6 +49,10 @@ jobs:
       - name: Verify Event Management Infrastructure Integrity
         run: dotnet test NmsEnterprise.slnx --no-build --configuration Release --filter "FullyQualifiedName~Events"
 
+      # [PHASE 33 ENHANCEMENT] Syslog Server Infrastructure Integrity Verification
+      - name: Verify Syslog Server Infrastructure Integrity
+        run: dotnet test NmsEnterprise.slnx --no-build --configuration Release --filter "FullyQualifiedName~Syslog"
+
       # [PHASE 23 ENHANCEMENT] Execute Tests with Cobertura Coverage Collection
       - name: Execute Unit and Integration Tests
         run: >

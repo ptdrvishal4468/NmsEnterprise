@@ -12,6 +12,7 @@ public class UnitOfWork : IUnitOfWork
     public IDeviceRepository Devices { get; }
     public IReachabilityHistoryRepository ReachabilityHistories { get; }
     public IEventRepository Events { get; }
+    public ISyslogRepository Syslogs { get; }
 
     public UnitOfWork(NmsDbContext context)
     {
@@ -19,6 +20,7 @@ public class UnitOfWork : IUnitOfWork
         Devices = new DeviceRepository(_context);
         ReachabilityHistories = new ReachabilityHistoryRepository(_context);
         Events = new EventRepository(_context);
+        Syslogs = new SyslogRepository(_context);
     }
 
     public async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
