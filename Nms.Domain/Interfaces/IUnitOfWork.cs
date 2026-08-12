@@ -1,6 +1,4 @@
-﻿using Nms.Domain.Interfaces;
-
-namespace Nms.Domain.Interfaces;
+﻿namespace Nms.Domain.Interfaces;
 
 /// <summary>
 /// Unit of Work pattern interface managing database transaction boundaries.
@@ -9,6 +7,7 @@ public interface IUnitOfWork : IDisposable
 {
     IDeviceRepository Devices { get; }
     IReachabilityHistoryRepository ReachabilityHistories { get; }
+    IEventRepository Events { get; }
 
     /// <summary>
     /// Asynchronously commits all pending tracking changes to the database context.

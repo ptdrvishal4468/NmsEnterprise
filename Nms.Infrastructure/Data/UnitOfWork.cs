@@ -11,12 +11,14 @@ public class UnitOfWork : IUnitOfWork
 
     public IDeviceRepository Devices { get; }
     public IReachabilityHistoryRepository ReachabilityHistories { get; }
+    public IEventRepository Events { get; }
 
     public UnitOfWork(NmsDbContext context)
     {
         _context = context;
         Devices = new DeviceRepository(_context);
         ReachabilityHistories = new ReachabilityHistoryRepository(_context);
+        Events = new EventRepository(_context);
     }
 
     public async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)

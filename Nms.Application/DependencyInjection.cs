@@ -14,6 +14,7 @@ using Nms.Application.Discovery.Commands.ImportDiscoveredDevice;
 using Nms.Application.Discovery.Commands.StartDiscoveryScan;
 using Nms.Application.Discovery.Queries.GetDiscoveryJobById;
 using Nms.Application.Discovery.Services;
+using Nms.Application.Events.Services;
 using Nms.Application.Health.Services;
 using Nms.Application.Notifications.Commands.CreateNotificationTemplate;
 using Nms.Application.Notifications.Commands.DeleteNotificationTemplate;
@@ -89,6 +90,9 @@ public static class DependencyInjection
         services.AddScoped<SendTestNotificationCommandHandler>();
         services.AddScoped<GetNotificationTemplatesPagedQueryHandler>();
         services.AddScoped<GetNotificationLogsPagedQueryHandler>();
+
+
+        services.AddScoped<IEventPublisher, EventPublisher>();
 
         return services;
     }

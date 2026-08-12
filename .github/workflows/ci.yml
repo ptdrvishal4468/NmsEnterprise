@@ -44,6 +44,10 @@ jobs:
       # [PHASE 31 ENHANCEMENT] Notification Module Provider Integrity Verification
       - name: Verify Notification Infrastructure Integrity
         run: dotnet test NmsEnterprise.slnx --no-build --configuration Release --filter "FullyQualifiedName~Notifications"
+      
+      # [PHASE 32 ENHANCEMENT] Event Management Infrastructure Integrity Verification
+      - name: Verify Event Management Infrastructure Integrity
+        run: dotnet test NmsEnterprise.slnx --no-build --configuration Release --filter "FullyQualifiedName~Events"
 
       # [PHASE 23 ENHANCEMENT] Execute Tests with Cobertura Coverage Collection
       - name: Execute Unit and Integration Tests
