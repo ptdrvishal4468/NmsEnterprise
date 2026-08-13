@@ -38,6 +38,8 @@ public class NmsDbContext : DbContext
     public DbSet<ConfigurationBackup> ConfigurationBackups => Set<ConfigurationBackup>();
     public DbSet<BackupSchedule> BackupSchedules => Set<BackupSchedule>();
     public DbSet<ConfigurationRestoreLog> ConfigurationRestoreLogs => Set<ConfigurationRestoreLog>();
+    public DbSet<FirmwareBaseline> FirmwareBaselines => Set<FirmwareBaseline>();
+    public DbSet<FirmwareUpgradePlan> FirmwareUpgradePlans => Set<FirmwareUpgradePlan>();
 
     public NmsDbContext(
         DbContextOptions<NmsDbContext> options,

@@ -63,7 +63,11 @@ jobs:
         
       # [PHASE 36 ENHANCEMENT] Configuration Restore Infrastructure & Safety Verification
       - name: Verify Configuration Restore Infrastructure Integrity
-        run: dotnet test NmsEnterprise.slnx --no-build --configuration Release --filter "FullyQualifiedName~ConfigurationRestore"  
+        run: dotnet test NmsEnterprise.slnx --no-build --configuration Release --filter "FullyQualifiedName~ConfigurationRestore"
+        
+      # [PHASE 37 ENHANCEMENT] Firmware & OS Management Infrastructure Integrity Verification
+      - name: Verify Firmware & OS Management Infrastructure Integrity
+        run: dotnet test NmsEnterprise.slnx --no-build --configuration Release --filter "FullyQualifiedName~Firmware"  
 
       # [PHASE 23 ENHANCEMENT] Execute Tests with Cobertura Coverage Collection
       - name: Execute Unit and Integration Tests

@@ -15,6 +15,7 @@ using Nms.Application.Discovery.Commands.StartDiscoveryScan;
 using Nms.Application.Discovery.Queries.GetDiscoveryJobById;
 using Nms.Application.Discovery.Services;
 using Nms.Application.Events.Services;
+using Nms.Application.Firmware.Services;
 using Nms.Application.Health.Services;
 using Nms.Application.Notifications.Commands.CreateNotificationTemplate;
 using Nms.Application.Notifications.Commands.DeleteNotificationTemplate;
@@ -99,8 +100,11 @@ public static class DependencyInjection
         services.AddScoped<GetSyslogsPagedQueryHandler>();
         services.AddScoped<GetSyslogByIdQueryHandler>();
 
-
+        // Event Publisher
         services.AddScoped<IEventPublisher, EventPublisher>();
+
+        // Firmware Version Comparator
+        services.AddSingleton<IFirmwareVersionComparator, FirmwareVersionComparator>();
 
         return services;
     }
