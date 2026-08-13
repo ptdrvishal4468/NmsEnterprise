@@ -35,8 +35,8 @@ public class NmsDbContext : DbContext
     public DbSet<DeviceEvent> DeviceEvents => Set<DeviceEvent>();
     public DbSet<SyslogMessage> SyslogMessages => Set<SyslogMessage>();
     public DbSet<SnmpTrapMessage> SnmpTrapMessages => Set<SnmpTrapMessage>();
-
-
+    public DbSet<ConfigurationBackup> ConfigurationBackups => Set<ConfigurationBackup>();
+    public DbSet<BackupSchedule> BackupSchedules => Set<BackupSchedule>();
     public NmsDbContext(
         DbContextOptions<NmsDbContext> options,
         ITenantContext? tenantContext = null) : base(options)
