@@ -53,6 +53,10 @@ jobs:
       - name: Verify Syslog Server Infrastructure Integrity
         run: dotnet test NmsEnterprise.slnx --no-build --configuration Release --filter "FullyQualifiedName~Syslog"
 
+      # [PHASE 34 ENHANCEMENT] SNMP Trap Receiver Infrastructure Integrity Verification
+      - name: Verify SNMP Trap Receiver Infrastructure Integrity
+        run: dotnet test NmsEnterprise.slnx --no-build --configuration Release --filter "FullyQualifiedName~Snmp"  
+
       # [PHASE 23 ENHANCEMENT] Execute Tests with Cobertura Coverage Collection
       - name: Execute Unit and Integration Tests
         run: >

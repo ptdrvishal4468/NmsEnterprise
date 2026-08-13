@@ -13,6 +13,7 @@ builder.Services.AddInfrastructureLayer(builder.Configuration);
 builder.Services.AddHostedService<SnmpPollingBackgroundService>();
 builder.Services.AddHostedService<IcmpPollingBackgroundService>();
 builder.Services.AddHostedService<SyslogListenerBackgroundService>();
+builder.Services.AddHostedService<SnmpTrapListenerBackgroundService>();
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
