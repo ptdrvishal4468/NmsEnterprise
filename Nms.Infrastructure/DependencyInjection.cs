@@ -144,6 +144,10 @@ public static class DependencyInjection
         services.AddScoped<IConfigurationRestoreLogRepository, ConfigurationRestoreLogRepository>();
         services.AddScoped<IConfigurationRestoreEngine, ConfigurationRestoreEngine>();
 
+        // 16. Firmware Upgrade Module
+        services.AddScoped<IFirmwareBaselineRepository, FirmwareBaselineRepository>();
+        services.AddScoped<IFirmwareUpgradePlanRepository, FirmwareUpgradePlanRepository>();
+
         return services;
     }
 }

@@ -112,6 +112,12 @@ public static class Permissions
         public const string Schedule = "ConfigurationBackup.Schedule";
         public const string Restore = "ConfigurationBackup.Restore";
     }
+    public static class Firmware
+    {
+        public const string View = "Firmware.View";
+        public const string ManageBaselines = "Firmware.ManageBaselines";
+        public const string ManagePlans = "Firmware.ManagePlans";
+    }
     /// <summary>
     /// Helper method to retrieve all predefined permissions for seeding and validation.
     /// </summary>
@@ -132,7 +138,8 @@ public static class Permissions
             Events.View, Events.Record, Events.Manage,
             Syslog.View, Syslog.Search, Syslog.Manage,
             SnmpTrap.View, SnmpTrap.Manage, SnmpTrap.Delete,
-            ConfigurationBackup.View, ConfigurationBackup.Create, ConfigurationBackup.Delete, ConfigurationBackup.Download, ConfigurationBackup.Schedule, ConfigurationBackup.Restore
+            ConfigurationBackup.View, ConfigurationBackup.Create, ConfigurationBackup.Delete, ConfigurationBackup.Download, ConfigurationBackup.Schedule, ConfigurationBackup.Restore,
+            Firmware.View, Firmware.ManageBaselines, Firmware.ManagePlans
         };
     }
 }

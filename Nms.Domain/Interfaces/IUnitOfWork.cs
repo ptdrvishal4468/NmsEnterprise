@@ -13,6 +13,8 @@ public interface IUnitOfWork : IDisposable
     IConfigurationBackupRepository ConfigurationBackups { get; }
     IBackupScheduleRepository BackupSchedules { get; }
     IConfigurationRestoreLogRepository ConfigurationRestoreLogs { get; }
+    IFirmwareBaselineRepository FirmwareBaselines { get; }
+    IFirmwareUpgradePlanRepository FirmwareUpgradePlans { get; }
 
     /// <summary>
     /// Asynchronously commits all pending tracking changes to the database context.
