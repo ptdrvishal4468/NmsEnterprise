@@ -141,6 +141,8 @@ public static class DependencyInjection
         services.AddScoped<IConfigurationBackupRepository, ConfigurationBackupRepository>();
         services.AddScoped<IBackupScheduleRepository, BackupScheduleRepository>();
         services.AddScoped<IConfigurationBackupEngine, ConfigurationBackupEngine>();
+        services.AddScoped<IConfigurationRestoreLogRepository, ConfigurationRestoreLogRepository>();
+        services.AddScoped<IConfigurationRestoreEngine, ConfigurationRestoreEngine>();
 
         return services;
     }
