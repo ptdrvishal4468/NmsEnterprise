@@ -16,6 +16,7 @@ public class UnitOfWork : IUnitOfWork
     public ISnmpTrapRepository SnmpTraps { get; }
     public IConfigurationBackupRepository ConfigurationBackups { get; }
     public IBackupScheduleRepository BackupSchedules { get; }
+    public IConfigurationRestoreLogRepository ConfigurationRestoreLogs { get; } // [NEW Phase 36]
 
     public UnitOfWork(NmsDbContext context)
     {
@@ -27,6 +28,7 @@ public class UnitOfWork : IUnitOfWork
         SnmpTraps = new SnmpTrapRepository(_context);
         ConfigurationBackups = new ConfigurationBackupRepository(_context);
         BackupSchedules = new BackupScheduleRepository(_context);
+        ConfigurationRestoreLogs = new ConfigurationRestoreLogRepository(_context); // [NEW Phase 36]
     }
 
     public async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)

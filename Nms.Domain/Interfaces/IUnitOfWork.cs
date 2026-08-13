@@ -12,6 +12,7 @@ public interface IUnitOfWork : IDisposable
     ISnmpTrapRepository SnmpTraps { get; }
     IConfigurationBackupRepository ConfigurationBackups { get; }
     IBackupScheduleRepository BackupSchedules { get; }
+    IConfigurationRestoreLogRepository ConfigurationRestoreLogs { get; }
 
     /// <summary>
     /// Asynchronously commits all pending tracking changes to the database context.

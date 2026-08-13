@@ -37,6 +37,8 @@ public class NmsDbContext : DbContext
     public DbSet<SnmpTrapMessage> SnmpTrapMessages => Set<SnmpTrapMessage>();
     public DbSet<ConfigurationBackup> ConfigurationBackups => Set<ConfigurationBackup>();
     public DbSet<BackupSchedule> BackupSchedules => Set<BackupSchedule>();
+    public DbSet<ConfigurationRestoreLog> ConfigurationRestoreLogs => Set<ConfigurationRestoreLog>();
+
     public NmsDbContext(
         DbContextOptions<NmsDbContext> options,
         ITenantContext? tenantContext = null) : base(options)

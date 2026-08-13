@@ -110,6 +110,7 @@ public static class Permissions
         public const string Delete = "ConfigurationBackup.Delete";
         public const string Download = "ConfigurationBackup.Download";
         public const string Schedule = "ConfigurationBackup.Schedule";
+        public const string Restore = "ConfigurationBackup.Restore";
     }
     /// <summary>
     /// Helper method to retrieve all predefined permissions for seeding and validation.
@@ -131,7 +132,7 @@ public static class Permissions
             Events.View, Events.Record, Events.Manage,
             Syslog.View, Syslog.Search, Syslog.Manage,
             SnmpTrap.View, SnmpTrap.Manage, SnmpTrap.Delete,
-            ConfigurationBackup.View, ConfigurationBackup.Create, ConfigurationBackup.Delete, ConfigurationBackup.Download, ConfigurationBackup.Schedule
+            ConfigurationBackup.View, ConfigurationBackup.Create, ConfigurationBackup.Delete, ConfigurationBackup.Download, ConfigurationBackup.Schedule, ConfigurationBackup.Restore
         };
     }
 }
