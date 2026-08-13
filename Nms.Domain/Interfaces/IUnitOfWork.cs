@@ -9,6 +9,7 @@ public interface IUnitOfWork : IDisposable
     IReachabilityHistoryRepository ReachabilityHistories { get; }
     IEventRepository Events { get; }
     ISyslogRepository Syslogs { get; }
+    ISnmpTrapRepository SnmpTraps { get; }
 
     /// <summary>
     /// Asynchronously commits all pending tracking changes to the database context.

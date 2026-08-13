@@ -34,8 +34,7 @@ public class NmsDbContext : DbContext
     public DbSet<NotificationLog> NotificationLogs => Set<NotificationLog>();
     public DbSet<DeviceEvent> DeviceEvents => Set<DeviceEvent>();
     public DbSet<SyslogMessage> SyslogMessages => Set<SyslogMessage>();
-
-
+    public DbSet<SnmpTrapMessage> SnmpTrapMessages => Set<SnmpTrapMessage>();
 
 
     public NmsDbContext(

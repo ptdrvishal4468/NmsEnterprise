@@ -13,6 +13,7 @@ public class UnitOfWork : IUnitOfWork
     public IReachabilityHistoryRepository ReachabilityHistories { get; }
     public IEventRepository Events { get; }
     public ISyslogRepository Syslogs { get; }
+    public ISnmpTrapRepository SnmpTraps { get; }
 
     public UnitOfWork(NmsDbContext context)
     {
@@ -21,6 +22,7 @@ public class UnitOfWork : IUnitOfWork
         ReachabilityHistories = new ReachabilityHistoryRepository(_context);
         Events = new EventRepository(_context);
         Syslogs = new SyslogRepository(_context);
+        SnmpTraps = new SnmpTrapRepository(_context);
     }
 
     public async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)

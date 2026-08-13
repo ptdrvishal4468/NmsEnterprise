@@ -13,6 +13,7 @@ using Nms.Infrastructure.Notifications.Providers;
 using Nms.Infrastructure.Polling;
 using Nms.Infrastructure.Security;
 using Nms.Infrastructure.Snmp;
+using Nms.Infrastructure.Snmp.Options;
 using Nms.Infrastructure.Ssh;
 using Nms.Infrastructure.Syslog;
 using Nms.Infrastructure.Syslog.Options;
@@ -126,6 +127,14 @@ public static class DependencyInjection
         services.AddSingleton<SyslogUdpReceiver>();
         services.AddSingleton<ISyslogReceiver>(sp => sp.GetRequiredService<SyslogUdpReceiver>());
         services.AddScoped<ISyslogRepository, SyslogRepository>();
+
+        // 14. SNMP Trap Message Repository
+        // Configure SNMP Trap Infrastructure
+        services.Configure<SnmpTrapOptions>(configuration.GetSection(SnmpTrapOptions.SectionName));
+        services.AddSingleton<ISnmpTrapParser, SnmpTrapParser>();
+        services.AddSingleton<SnmpTrapUdpReceiver>();
+        services.AddSingleton<ISnmpTrapReceiver>(sp => sp.GetRequiredService<SnmpTrapUdpReceiver>());
+        services.AddScoped<ISnmpTrapRepository, SnmpTrapRepository>();
 
         return services;
     }

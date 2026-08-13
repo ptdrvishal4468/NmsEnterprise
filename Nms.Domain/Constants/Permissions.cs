@@ -95,6 +95,13 @@ public static class Permissions
         public const string Search = "Syslog.Search";
         public const string Manage = "Syslog.Manage";
     }
+
+    public static class SnmpTrap
+    {
+        public const string View = "SnmpTrap.View";
+        public const string Manage = "SnmpTrap.Manage";
+        public const string Delete = "SnmpTrap.Delete";
+    }
     /// <summary>
     /// Helper method to retrieve all predefined permissions for seeding and validation.
     /// </summary>
@@ -113,7 +120,8 @@ public static class Permissions
             Alerts.View, Alerts.ManageRules, Alerts.Acknowledge, Alerts.Suppress, Alerts.Resolve,
             Notifications.View, Notifications.ManageTemplates, Notifications.SendTest,
             Events.View, Events.Record, Events.Manage,
-            Syslog.View, Syslog.Search, Syslog.Manage
+            Syslog.View, Syslog.Search, Syslog.Manage,
+            SnmpTrap.View, SnmpTrap.Manage, SnmpTrap.Delete
         };
     }
 }
