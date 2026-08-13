@@ -4,6 +4,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Nms.Application.Common.Interfaces;
 using Nms.Domain.Interfaces;
+using Nms.Infrastructure.ConfigurationBackups;
 using Nms.Infrastructure.Connectivity;
 using Nms.Infrastructure.Data;
 using Nms.Infrastructure.Data.Interceptors;
@@ -129,12 +130,17 @@ public static class DependencyInjection
         services.AddScoped<ISyslogRepository, SyslogRepository>();
 
         // 14. SNMP Trap Message Repository
-        // Configure SNMP Trap Infrastructure
         services.Configure<SnmpTrapOptions>(configuration.GetSection(SnmpTrapOptions.SectionName));
         services.AddSingleton<ISnmpTrapParser, SnmpTrapParser>();
         services.AddSingleton<SnmpTrapUdpReceiver>();
         services.AddSingleton<ISnmpTrapReceiver>(sp => sp.GetRequiredService<SnmpTrapUdpReceiver>());
         services.AddScoped<ISnmpTrapRepository, SnmpTrapRepository>();
+
+        // 15. Configuration Backup Module
+        services.AddScoped<IConfigurationStorageService, LocalConfigurationStorageService>();
+        services.AddScoped<IConfigurationBackupRepository, ConfigurationBackupRepository>();
+        services.AddScoped<IBackupScheduleRepository, BackupScheduleRepository>();
+        services.AddScoped<IConfigurationBackupEngine, ConfigurationBackupEngine>();
 
         return services;
     }

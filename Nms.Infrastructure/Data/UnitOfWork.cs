@@ -14,6 +14,8 @@ public class UnitOfWork : IUnitOfWork
     public IEventRepository Events { get; }
     public ISyslogRepository Syslogs { get; }
     public ISnmpTrapRepository SnmpTraps { get; }
+    public IConfigurationBackupRepository ConfigurationBackups { get; }
+    public IBackupScheduleRepository BackupSchedules { get; }
 
     public UnitOfWork(NmsDbContext context)
     {
@@ -23,6 +25,8 @@ public class UnitOfWork : IUnitOfWork
         Events = new EventRepository(_context);
         Syslogs = new SyslogRepository(_context);
         SnmpTraps = new SnmpTrapRepository(_context);
+        ConfigurationBackups = new ConfigurationBackupRepository(_context);
+        BackupSchedules = new BackupScheduleRepository(_context);
     }
 
     public async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)

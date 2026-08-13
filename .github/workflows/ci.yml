@@ -55,7 +55,11 @@ jobs:
 
       # [PHASE 34 ENHANCEMENT] SNMP Trap Receiver Infrastructure Integrity Verification
       - name: Verify SNMP Trap Receiver Infrastructure Integrity
-        run: dotnet test NmsEnterprise.slnx --no-build --configuration Release --filter "FullyQualifiedName~Snmp"  
+        run: dotnet test NmsEnterprise.slnx --no-build --configuration Release --filter "FullyQualifiedName~Snmp"
+        
+      # [PHASE 35 ENHANCEMENT] Configuration Backup Infrastructure Integrity Verification
+      - name: Verify Configuration Backup Infrastructure Integrity
+        run: dotnet test NmsEnterprise.slnx --no-build --configuration Release --filter "FullyQualifiedName~ConfigurationBackup"  
 
       # [PHASE 23 ENHANCEMENT] Execute Tests with Cobertura Coverage Collection
       - name: Execute Unit and Integration Tests

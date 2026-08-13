@@ -102,6 +102,15 @@ public static class Permissions
         public const string Manage = "SnmpTrap.Manage";
         public const string Delete = "SnmpTrap.Delete";
     }
+
+    public static class ConfigurationBackup
+    {
+        public const string View = "ConfigurationBackup.View";
+        public const string Create = "ConfigurationBackup.Create";
+        public const string Delete = "ConfigurationBackup.Delete";
+        public const string Download = "ConfigurationBackup.Download";
+        public const string Schedule = "ConfigurationBackup.Schedule";
+    }
     /// <summary>
     /// Helper method to retrieve all predefined permissions for seeding and validation.
     /// </summary>
@@ -121,7 +130,8 @@ public static class Permissions
             Notifications.View, Notifications.ManageTemplates, Notifications.SendTest,
             Events.View, Events.Record, Events.Manage,
             Syslog.View, Syslog.Search, Syslog.Manage,
-            SnmpTrap.View, SnmpTrap.Manage, SnmpTrap.Delete
+            SnmpTrap.View, SnmpTrap.Manage, SnmpTrap.Delete,
+            ConfigurationBackup.View, ConfigurationBackup.Create, ConfigurationBackup.Delete, ConfigurationBackup.Download, ConfigurationBackup.Schedule
         };
     }
 }

@@ -10,6 +10,8 @@ public interface IUnitOfWork : IDisposable
     IEventRepository Events { get; }
     ISyslogRepository Syslogs { get; }
     ISnmpTrapRepository SnmpTraps { get; }
+    IConfigurationBackupRepository ConfigurationBackups { get; }
+    IBackupScheduleRepository BackupSchedules { get; }
 
     /// <summary>
     /// Asynchronously commits all pending tracking changes to the database context.
