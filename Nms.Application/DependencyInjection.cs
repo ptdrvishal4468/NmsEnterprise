@@ -30,6 +30,7 @@ using Nms.Application.Syslog.Queries.GetSyslogsPaged;
 using Nms.Application.Telemetry.Commands.PollDevice;
 using Nms.Application.Telemetry.Commands.ProcessTelemetryData;
 using Nms.Application.Telemetry.Queries.GetDeviceMetrics;
+using Nms.Application.Topology.Services;
 using Nms.Application.Users.Commands.CreateUser;
 using Nms.Application.Users.Commands.UpdateUserRoles;
 using Nms.Application.Users.Queries.GetUserById;
@@ -105,6 +106,9 @@ public static class DependencyInjection
 
         // Firmware Version Comparator
         services.AddSingleton<IFirmwareVersionComparator, FirmwareVersionComparator>();
+
+        // Topology Graph Builder
+        services.AddScoped<ITopologyGraphBuilder, TopologyGraphBuilder>();
 
         return services;
     }

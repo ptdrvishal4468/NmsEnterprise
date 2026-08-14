@@ -69,6 +69,10 @@ jobs:
       - name: Verify Firmware & OS Management Infrastructure Integrity
         run: dotnet test NmsEnterprise.slnx --no-build --configuration Release --filter "FullyQualifiedName~Firmware"  
 
+      # [PHASE 38 ENHANCEMENT] Network Topology Infrastructure & Graph Integrity Verification
+      - name: Verify Network Topology Infrastructure Integrity
+        run: dotnet test NmsEnterprise.slnx --no-build --configuration Release --filter "FullyQualifiedName~Topology"  
+
       # [PHASE 23 ENHANCEMENT] Execute Tests with Cobertura Coverage Collection
       - name: Execute Unit and Integration Tests
         run: >

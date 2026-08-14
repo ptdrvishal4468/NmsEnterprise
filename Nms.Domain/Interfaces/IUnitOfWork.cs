@@ -15,6 +15,7 @@ public interface IUnitOfWork : IDisposable
     IConfigurationRestoreLogRepository ConfigurationRestoreLogs { get; }
     IFirmwareBaselineRepository FirmwareBaselines { get; }
     IFirmwareUpgradePlanRepository FirmwareUpgradePlans { get; }
+    ITopologyLinkRepository TopologyLinks { get; }
 
     /// <summary>
     /// Asynchronously commits all pending tracking changes to the database context.
