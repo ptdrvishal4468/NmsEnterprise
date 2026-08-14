@@ -73,6 +73,10 @@ jobs:
       - name: Verify Network Topology Infrastructure Integrity
         run: dotnet test NmsEnterprise.slnx --no-build --configuration Release --filter "FullyQualifiedName~Topology"  
 
+      # [PHASE 39 ENHANCEMENT] Dashboard APIs & Aggregation Integrity Verification
+      - name: Verify Dashboard Infrastructure Integrity
+        run: dotnet test NmsEnterprise.slnx --no-build --configuration Release --filter "FullyQualifiedName~Dashboard"  
+
       # [PHASE 23 ENHANCEMENT] Execute Tests with Cobertura Coverage Collection
       - name: Execute Unit and Integration Tests
         run: >

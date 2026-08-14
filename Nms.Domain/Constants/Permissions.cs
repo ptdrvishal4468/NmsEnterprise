@@ -126,6 +126,13 @@ public static class Permissions
         public const string Manage = "Topology.Manage";
     }
 
+    public static class Dashboard
+    {
+        public const string View = "Dashboard.View";
+        public const string ViewExecutive = "Dashboard.ViewExecutive";
+        public const string ViewTenant = "Dashboard.ViewTenant";
+    }
+
     /// <summary>
     /// Helper method to retrieve all predefined permissions for seeding and validation.
     /// </summary>
@@ -148,7 +155,8 @@ public static class Permissions
             SnmpTrap.View, SnmpTrap.Manage, SnmpTrap.Delete,
             ConfigurationBackup.View, ConfigurationBackup.Create, ConfigurationBackup.Delete, ConfigurationBackup.Download, ConfigurationBackup.Schedule, ConfigurationBackup.Restore,
             Firmware.View, Firmware.ManageBaselines, Firmware.ManagePlans,
-            Topology.View, Topology.Discover, Topology.Manage
+            Topology.View, Topology.Discover, Topology.Manage,
+            Dashboard.View, Dashboard.ViewExecutive, Dashboard.ViewTenant
         };
     }
 }
