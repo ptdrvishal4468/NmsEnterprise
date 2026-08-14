@@ -40,6 +40,7 @@ public class NmsDbContext : DbContext
     public DbSet<ConfigurationRestoreLog> ConfigurationRestoreLogs => Set<ConfigurationRestoreLog>();
     public DbSet<FirmwareBaseline> FirmwareBaselines => Set<FirmwareBaseline>();
     public DbSet<FirmwareUpgradePlan> FirmwareUpgradePlans => Set<FirmwareUpgradePlan>();
+    public DbSet<TopologyLink> TopologyLinks => Set<TopologyLink>();
 
     public NmsDbContext(
         DbContextOptions<NmsDbContext> options,

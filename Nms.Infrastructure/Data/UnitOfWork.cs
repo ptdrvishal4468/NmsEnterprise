@@ -19,6 +19,7 @@ public class UnitOfWork : IUnitOfWork
     public IConfigurationRestoreLogRepository ConfigurationRestoreLogs { get; }
     public IFirmwareBaselineRepository FirmwareBaselines { get; }
     public IFirmwareUpgradePlanRepository FirmwareUpgradePlans { get; }
+    public ITopologyLinkRepository TopologyLinks { get; }
 
     public UnitOfWork(NmsDbContext context)
     {
@@ -33,6 +34,7 @@ public class UnitOfWork : IUnitOfWork
         ConfigurationRestoreLogs = new ConfigurationRestoreLogRepository(_context);
         FirmwareBaselines = new FirmwareBaselineRepository(_context);
         FirmwareUpgradePlans = new FirmwareUpgradePlanRepository(_context);
+        TopologyLinks = new TopologyLinkRepository(_context);
     }
 
     public async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)

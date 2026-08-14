@@ -20,6 +20,7 @@ using Nms.Infrastructure.Syslog;
 using Nms.Infrastructure.Syslog.Options;
 using Nms.Infrastructure.Telemetry;
 using Nms.Infrastructure.Tenants;
+using Nms.Infrastructure.Topology;
 
 namespace Nms.Infrastructure;
 
@@ -147,6 +148,10 @@ public static class DependencyInjection
         // 16. Firmware Upgrade Module
         services.AddScoped<IFirmwareBaselineRepository, FirmwareBaselineRepository>();
         services.AddScoped<IFirmwareUpgradePlanRepository, FirmwareUpgradePlanRepository>();
+
+        // 17. Network Topology Module
+        services.AddScoped<ITopologyLinkRepository, TopologyLinkRepository>();
+        services.AddScoped<INeighborDiscoveryEngine, NeighborDiscoveryEngine>();
 
         return services;
     }

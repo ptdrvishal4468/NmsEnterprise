@@ -81,7 +81,6 @@ public static class Permissions
         public const string SendTest = "Notifications.SendTest";
     }
 
-    // Inside public static class Permissions
     public static class Events
     {
         public const string View = "Events.View";
@@ -112,12 +111,21 @@ public static class Permissions
         public const string Schedule = "ConfigurationBackup.Schedule";
         public const string Restore = "ConfigurationBackup.Restore";
     }
+
     public static class Firmware
     {
         public const string View = "Firmware.View";
         public const string ManageBaselines = "Firmware.ManageBaselines";
         public const string ManagePlans = "Firmware.ManagePlans";
     }
+
+    public static class Topology
+    {
+        public const string View = "Topology.View";
+        public const string Discover = "Topology.Discover";
+        public const string Manage = "Topology.Manage";
+    }
+
     /// <summary>
     /// Helper method to retrieve all predefined permissions for seeding and validation.
     /// </summary>
@@ -139,7 +147,8 @@ public static class Permissions
             Syslog.View, Syslog.Search, Syslog.Manage,
             SnmpTrap.View, SnmpTrap.Manage, SnmpTrap.Delete,
             ConfigurationBackup.View, ConfigurationBackup.Create, ConfigurationBackup.Delete, ConfigurationBackup.Download, ConfigurationBackup.Schedule, ConfigurationBackup.Restore,
-            Firmware.View, Firmware.ManageBaselines, Firmware.ManagePlans
+            Firmware.View, Firmware.ManageBaselines, Firmware.ManagePlans,
+            Topology.View, Topology.Discover, Topology.Manage
         };
     }
 }
