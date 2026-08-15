@@ -22,6 +22,7 @@ public class UnitOfWork : IUnitOfWork
     public ITopologyLinkRepository TopologyLinks { get; }
     public IScheduledReportRepository ScheduledReports { get; }
     public IScheduledReportExecutionLogRepository ScheduledReportExecutionLogs { get; }
+    public IAuditLogRepository AuditLogs { get; }
 
     public UnitOfWork(NmsDbContext context)
     {
@@ -39,6 +40,7 @@ public class UnitOfWork : IUnitOfWork
         TopologyLinks = new TopologyLinkRepository(_context);
         ScheduledReports = new ScheduledReportRepository(_context);
         ScheduledReportExecutionLogs = new ScheduledReportExecutionLogRepository(_context);
+        AuditLogs = new AuditLogRepository(_context);
     }
 
     public async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)

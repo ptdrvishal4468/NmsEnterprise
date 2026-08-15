@@ -18,6 +18,7 @@ public interface IUnitOfWork : IDisposable
     ITopologyLinkRepository TopologyLinks { get; }
     IScheduledReportRepository ScheduledReports { get; }
     IScheduledReportExecutionLogRepository ScheduledReportExecutionLogs { get; }
+    IAuditLogRepository AuditLogs { get; }
 
     /// <summary>
     /// Asynchronously commits all pending tracking changes to the database context.
