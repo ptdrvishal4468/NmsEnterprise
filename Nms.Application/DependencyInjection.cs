@@ -24,6 +24,7 @@ using Nms.Application.Notifications.Commands.UpdateNotificationTemplate;
 using Nms.Application.Notifications.Queries.GetNotificationLogsPaged;
 using Nms.Application.Notifications.Queries.GetNotificationTemplatesPaged;
 using Nms.Application.Notifications.Services;
+using Nms.Application.Reporting.Services;
 using Nms.Application.Syslog.Commands.IngestSyslogMessage;
 using Nms.Application.Syslog.Queries.GetSyslogById;
 using Nms.Application.Syslog.Queries.GetSyslogsPaged;
@@ -109,6 +110,9 @@ public static class DependencyInjection
 
         // Topology Graph Builder
         services.AddScoped<ITopologyGraphBuilder, TopologyGraphBuilder>();
+
+        // Reporting Services
+        services.AddSingleton<ICsvReportFormatter, CsvReportFormatter>();
 
         return services;
     }
