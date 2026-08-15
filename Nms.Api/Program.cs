@@ -15,7 +15,7 @@ builder.Services.AddHostedService<IcmpPollingBackgroundService>();
 builder.Services.AddHostedService<SyslogListenerBackgroundService>();
 builder.Services.AddHostedService<SnmpTrapListenerBackgroundService>();
 builder.Services.AddHostedService<BackupSchedulerBackgroundService>();
-
+builder.Services.AddHostedService<ReportSchedulerBackgroundService>();
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();

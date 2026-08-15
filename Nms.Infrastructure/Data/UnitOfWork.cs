@@ -20,6 +20,8 @@ public class UnitOfWork : IUnitOfWork
     public IFirmwareBaselineRepository FirmwareBaselines { get; }
     public IFirmwareUpgradePlanRepository FirmwareUpgradePlans { get; }
     public ITopologyLinkRepository TopologyLinks { get; }
+    public IScheduledReportRepository ScheduledReports { get; }
+    public IScheduledReportExecutionLogRepository ScheduledReportExecutionLogs { get; }
 
     public UnitOfWork(NmsDbContext context)
     {
@@ -35,6 +37,8 @@ public class UnitOfWork : IUnitOfWork
         FirmwareBaselines = new FirmwareBaselineRepository(_context);
         FirmwareUpgradePlans = new FirmwareUpgradePlanRepository(_context);
         TopologyLinks = new TopologyLinkRepository(_context);
+        ScheduledReports = new ScheduledReportRepository(_context);
+        ScheduledReportExecutionLogs = new ScheduledReportExecutionLogRepository(_context);
     }
 
     public async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)

@@ -153,6 +153,11 @@ public static class DependencyInjection
         services.AddScoped<ITopologyLinkRepository, TopologyLinkRepository>();
         services.AddScoped<INeighborDiscoveryEngine, NeighborDiscoveryEngine>();
 
+
+        // 18. Reporting Repositories
+        services.AddScoped<IScheduledReportRepository, ScheduledReportRepository>();
+        services.AddScoped<IScheduledReportExecutionLogRepository, ScheduledReportExecutionLogRepository>();
+
         return services;
     }
 }

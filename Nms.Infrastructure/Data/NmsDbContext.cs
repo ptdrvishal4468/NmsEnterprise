@@ -41,6 +41,8 @@ public class NmsDbContext : DbContext
     public DbSet<FirmwareBaseline> FirmwareBaselines => Set<FirmwareBaseline>();
     public DbSet<FirmwareUpgradePlan> FirmwareUpgradePlans => Set<FirmwareUpgradePlan>();
     public DbSet<TopologyLink> TopologyLinks => Set<TopologyLink>();
+    public DbSet<ScheduledReport> ScheduledReports => Set<ScheduledReport>();
+    public DbSet<ScheduledReportExecutionLog> ScheduledReportExecutionLogs => Set<ScheduledReportExecutionLog>();
 
     public NmsDbContext(
         DbContextOptions<NmsDbContext> options,

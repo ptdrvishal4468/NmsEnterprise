@@ -133,6 +133,11 @@ public static class Permissions
         public const string ViewTenant = "Dashboard.ViewTenant";
     }
 
+    public static class Reports
+    {
+        public const string Generate = "Reports.Generate";
+        public const string ManageSchedules = "Reports.ManageSchedules";
+    }
     /// <summary>
     /// Helper method to retrieve all predefined permissions for seeding and validation.
     /// </summary>
@@ -156,7 +161,8 @@ public static class Permissions
             ConfigurationBackup.View, ConfigurationBackup.Create, ConfigurationBackup.Delete, ConfigurationBackup.Download, ConfigurationBackup.Schedule, ConfigurationBackup.Restore,
             Firmware.View, Firmware.ManageBaselines, Firmware.ManagePlans,
             Topology.View, Topology.Discover, Topology.Manage,
-            Dashboard.View, Dashboard.ViewExecutive, Dashboard.ViewTenant
+            Dashboard.View, Dashboard.ViewExecutive, Dashboard.ViewTenant,
+            Reports.Generate, Reports.ManageSchedules
         };
     }
 }
