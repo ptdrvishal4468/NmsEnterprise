@@ -138,6 +138,14 @@ public static class Permissions
         public const string Generate = "Reports.Generate";
         public const string ManageSchedules = "Reports.ManageSchedules";
     }
+
+    public static class Audit
+    {
+        public const string View = "Audit.View";
+        public const string Search = "Audit.Search";
+        public const string Export = "Audit.Export";
+        public const string ComplianceReport = "Audit.ComplianceReport";
+    }
     /// <summary>
     /// Helper method to retrieve all predefined permissions for seeding and validation.
     /// </summary>
@@ -162,7 +170,8 @@ public static class Permissions
             Firmware.View, Firmware.ManageBaselines, Firmware.ManagePlans,
             Topology.View, Topology.Discover, Topology.Manage,
             Dashboard.View, Dashboard.ViewExecutive, Dashboard.ViewTenant,
-            Reports.Generate, Reports.ManageSchedules
+            Reports.Generate, Reports.ManageSchedules,
+            Audit.View, Audit.Search, Audit.Export, Audit.ComplianceReport
         };
     }
 }

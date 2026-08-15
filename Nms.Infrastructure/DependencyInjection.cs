@@ -158,6 +158,9 @@ public static class DependencyInjection
         services.AddScoped<IScheduledReportRepository, ScheduledReportRepository>();
         services.AddScoped<IScheduledReportExecutionLogRepository, ScheduledReportExecutionLogRepository>();
 
+        // 19. Audit Logging Repository
+        services.AddScoped<IAuditLogRepository, AuditLogRepository>();
+
         return services;
     }
 }
