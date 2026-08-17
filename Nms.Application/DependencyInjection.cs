@@ -5,6 +5,16 @@ using Nms.Application.Alerts.Services;
 using Nms.Application.Auth.Commands.Login;
 using Nms.Application.Common.Behaviors;
 using Nms.Application.Common.Interfaces;
+using Nms.Application.Customers.Commands.AddCustomerContact;
+using Nms.Application.Customers.Commands.CreateCustomer;
+using Nms.Application.Customers.Commands.DeleteCustomer;
+using Nms.Application.Customers.Commands.DeleteCustomerContact;
+using Nms.Application.Customers.Commands.UpdateCustomer;
+using Nms.Application.Customers.Commands.UpdateCustomerContact;
+using Nms.Application.Customers.Queries.GetCustomerById;
+using Nms.Application.Customers.Queries.GetCustomerContacts;
+using Nms.Application.Customers.Queries.GetCustomerHierarchy;
+using Nms.Application.Customers.Queries.GetCustomersPaged;
 using Nms.Application.Devices.Commands.CreateDevice;
 using Nms.Application.Devices.Commands.DeleteDevice;
 using Nms.Application.Devices.Commands.UpdateDevice;
@@ -113,6 +123,18 @@ public static class DependencyInjection
 
         // Reporting Services
         services.AddSingleton<ICsvReportFormatter, CsvReportFormatter>();
+
+        // Customer Command & Query Handlers
+        services.AddScoped<CreateCustomerCommandHandler>();
+        services.AddScoped<UpdateCustomerCommandHandler>();
+        services.AddScoped<DeleteCustomerCommandHandler>();
+        services.AddScoped<AddCustomerContactCommandHandler>();
+        services.AddScoped<UpdateCustomerContactCommandHandler>();
+        services.AddScoped<DeleteCustomerContactCommandHandler>();
+        services.AddScoped<GetCustomerByIdQueryHandler>();
+        services.AddScoped<GetCustomerHierarchyQueryHandler>();
+        services.AddScoped<GetCustomersPagedQueryHandler>();
+        services.AddScoped<GetCustomerContactsQueryHandler>();
 
         return services;
     }

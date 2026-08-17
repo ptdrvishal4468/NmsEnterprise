@@ -96,6 +96,10 @@ jobs:
       - name: Verify Locations Infrastructure Integrity
         run: dotnet test NmsEnterprise.slnx --no-build --configuration Release --filter "FullyQualifiedName~Locations"  
 
+      # [PHASE 44 ENHANCEMENT] Customer Management Subsystem Integrity Verification
+      - name: Verify Customer Management Infrastructure Integrity
+        run: dotnet test NmsEnterprise.slnx --no-build --configuration Release --filter "FullyQualifiedName~Customers"  
+
       # [PHASE 23 ENHANCEMENT] Execute Tests with Cobertura Coverage Collection
       - name: Execute Unit and Integration Tests
         run: >

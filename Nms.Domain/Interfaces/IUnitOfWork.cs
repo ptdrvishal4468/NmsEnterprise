@@ -25,6 +25,8 @@ public interface IUnitOfWork : IDisposable
     IFloorRepository Floors { get; }
     IRoomRepository Rooms { get; }
     IRackRepository Racks { get; }
+    ICustomerRepository Customers { get; }
+    ICustomerContactRepository CustomerContacts { get; }
 
     /// <summary>
     /// Asynchronously commits all pending tracking changes to the database context.
