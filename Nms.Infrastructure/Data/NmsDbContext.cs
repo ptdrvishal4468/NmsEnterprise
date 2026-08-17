@@ -49,6 +49,8 @@ public class NmsDbContext : DbContext
     public DbSet<Floor> Floors => Set<Floor>();
     public DbSet<Room> Rooms => Set<Room>();
     public DbSet<Rack> Racks => Set<Rack>();
+    public DbSet<Customer> Customers => Set<Customer>();
+    public DbSet<CustomerContact> CustomerContacts => Set<CustomerContact>();
 
     public NmsDbContext(
         DbContextOptions<NmsDbContext> options,

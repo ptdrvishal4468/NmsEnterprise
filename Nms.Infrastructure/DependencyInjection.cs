@@ -179,6 +179,10 @@ public static class DependencyInjection
         // 25. Rack Management Repository
         services.AddScoped<IRackRepository, RackRepository>();
 
+        // 26. Customer Management Repositories
+        services.AddScoped<ICustomerRepository, CustomerRepository>();
+        services.AddScoped<ICustomerContactRepository, CustomerContactRepository>();
+
         return services;
     }
 }

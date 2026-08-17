@@ -29,6 +29,8 @@ public class UnitOfWork : IUnitOfWork
     public IFloorRepository Floors { get; }
     public IRoomRepository Rooms { get; }
     public IRackRepository Racks { get; }
+    public ICustomerRepository Customers { get; }
+    public ICustomerContactRepository CustomerContacts { get; }
 
     public UnitOfWork(NmsDbContext context)
     {
@@ -53,6 +55,8 @@ public class UnitOfWork : IUnitOfWork
         Floors = new FloorRepository(_context);
         Rooms = new RoomRepository(_context);
         Racks = new RackRepository(_context);
+        Customers = new CustomerRepository(_context);
+        CustomerContacts = new CustomerContactRepository(_context);
 
 
     }

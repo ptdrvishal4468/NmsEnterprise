@@ -170,6 +170,14 @@ public static class Permissions
         public const string Update = "Locations.Update";
         public const string Delete = "Locations.Delete";
     }
+
+    public static class Customers
+    {
+        public const string View = "Customers.View";
+        public const string Create = "Customers.Create";
+        public const string Update = "Customers.Update";
+        public const string Delete = "Customers.Delete";
+    }
     /// <summary>
     /// Helper method to retrieve all predefined permissions for seeding and validation.
     /// </summary>
@@ -198,7 +206,8 @@ public static class Permissions
             Audit.View, Audit.Search, Audit.Export, Audit.ComplianceReport,
             Assets.View, Assets.Create, Assets.Update, Assets.Delete, Assets.ManageLifecycle,
             Sites.View, Sites.Create, Sites.Update, Sites.Delete,
-            Locations.View, Locations.Create, Locations.Update, Locations.Delete
+            Locations.View, Locations.Create, Locations.Update, Locations.Delete,
+            Customers.View, Customers.Create, Customers.Update, Customers.Delete
         };
     }
 }
