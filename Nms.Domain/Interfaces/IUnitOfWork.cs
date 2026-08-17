@@ -5,6 +5,7 @@
 /// </summary>
 public interface IUnitOfWork : IDisposable
 {
+    IAssetRepository Assets { get; }
     IDeviceRepository Devices { get; }
     IReachabilityHistoryRepository ReachabilityHistories { get; }
     IEventRepository Events { get; }
