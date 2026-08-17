@@ -20,6 +20,11 @@ public interface IUnitOfWork : IDisposable
     IScheduledReportRepository ScheduledReports { get; }
     IScheduledReportExecutionLogRepository ScheduledReportExecutionLogs { get; }
     IAuditLogRepository AuditLogs { get; }
+    ISiteRepository Sites { get; }
+    IBuildingRepository Buildings { get; }
+    IFloorRepository Floors { get; }
+    IRoomRepository Rooms { get; }
+    IRackRepository Racks { get; }
 
     /// <summary>
     /// Asynchronously commits all pending tracking changes to the database context.

@@ -44,6 +44,11 @@ public class NmsDbContext : DbContext
     public DbSet<ScheduledReport> ScheduledReports => Set<ScheduledReport>();
     public DbSet<ScheduledReportExecutionLog> ScheduledReportExecutionLogs => Set<ScheduledReportExecutionLog>();
     public DbSet<Asset> Assets => Set<Asset>();
+    public DbSet<Site> Sites => Set<Site>();
+    public DbSet<Building> Buildings => Set<Building>();
+    public DbSet<Floor> Floors => Set<Floor>();
+    public DbSet<Room> Rooms => Set<Room>();
+    public DbSet<Rack> Racks => Set<Rack>();
 
     public NmsDbContext(
         DbContextOptions<NmsDbContext> options,

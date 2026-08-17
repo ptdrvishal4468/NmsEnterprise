@@ -87,7 +87,14 @@ jobs:
         
       # [PHASE 42 ENHANCEMENT] Asset Management Subsystem Integrity Verification
       - name: Verify Asset Management Infrastructure Integrity
-        run: dotnet test NmsEnterprise.slnx --no-build --configuration Release --filter "FullyQualifiedName~Assets"  
+        run: dotnet test NmsEnterprise.slnx --no-build --configuration Release --filter "FullyQualifiedName~Assets" 
+        
+      # [PHASE 43 ENHANCEMENT] Site & Location Management Subsystem Integrity Verification
+      - name: Verify Sites Infrastructure Integrity
+        run: dotnet test NmsEnterprise.slnx --no-build --configuration Release --filter "FullyQualifiedName~Sites"
+
+      - name: Verify Locations Infrastructure Integrity
+        run: dotnet test NmsEnterprise.slnx --no-build --configuration Release --filter "FullyQualifiedName~Locations"  
 
       # [PHASE 23 ENHANCEMENT] Execute Tests with Cobertura Coverage Collection
       - name: Execute Unit and Integration Tests
