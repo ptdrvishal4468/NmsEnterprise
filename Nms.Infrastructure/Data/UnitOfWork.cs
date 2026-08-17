@@ -31,6 +31,8 @@ public class UnitOfWork : IUnitOfWork
     public IRackRepository Racks { get; }
     public ICustomerRepository Customers { get; }
     public ICustomerContactRepository CustomerContacts { get; }
+    public ITicketRepository Tickets { get; }
+    public ITicketSyncLogRepository TicketSyncLogs { get; }
 
     public UnitOfWork(NmsDbContext context)
     {
@@ -57,6 +59,8 @@ public class UnitOfWork : IUnitOfWork
         Racks = new RackRepository(_context);
         Customers = new CustomerRepository(_context);
         CustomerContacts = new CustomerContactRepository(_context);
+        Tickets = new TicketRepository(_context);
+        TicketSyncLogs = new TicketSyncLogRepository(_context);
 
 
     }

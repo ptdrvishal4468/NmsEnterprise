@@ -178,6 +178,15 @@ public static class Permissions
         public const string Update = "Customers.Update";
         public const string Delete = "Customers.Delete";
     }
+
+    public static class Ticketing
+    {
+        public const string View = "Ticketing.View";
+        public const string Create = "Ticketing.Create";
+        public const string Update = "Ticketing.Update";
+        public const string Delete = "Ticketing.Delete";
+        public const string Sync = "Ticketing.Sync";
+    }
     /// <summary>
     /// Helper method to retrieve all predefined permissions for seeding and validation.
     /// </summary>
@@ -207,7 +216,8 @@ public static class Permissions
             Assets.View, Assets.Create, Assets.Update, Assets.Delete, Assets.ManageLifecycle,
             Sites.View, Sites.Create, Sites.Update, Sites.Delete,
             Locations.View, Locations.Create, Locations.Update, Locations.Delete,
-            Customers.View, Customers.Create, Customers.Update, Customers.Delete
+            Customers.View, Customers.Create, Customers.Update, Customers.Delete,
+            Ticketing.View, Ticketing.Create, Ticketing.Update, Ticketing.Delete, Ticketing.Sync
         };
     }
 }

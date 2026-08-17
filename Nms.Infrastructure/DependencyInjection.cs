@@ -20,6 +20,10 @@ using Nms.Infrastructure.Syslog;
 using Nms.Infrastructure.Syslog.Options;
 using Nms.Infrastructure.Telemetry;
 using Nms.Infrastructure.Tenants;
+using Nms.Infrastructure.Ticketing;
+using Nms.Infrastructure.Ticketing.Jira;
+using Nms.Infrastructure.Ticketing.Options;
+using Nms.Infrastructure.Ticketing.ServiceNow;
 using Nms.Infrastructure.Topology;
 
 namespace Nms.Infrastructure;
@@ -182,6 +186,21 @@ public static class DependencyInjection
         // 26. Customer Management Repositories
         services.AddScoped<ICustomerRepository, CustomerRepository>();
         services.AddScoped<ICustomerContactRepository, CustomerContactRepository>();
+
+        // 27.(Ticketing Options, Repositories, Clients & Providers)
+        services.Configure<TicketingOptions>(configuration.GetSection(TicketingOptions.SectionName));
+        services.Configure<ServiceNowOptions>(configuration.GetSection(ServiceNowOptions.SectionName));
+        services.Configure<JiraOptions>(configuration.GetSection(JiraOptions.SectionName));
+
+        services.AddScoped<ITicketRepository, TicketRepository>();
+        services.AddScoped<ITicketSyncLogRepository, TicketSyncLogRepository>();
+
+        services.AddScoped<IServiceNowClient, ServiceNowClient>();
+        services.AddScoped<IJiraClient, JiraClient>();
+
+        services.AddScoped<ServiceNowTicketingProvider>();
+        services.AddScoped<JiraTicketingProvider>();
+        services.AddScoped<ITicketingProviderFactory, TicketingProviderFactory>();
 
         return services;
     }

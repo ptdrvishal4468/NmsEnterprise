@@ -98,7 +98,11 @@ jobs:
 
       # [PHASE 44 ENHANCEMENT] Customer Management Subsystem Integrity Verification
       - name: Verify Customer Management Infrastructure Integrity
-        run: dotnet test NmsEnterprise.slnx --no-build --configuration Release --filter "FullyQualifiedName~Customers"  
+        run: dotnet test NmsEnterprise.slnx --no-build --configuration Release --filter "FullyQualifiedName~Customers" 
+        
+      # [PHASE 45 ENHANCEMENT] Ticketing Integration Subsystem Integrity Verification
+      - name: Verify Ticketing Integration Infrastructure Integrity
+        run: dotnet test NmsEnterprise.slnx --no-build --configuration Release --filter "FullyQualifiedName~Ticketing"  
 
       # [PHASE 23 ENHANCEMENT] Execute Tests with Cobertura Coverage Collection
       - name: Execute Unit and Integration Tests

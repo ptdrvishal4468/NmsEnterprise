@@ -27,6 +27,8 @@ public interface IUnitOfWork : IDisposable
     IRackRepository Racks { get; }
     ICustomerRepository Customers { get; }
     ICustomerContactRepository CustomerContacts { get; }
+    ITicketRepository Tickets { get; }
+    ITicketSyncLogRepository TicketSyncLogs { get; }
 
     /// <summary>
     /// Asynchronously commits all pending tracking changes to the database context.
