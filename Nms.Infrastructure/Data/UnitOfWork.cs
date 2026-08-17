@@ -24,6 +24,11 @@ public class UnitOfWork : IUnitOfWork
     public IScheduledReportExecutionLogRepository ScheduledReportExecutionLogs { get; }
     public IAuditLogRepository AuditLogs { get; }
     public IAssetRepository Assets { get; }
+    public ISiteRepository Sites { get; }
+    public IBuildingRepository Buildings { get; }
+    public IFloorRepository Floors { get; }
+    public IRoomRepository Rooms { get; }
+    public IRackRepository Racks { get; }
 
     public UnitOfWork(NmsDbContext context)
     {
@@ -43,6 +48,13 @@ public class UnitOfWork : IUnitOfWork
         ScheduledReportExecutionLogs = new ScheduledReportExecutionLogRepository(_context);
         AuditLogs = new AuditLogRepository(_context);
         Assets = new AssetRepository(_context);
+        Sites = new SiteRepository(_context);
+        Buildings = new BuildingRepository(_context);
+        Floors = new FloorRepository(_context);
+        Rooms = new RoomRepository(_context);
+        Racks = new RackRepository(_context);
+
+
     }
 
     public async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)

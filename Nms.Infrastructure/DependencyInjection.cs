@@ -164,6 +164,21 @@ public static class DependencyInjection
         // 20. Asset Management Repository
         services.AddScoped<IAssetRepository, AssetRepository>();
 
+        // 21. Site Management Repository
+        services.AddScoped<ISiteRepository, SiteRepository>();
+
+        // 22. Building Management Repository
+        services.AddScoped<IBuildingRepository, BuildingRepository>();
+
+        // 23. Floor Management Repository
+        services.AddScoped<IFloorRepository, FloorRepository>();
+
+        // 24. Room Management Repository
+        services.AddScoped<IRoomRepository, RoomRepository>();
+
+        // 25. Rack Management Repository
+        services.AddScoped<IRackRepository, RackRepository>();
+
         return services;
     }
 }

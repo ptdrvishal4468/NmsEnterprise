@@ -154,6 +154,22 @@ public static class Permissions
         public const string Delete = "Assets.Delete";
         public const string ManageLifecycle = "Assets.ManageLifecycle";
     }
+
+    public static class Sites
+    {
+        public const string View = "Sites.View";
+        public const string Create = "Sites.Create";
+        public const string Update = "Sites.Update";
+        public const string Delete = "Sites.Delete";
+    }
+
+    public static class Locations
+    {
+        public const string View = "Locations.View";
+        public const string Create = "Locations.Create";
+        public const string Update = "Locations.Update";
+        public const string Delete = "Locations.Delete";
+    }
     /// <summary>
     /// Helper method to retrieve all predefined permissions for seeding and validation.
     /// </summary>
@@ -180,7 +196,9 @@ public static class Permissions
             Dashboard.View, Dashboard.ViewExecutive, Dashboard.ViewTenant,
             Reports.Generate, Reports.ManageSchedules,
             Audit.View, Audit.Search, Audit.Export, Audit.ComplianceReport,
-            Assets.View, Assets.Create, Assets.Update, Assets.Delete, Assets.ManageLifecycle
+            Assets.View, Assets.Create, Assets.Update, Assets.Delete, Assets.ManageLifecycle,
+            Sites.View, Sites.Create, Sites.Update, Sites.Delete,
+            Locations.View, Locations.Create, Locations.Update, Locations.Delete
         };
     }
 }
