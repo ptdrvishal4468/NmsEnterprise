@@ -41,6 +41,13 @@ using Nms.Application.Syslog.Queries.GetSyslogsPaged;
 using Nms.Application.Telemetry.Commands.PollDevice;
 using Nms.Application.Telemetry.Commands.ProcessTelemetryData;
 using Nms.Application.Telemetry.Queries.GetDeviceMetrics;
+using Nms.Application.Ticketing.Commands.CloseTicket;
+using Nms.Application.Ticketing.Commands.CreateTicket;
+using Nms.Application.Ticketing.Commands.SyncTicket;
+using Nms.Application.Ticketing.Commands.UpdateTicket;
+using Nms.Application.Ticketing.Queries.GetTicketById;
+using Nms.Application.Ticketing.Queries.GetTicketsPaged;
+using Nms.Application.Ticketing.Queries.GetTicketSyncLogs;
 using Nms.Application.Topology.Services;
 using Nms.Application.Users.Commands.CreateUser;
 using Nms.Application.Users.Commands.UpdateUserRoles;
@@ -135,6 +142,15 @@ public static class DependencyInjection
         services.AddScoped<GetCustomerHierarchyQueryHandler>();
         services.AddScoped<GetCustomersPagedQueryHandler>();
         services.AddScoped<GetCustomerContactsQueryHandler>();
+
+        // Ticketing Command & Query Handlers
+        services.AddScoped<CreateTicketCommandHandler>();
+        services.AddScoped<UpdateTicketCommandHandler>();
+        services.AddScoped<CloseTicketCommandHandler>();
+        services.AddScoped<SyncTicketCommandHandler>();
+        services.AddScoped<GetTicketByIdQueryHandler>();
+        services.AddScoped<GetTicketsPagedQueryHandler>();
+        services.AddScoped<GetTicketSyncLogsQueryHandler>();
 
         return services;
     }

@@ -51,6 +51,8 @@ public class NmsDbContext : DbContext
     public DbSet<Rack> Racks => Set<Rack>();
     public DbSet<Customer> Customers => Set<Customer>();
     public DbSet<CustomerContact> CustomerContacts => Set<CustomerContact>();
+    public DbSet<Ticket> Tickets => Set<Ticket>();
+    public DbSet<TicketSyncLog> TicketSyncLogs => Set<TicketSyncLog>();
 
     public NmsDbContext(
         DbContextOptions<NmsDbContext> options,
