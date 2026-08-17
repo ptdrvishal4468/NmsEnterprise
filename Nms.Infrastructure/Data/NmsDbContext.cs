@@ -43,6 +43,7 @@ public class NmsDbContext : DbContext
     public DbSet<TopologyLink> TopologyLinks => Set<TopologyLink>();
     public DbSet<ScheduledReport> ScheduledReports => Set<ScheduledReport>();
     public DbSet<ScheduledReportExecutionLog> ScheduledReportExecutionLogs => Set<ScheduledReportExecutionLog>();
+    public DbSet<Asset> Assets => Set<Asset>();
 
     public NmsDbContext(
         DbContextOptions<NmsDbContext> options,

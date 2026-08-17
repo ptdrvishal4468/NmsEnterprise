@@ -23,6 +23,7 @@ public class UnitOfWork : IUnitOfWork
     public IScheduledReportRepository ScheduledReports { get; }
     public IScheduledReportExecutionLogRepository ScheduledReportExecutionLogs { get; }
     public IAuditLogRepository AuditLogs { get; }
+    public IAssetRepository Assets { get; }
 
     public UnitOfWork(NmsDbContext context)
     {
@@ -41,6 +42,7 @@ public class UnitOfWork : IUnitOfWork
         ScheduledReports = new ScheduledReportRepository(_context);
         ScheduledReportExecutionLogs = new ScheduledReportExecutionLogRepository(_context);
         AuditLogs = new AuditLogRepository(_context);
+        Assets = new AssetRepository(_context);
     }
 
     public async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)

@@ -146,6 +146,14 @@ public static class Permissions
         public const string Export = "Audit.Export";
         public const string ComplianceReport = "Audit.ComplianceReport";
     }
+    public static class Assets
+    {
+        public const string View = "Assets.View";
+        public const string Create = "Assets.Create";
+        public const string Update = "Assets.Update";
+        public const string Delete = "Assets.Delete";
+        public const string ManageLifecycle = "Assets.ManageLifecycle";
+    }
     /// <summary>
     /// Helper method to retrieve all predefined permissions for seeding and validation.
     /// </summary>
@@ -171,7 +179,8 @@ public static class Permissions
             Topology.View, Topology.Discover, Topology.Manage,
             Dashboard.View, Dashboard.ViewExecutive, Dashboard.ViewTenant,
             Reports.Generate, Reports.ManageSchedules,
-            Audit.View, Audit.Search, Audit.Export, Audit.ComplianceReport
+            Audit.View, Audit.Search, Audit.Export, Audit.ComplianceReport,
+            Assets.View, Assets.Create, Assets.Update, Assets.Delete, Assets.ManageLifecycle
         };
     }
 }

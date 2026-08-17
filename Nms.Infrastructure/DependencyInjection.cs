@@ -161,6 +161,9 @@ public static class DependencyInjection
         // 19. Audit Logging Repository
         services.AddScoped<IAuditLogRepository, AuditLogRepository>();
 
+        // 20. Asset Management Repository
+        services.AddScoped<IAssetRepository, AssetRepository>();
+
         return services;
     }
 }
