@@ -112,6 +112,10 @@ jobs:
       - name: Verify Vulnerability & Firmware Analysis Infrastructure Integrity
         run: dotnet test NmsEnterprise.slnx --no-build --configuration Release --filter "FullyQualifiedName~Vulnerabilities"  
 
+      # [PHASE 48 ENHANCEMENT] Threat Detection Subsystem Integrity Verification
+      - name: Verify Threat Detection Infrastructure Integrity
+        run: dotnet test NmsEnterprise.slnx --no-build --configuration Release --filter "FullyQualifiedName~ThreatDetection"  
+
       # [PHASE 23 ENHANCEMENT] Execute Tests with Cobertura Coverage Collection
       - name: Execute Unit and Integration Tests
         run: >

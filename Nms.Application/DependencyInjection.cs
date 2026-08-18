@@ -53,6 +53,7 @@ using Nms.Application.Syslog.Queries.GetSyslogsPaged;
 using Nms.Application.Telemetry.Commands.PollDevice;
 using Nms.Application.Telemetry.Commands.ProcessTelemetryData;
 using Nms.Application.Telemetry.Queries.GetDeviceMetrics;
+using Nms.Application.ThreatDetection.Services;
 using Nms.Application.Ticketing.Commands.CloseTicket;
 using Nms.Application.Ticketing.Commands.CreateTicket;
 using Nms.Application.Ticketing.Commands.SyncTicket;
@@ -216,6 +217,11 @@ public static class DependencyInjection
         services.AddScoped<GetUpgradeRecommendationsPagedQueryHandler>();
         services.AddScoped<GetFirmwareRiskSummaryQueryHandler>();
 
+        // Threat Detection Services
+        services.AddScoped<IFailedLoginDetector, FailedLoginDetector>();
+        services.AddScoped<IConfigurationDriftDetector, ConfigurationDriftDetector>();
+        services.AddScoped<IPortScanDetector, PortScanDetector>();
+        services.AddScoped<IUnauthorizedAccessDetector, UnauthorizedAccessDetector>();
         return services;
     }
 }
