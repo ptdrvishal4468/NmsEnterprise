@@ -106,7 +106,11 @@ jobs:
         
       # [PHASE 46 ENHANCEMENT] Cybersecurity Compliance Subsystem Integrity Verification
       - name: Verify Cybersecurity Compliance Infrastructure Integrity
-        run: dotnet test NmsEnterprise.slnx --no-build --configuration Release --filter "FullyQualifiedName~Cybersecurity"  
+        run: dotnet test NmsEnterprise.slnx --no-build --configuration Release --filter "FullyQualifiedName~Cybersecurity" 
+        
+      # [PHASE 47 ENHANCEMENT] Vulnerability & Firmware Analysis Subsystem Integrity Verification
+      - name: Verify Vulnerability & Firmware Analysis Infrastructure Integrity
+        run: dotnet test NmsEnterprise.slnx --no-build --configuration Release --filter "FullyQualifiedName~Vulnerabilities"  
 
       # [PHASE 23 ENHANCEMENT] Execute Tests with Cobertura Coverage Collection
       - name: Execute Unit and Integration Tests

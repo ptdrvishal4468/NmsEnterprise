@@ -35,6 +35,10 @@ public class UnitOfWork : IUnitOfWork
     public ITicketSyncLogRepository TicketSyncLogs { get; }
     public ICompliancePolicyRepository CompliancePolicies { get; }
     public IDeviceComplianceScanRepository DeviceComplianceScans { get; }
+    public IVulnerabilityRepository Vulnerabilities { get; }
+    public ISecurityAdvisoryRepository SecurityAdvisories { get; }
+    public IDeviceVulnerabilityMatchRepository DeviceVulnerabilityMatches { get; }
+    public IFirmwareUpgradeRecommendationRepository FirmwareUpgradeRecommendations { get; }
 
     public UnitOfWork(NmsDbContext context)
     {
@@ -65,6 +69,10 @@ public class UnitOfWork : IUnitOfWork
         TicketSyncLogs = new TicketSyncLogRepository(_context);
         CompliancePolicies = new CompliancePolicyRepository(_context);
         DeviceComplianceScans = new DeviceComplianceScanRepository(_context);
+        Vulnerabilities = new VulnerabilityRepository(_context);
+        SecurityAdvisories = new SecurityAdvisoryRepository(_context);
+        DeviceVulnerabilityMatches = new DeviceVulnerabilityMatchRepository(_context);
+        FirmwareUpgradeRecommendations = new FirmwareUpgradeRecommendationRepository(_context);
 
 
     }

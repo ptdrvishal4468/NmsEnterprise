@@ -56,7 +56,10 @@ public class NmsDbContext : DbContext
     public DbSet<CompliancePolicy> CompliancePolicies => Set<CompliancePolicy>();
     public DbSet<DeviceComplianceScan> DeviceComplianceScans => Set<DeviceComplianceScan>();
     public DbSet<DeviceComplianceResult> DeviceComplianceResults => Set<DeviceComplianceResult>();
-
+    public DbSet<Vulnerability> Vulnerabilities => Set<Vulnerability>();
+    public DbSet<SecurityAdvisory> SecurityAdvisories => Set<SecurityAdvisory>();
+    public DbSet<DeviceVulnerabilityMatch> DeviceVulnerabilityMatches => Set<DeviceVulnerabilityMatch>();
+    public DbSet<FirmwareUpgradeRecommendation> FirmwareUpgradeRecommendations => Set<FirmwareUpgradeRecommendation>();
     public NmsDbContext(
         DbContextOptions<NmsDbContext> options,
         ITenantContext? tenantContext = null) : base(options)

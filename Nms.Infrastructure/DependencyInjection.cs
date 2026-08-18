@@ -26,6 +26,8 @@ using Nms.Infrastructure.Ticketing.Jira;
 using Nms.Infrastructure.Ticketing.Options;
 using Nms.Infrastructure.Ticketing.ServiceNow;
 using Nms.Infrastructure.Topology;
+using Nms.Infrastructure.Vulnerabilities.Options;
+using Nms.Infrastructure.Vulnerabilities.Providers;
 
 namespace Nms.Infrastructure;
 
@@ -207,6 +209,16 @@ public static class DependencyInjection
         services.AddScoped<ICompliancePolicyRepository, CompliancePolicyRepository>();
         services.AddScoped<IDeviceComplianceScanRepository, DeviceComplianceScanRepository>();
         services.AddScoped<IDeviceSecurityEvaluationAdapter, DeviceSecurityEvaluationAdapter>();
+
+        // 29. Vulnerability & Firmware Analysis Repositories & Providers
+        services.Configure<VulnerabilityIntelligenceOptions>(configuration.GetSection(VulnerabilityIntelligenceOptions.SectionName));
+        services.AddScoped<IVulnerabilityRepository, VulnerabilityRepository>();
+        services.AddScoped<ISecurityAdvisoryRepository, SecurityAdvisoryRepository>();
+        services.AddScoped<IDeviceVulnerabilityMatchRepository, DeviceVulnerabilityMatchRepository>();
+        services.AddScoped<IFirmwareUpgradeRecommendationRepository, FirmwareUpgradeRecommendationRepository>();
+        services.AddScoped<IVulnerabilityIntelligenceProvider, LocalVulnerabilityIntelligenceProvider>();
+
+
         return services;
     }
 }

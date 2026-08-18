@@ -65,6 +65,20 @@ using Nms.Application.Users.Commands.CreateUser;
 using Nms.Application.Users.Commands.UpdateUserRoles;
 using Nms.Application.Users.Queries.GetUserById;
 using Nms.Application.Users.Queries.GetUsersPaged;
+using Nms.Application.Vulnerabilities.Commands.AnalyzeAllDevicesVulnerabilities;
+using Nms.Application.Vulnerabilities.Commands.AnalyzeDeviceVulnerabilities;
+using Nms.Application.Vulnerabilities.Commands.CreateSecurityAdvisory;
+using Nms.Application.Vulnerabilities.Commands.CreateVulnerability;
+using Nms.Application.Vulnerabilities.Commands.GenerateUpgradeRecommendations;
+using Nms.Application.Vulnerabilities.Commands.UpdateVulnerabilityMatchStatus;
+using Nms.Application.Vulnerabilities.Queries.GetDeviceVulnerabilitiesPaged;
+using Nms.Application.Vulnerabilities.Queries.GetFirmwareRiskSummary;
+using Nms.Application.Vulnerabilities.Queries.GetSecurityAdvisoriesPaged;
+using Nms.Application.Vulnerabilities.Queries.GetSecurityAdvisoryById;
+using Nms.Application.Vulnerabilities.Queries.GetUpgradeRecommendationsPaged;
+using Nms.Application.Vulnerabilities.Queries.GetVulnerabilitiesPaged;
+using Nms.Application.Vulnerabilities.Queries.GetVulnerabilityById;
+using Nms.Application.Vulnerabilities.Services;
 
 namespace Nms.Application;
 
@@ -182,6 +196,25 @@ public static class DependencyInjection
         services.AddScoped<IPasswordPolicyVerifier, PasswordPolicyVerifier>();
         services.AddScoped<IEncryptionVerifier, EncryptionVerifier>();
         services.AddScoped<ICybersecurityComplianceEngine, CybersecurityComplianceEngine>();
+
+        // Vulnerability & Firmware Analysis Handlers & Engines
+        services.AddScoped<IVulnerabilityAnalysisEngine, VulnerabilityAnalysisEngine>();
+        services.AddScoped<IFirmwareUpgradeRecommendationEngine, FirmwareUpgradeRecommendationEngine>();
+
+        services.AddScoped<CreateVulnerabilityCommandHandler>();
+        services.AddScoped<CreateSecurityAdvisoryCommandHandler>();
+        services.AddScoped<AnalyzeDeviceVulnerabilitiesCommandHandler>();
+        services.AddScoped<AnalyzeAllDevicesVulnerabilitiesCommandHandler>();
+        services.AddScoped<GenerateUpgradeRecommendationsCommandHandler>();
+        services.AddScoped<UpdateVulnerabilityMatchStatusCommandHandler>();
+
+        services.AddScoped<GetVulnerabilitiesPagedQueryHandler>();
+        services.AddScoped<GetVulnerabilityByIdQueryHandler>();
+        services.AddScoped<GetSecurityAdvisoriesPagedQueryHandler>();
+        services.AddScoped<GetSecurityAdvisoryByIdQueryHandler>();
+        services.AddScoped<GetDeviceVulnerabilitiesPagedQueryHandler>();
+        services.AddScoped<GetUpgradeRecommendationsPagedQueryHandler>();
+        services.AddScoped<GetFirmwareRiskSummaryQueryHandler>();
 
         return services;
     }
