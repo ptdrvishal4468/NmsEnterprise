@@ -218,7 +218,10 @@ public static class DependencyInjection
         services.AddScoped<IFirmwareUpgradeRecommendationRepository, FirmwareUpgradeRecommendationRepository>();
         services.AddScoped<IVulnerabilityIntelligenceProvider, LocalVulnerabilityIntelligenceProvider>();
 
-
+        // 30. Threat Intelligence Repositories
+        services.AddScoped<IThreatIndicatorRepository, ThreatIndicatorRepository>();
+        services.AddScoped<IThreatDetectionRuleRepository, ThreatDetectionRuleRepository>();
+        services.AddScoped<IConfigurationDriftRepository, ConfigurationDriftRepository>();
         return services;
     }
 }

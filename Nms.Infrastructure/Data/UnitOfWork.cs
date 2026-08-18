@@ -39,7 +39,9 @@ public class UnitOfWork : IUnitOfWork
     public ISecurityAdvisoryRepository SecurityAdvisories { get; }
     public IDeviceVulnerabilityMatchRepository DeviceVulnerabilityMatches { get; }
     public IFirmwareUpgradeRecommendationRepository FirmwareUpgradeRecommendations { get; }
-
+    public IThreatIndicatorRepository ThreatIndicators { get; }
+    public IThreatDetectionRuleRepository ThreatDetectionRules { get; }
+    public IConfigurationDriftRepository ConfigurationDrifts { get; }
     public UnitOfWork(NmsDbContext context)
     {
         _context = context;
@@ -73,7 +75,9 @@ public class UnitOfWork : IUnitOfWork
         SecurityAdvisories = new SecurityAdvisoryRepository(_context);
         DeviceVulnerabilityMatches = new DeviceVulnerabilityMatchRepository(_context);
         FirmwareUpgradeRecommendations = new FirmwareUpgradeRecommendationRepository(_context);
-
+        ThreatIndicators = new ThreatIndicatorRepository(_context);
+        ThreatDetectionRules = new ThreatDetectionRuleRepository(_context);
+        ConfigurationDrifts = new ConfigurationDriftRepository(_context);
 
     }
 

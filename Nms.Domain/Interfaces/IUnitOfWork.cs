@@ -35,6 +35,9 @@ public interface IUnitOfWork : IDisposable
     ISecurityAdvisoryRepository SecurityAdvisories { get; }
     IDeviceVulnerabilityMatchRepository DeviceVulnerabilityMatches { get; }
     IFirmwareUpgradeRecommendationRepository FirmwareUpgradeRecommendations { get; }
+    IThreatIndicatorRepository ThreatIndicators { get; }
+    IThreatDetectionRuleRepository ThreatDetectionRules { get; }
+    IConfigurationDriftRepository ConfigurationDrifts { get; }
 
     /// <summary>
     /// Asynchronously commits all pending tracking changes to the database context.

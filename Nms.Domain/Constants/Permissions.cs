@@ -201,6 +201,12 @@ public static class Permissions
         public const string Analyze = "Vulnerabilities.Analyze";
         public const string Recommendations = "Vulnerabilities.Recommendations";
     }
+    public static class ThreatDetection
+    {
+        public const string View = "Permissions.ThreatDetection.View";
+        public const string Manage = "Permissions.ThreatDetection.Manage";
+        public const string Analyze = "Permissions.ThreatDetection.Analyze";
+    }
     /// <summary>
     /// Helper method to retrieve all predefined permissions for seeding and validation.
     /// </summary>
@@ -233,7 +239,8 @@ public static class Permissions
             Customers.View, Customers.Create, Customers.Update, Customers.Delete,
             Ticketing.View, Ticketing.Create, Ticketing.Update, Ticketing.Delete, Ticketing.Sync,
             Cybersecurity.View, Cybersecurity.ManagePolicies, Cybersecurity.Evaluate,
-            Vulnerabilities.View, Vulnerabilities.Manage, Vulnerabilities.Analyze, Vulnerabilities.Recommendations
+            Vulnerabilities.View, Vulnerabilities.Manage, Vulnerabilities.Analyze, Vulnerabilities.Recommendations,
+            ThreatDetection.View, ThreatDetection.Manage, ThreatDetection.Analyze
         };
     }
 }

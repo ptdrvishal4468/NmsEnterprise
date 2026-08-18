@@ -60,6 +60,9 @@ public class NmsDbContext : DbContext
     public DbSet<SecurityAdvisory> SecurityAdvisories => Set<SecurityAdvisory>();
     public DbSet<DeviceVulnerabilityMatch> DeviceVulnerabilityMatches => Set<DeviceVulnerabilityMatch>();
     public DbSet<FirmwareUpgradeRecommendation> FirmwareUpgradeRecommendations => Set<FirmwareUpgradeRecommendation>();
+    public DbSet<ThreatIndicator> ThreatIndicators => Set<ThreatIndicator>();
+    public DbSet<ThreatDetectionRule> ThreatDetectionRules => Set<ThreatDetectionRule>();
+    public DbSet<ConfigurationDriftRecord> ConfigurationDrifts => Set<ConfigurationDriftRecord>();
     public NmsDbContext(
         DbContextOptions<NmsDbContext> options,
         ITenantContext? tenantContext = null) : base(options)
