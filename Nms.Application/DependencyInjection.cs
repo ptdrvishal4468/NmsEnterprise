@@ -15,6 +15,18 @@ using Nms.Application.Customers.Queries.GetCustomerById;
 using Nms.Application.Customers.Queries.GetCustomerContacts;
 using Nms.Application.Customers.Queries.GetCustomerHierarchy;
 using Nms.Application.Customers.Queries.GetCustomersPaged;
+using Nms.Application.Cybersecurity.Commands.CreateCompliancePolicy;
+using Nms.Application.Cybersecurity.Commands.DeleteCompliancePolicy;
+using Nms.Application.Cybersecurity.Commands.EvaluateAllDevicesCompliance;
+using Nms.Application.Cybersecurity.Commands.EvaluateDeviceCompliance;
+using Nms.Application.Cybersecurity.Commands.UpdateCompliancePolicy;
+using Nms.Application.Cybersecurity.Queries.GetCompliancePoliciesPaged;
+using Nms.Application.Cybersecurity.Queries.GetCompliancePolicyById;
+using Nms.Application.Cybersecurity.Queries.GetCybersecurityPostureSummary;
+using Nms.Application.Cybersecurity.Queries.GetDeviceComplianceScanById;
+using Nms.Application.Cybersecurity.Queries.GetDeviceComplianceScansPaged;
+using Nms.Application.Cybersecurity.Queries.GetDeviceLatestComplianceScan;
+using Nms.Application.Cybersecurity.Services;
 using Nms.Application.Devices.Commands.CreateDevice;
 using Nms.Application.Devices.Commands.DeleteDevice;
 using Nms.Application.Devices.Commands.UpdateDevice;
@@ -151,6 +163,25 @@ public static class DependencyInjection
         services.AddScoped<GetTicketByIdQueryHandler>();
         services.AddScoped<GetTicketsPagedQueryHandler>();
         services.AddScoped<GetTicketSyncLogsQueryHandler>();
+
+        // Cybersecurity Command & Query Handlers
+        services.AddScoped<CreateCompliancePolicyCommandHandler>();
+        services.AddScoped<UpdateCompliancePolicyCommandHandler>();
+        services.AddScoped<DeleteCompliancePolicyCommandHandler>();
+        services.AddScoped<EvaluateDeviceComplianceCommandHandler>();
+        services.AddScoped<EvaluateAllDevicesComplianceCommandHandler>();
+        services.AddScoped<GetCompliancePoliciesPagedQueryHandler>();
+        services.AddScoped<GetCompliancePolicyByIdQueryHandler>();
+        services.AddScoped<GetDeviceComplianceScanByIdQueryHandler>();
+        services.AddScoped<GetDeviceComplianceScansPagedQueryHandler>();
+        services.AddScoped<GetDeviceLatestComplianceScanQueryHandler>();
+        services.AddScoped<GetCybersecurityPostureSummaryQueryHandler>();
+
+        // Cybersecurity Compliance Evaluation Services
+        services.AddScoped<ISecureConfigurationValidator, SecureConfigurationValidator>();
+        services.AddScoped<IPasswordPolicyVerifier, PasswordPolicyVerifier>();
+        services.AddScoped<IEncryptionVerifier, EncryptionVerifier>();
+        services.AddScoped<ICybersecurityComplianceEngine, CybersecurityComplianceEngine>();
 
         return services;
     }
