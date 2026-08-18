@@ -31,6 +31,10 @@ public interface IUnitOfWork : IDisposable
     ITicketSyncLogRepository TicketSyncLogs { get; }
     ICompliancePolicyRepository CompliancePolicies { get; }
     IDeviceComplianceScanRepository DeviceComplianceScans { get; }
+    IVulnerabilityRepository Vulnerabilities { get; }
+    ISecurityAdvisoryRepository SecurityAdvisories { get; }
+    IDeviceVulnerabilityMatchRepository DeviceVulnerabilityMatches { get; }
+    IFirmwareUpgradeRecommendationRepository FirmwareUpgradeRecommendations { get; }
 
     /// <summary>
     /// Asynchronously commits all pending tracking changes to the database context.
