@@ -6,6 +6,7 @@ using Nms.Application.Common.Interfaces;
 using Nms.Domain.Interfaces;
 using Nms.Infrastructure.ConfigurationBackups;
 using Nms.Infrastructure.Connectivity;
+using Nms.Infrastructure.Cybersecurity.Adapters;
 using Nms.Infrastructure.Data;
 using Nms.Infrastructure.Data.Interceptors;
 using Nms.Infrastructure.Data.Repositories;
@@ -202,6 +203,10 @@ public static class DependencyInjection
         services.AddScoped<JiraTicketingProvider>();
         services.AddScoped<ITicketingProviderFactory, TicketingProviderFactory>();
 
+        // 28. Compliance Policy & Device Compliance Scan Repositories
+        services.AddScoped<ICompliancePolicyRepository, CompliancePolicyRepository>();
+        services.AddScoped<IDeviceComplianceScanRepository, DeviceComplianceScanRepository>();
+        services.AddScoped<IDeviceSecurityEvaluationAdapter, DeviceSecurityEvaluationAdapter>();
         return services;
     }
 }

@@ -187,6 +187,12 @@ public static class Permissions
         public const string Delete = "Ticketing.Delete";
         public const string Sync = "Ticketing.Sync";
     }
+    public static class Cybersecurity
+    {
+        public const string View = "Cybersecurity.View";
+        public const string ManagePolicies = "Cybersecurity.ManagePolicies";
+        public const string Evaluate = "Cybersecurity.Evaluate";
+    }
     /// <summary>
     /// Helper method to retrieve all predefined permissions for seeding and validation.
     /// </summary>
@@ -217,7 +223,8 @@ public static class Permissions
             Sites.View, Sites.Create, Sites.Update, Sites.Delete,
             Locations.View, Locations.Create, Locations.Update, Locations.Delete,
             Customers.View, Customers.Create, Customers.Update, Customers.Delete,
-            Ticketing.View, Ticketing.Create, Ticketing.Update, Ticketing.Delete, Ticketing.Sync
+            Ticketing.View, Ticketing.Create, Ticketing.Update, Ticketing.Delete, Ticketing.Sync,
+            Cybersecurity.View, Cybersecurity.ManagePolicies, Cybersecurity.Evaluate
         };
     }
 }

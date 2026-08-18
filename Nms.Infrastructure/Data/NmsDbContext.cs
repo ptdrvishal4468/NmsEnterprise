@@ -53,6 +53,9 @@ public class NmsDbContext : DbContext
     public DbSet<CustomerContact> CustomerContacts => Set<CustomerContact>();
     public DbSet<Ticket> Tickets => Set<Ticket>();
     public DbSet<TicketSyncLog> TicketSyncLogs => Set<TicketSyncLog>();
+    public DbSet<CompliancePolicy> CompliancePolicies => Set<CompliancePolicy>();
+    public DbSet<DeviceComplianceScan> DeviceComplianceScans => Set<DeviceComplianceScan>();
+    public DbSet<DeviceComplianceResult> DeviceComplianceResults => Set<DeviceComplianceResult>();
 
     public NmsDbContext(
         DbContextOptions<NmsDbContext> options,

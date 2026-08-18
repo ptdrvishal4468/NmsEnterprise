@@ -102,7 +102,11 @@ jobs:
         
       # [PHASE 45 ENHANCEMENT] Ticketing Integration Subsystem Integrity Verification
       - name: Verify Ticketing Integration Infrastructure Integrity
-        run: dotnet test NmsEnterprise.slnx --no-build --configuration Release --filter "FullyQualifiedName~Ticketing"  
+        run: dotnet test NmsEnterprise.slnx --no-build --configuration Release --filter "FullyQualifiedName~Ticketing"
+        
+      # [PHASE 46 ENHANCEMENT] Cybersecurity Compliance Subsystem Integrity Verification
+      - name: Verify Cybersecurity Compliance Infrastructure Integrity
+        run: dotnet test NmsEnterprise.slnx --no-build --configuration Release --filter "FullyQualifiedName~Cybersecurity"  
 
       # [PHASE 23 ENHANCEMENT] Execute Tests with Cobertura Coverage Collection
       - name: Execute Unit and Integration Tests

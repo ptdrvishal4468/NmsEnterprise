@@ -33,6 +33,8 @@ public class UnitOfWork : IUnitOfWork
     public ICustomerContactRepository CustomerContacts { get; }
     public ITicketRepository Tickets { get; }
     public ITicketSyncLogRepository TicketSyncLogs { get; }
+    public ICompliancePolicyRepository CompliancePolicies { get; }
+    public IDeviceComplianceScanRepository DeviceComplianceScans { get; }
 
     public UnitOfWork(NmsDbContext context)
     {
@@ -61,6 +63,8 @@ public class UnitOfWork : IUnitOfWork
         CustomerContacts = new CustomerContactRepository(_context);
         Tickets = new TicketRepository(_context);
         TicketSyncLogs = new TicketSyncLogRepository(_context);
+        CompliancePolicies = new CompliancePolicyRepository(_context);
+        DeviceComplianceScans = new DeviceComplianceScanRepository(_context);
 
 
     }
