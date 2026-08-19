@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Nms.Application.Common.Interfaces;
 using Nms.Application.Dashboard.Dtos;
 using Nms.Domain.Enums;
 using Nms.Domain.Interfaces;
@@ -9,23 +10,36 @@ public class GetHealthSummaryQueryHandler : IRequestHandler<GetHealthSummaryQuer
 {
     private readonly IDeviceRepository _deviceRepository;
     private readonly IDeviceHealthHistoryRepository _healthHistoryRepository;
+    private readonly ICacheService? _cacheService;
 
     public GetHealthSummaryQueryHandler(
         IDeviceRepository deviceRepository,
-        IDeviceHealthHistoryRepository healthHistoryRepository)
+        IDeviceHealthHistoryRepository healthHistoryRepository,
+        ICacheService? cacheService = null)
     {
         _deviceRepository = deviceRepository;
         _healthHistoryRepository = healthHistoryRepository;
+        _cacheService = cacheService;
     }
 
     public async Task<HealthSummaryDto> Handle(GetHealthSummaryQuery request, CancellationToken cancellationToken)
     {
+        var cacheKey = $"dashboard:health-summary:{request.TopDegradedLimit}";
+        if (_cacheService != null)
+        {
+            var cached = await _cacheService.GetAsync<HealthSummaryDto>(cacheKey, cancellationToken);
+            if (cached != null)
+            {
+                return cached;
+            }
+        }
+
         var devices = await _deviceRepository.GetAllAsync(cancellationToken);
         int totalDevices = devices.Count;
 
         if (totalDevices == 0)
         {
-            return new HealthSummaryDto
+            var emptyResult = new HealthSummaryDto
             {
                 TotalMonitoredDevices = 0,
                 AverageHealthScore = 100.0,
@@ -35,6 +49,13 @@ public class GetHealthSummaryQueryHandler : IRequestHandler<GetHealthSummaryQuer
                 TopDegradedDevices = Array.Empty<DegradedDeviceHealthDto>(),
                 GeneratedAtUtc = DateTime.UtcNow
             };
+
+            if (_cacheService != null)
+            {
+                await _cacheService.SetAsync(cacheKey, emptyResult, TimeSpan.FromSeconds(30), cancellationToken);
+            }
+
+            return emptyResult;
         }
 
         var deviceLookup = devices.ToDictionary(d => d.Id);
@@ -43,7 +64,6 @@ public class GetHealthSummaryQueryHandler : IRequestHandler<GetHealthSummaryQuer
             h => h.TimestampUtc >= recentCutoff,
             cancellationToken);
 
-        // Group by device to extract the latest evaluation for each device
         var latestPerDevice = recentHistories
             .GroupBy(h => h.DeviceId)
             .Select(g => g.OrderByDescending(h => h.TimestampUtc).First())
@@ -92,7 +112,6 @@ public class GetHealthSummaryQueryHandler : IRequestHandler<GetHealthSummaryQuer
                 }
             }
 
-            // Include remaining devices without recent history as healthy by default if online
             int unrecordedDevices = totalDevices - latestPerDevice.Count;
             if (unrecordedDevices > 0)
             {
@@ -103,7 +122,6 @@ public class GetHealthSummaryQueryHandler : IRequestHandler<GetHealthSummaryQuer
         }
         else
         {
-            // Fallback approximation when health history table is empty
             foreach (var device in devices)
             {
                 switch (device.Status)
@@ -147,7 +165,7 @@ public class GetHealthSummaryQueryHandler : IRequestHandler<GetHealthSummaryQuer
             .Take(Math.Max(1, request.TopDegradedLimit))
             .ToList();
 
-        return new HealthSummaryDto
+        var result = new HealthSummaryDto
         {
             TotalMonitoredDevices = totalDevices,
             AverageHealthScore = averageScore,
@@ -157,5 +175,12 @@ public class GetHealthSummaryQueryHandler : IRequestHandler<GetHealthSummaryQuer
             TopDegradedDevices = topDegraded,
             GeneratedAtUtc = DateTime.UtcNow
         };
+
+        if (_cacheService != null)
+        {
+            await _cacheService.SetAsync(cacheKey, result, TimeSpan.FromSeconds(30), cancellationToken);
+        }
+
+        return result;
     }
 }

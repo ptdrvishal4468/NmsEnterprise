@@ -61,10 +61,12 @@ public class AuditLogConfiguration : IEntityTypeConfiguration<AuditLog>
                .IsRequired()
                .HasDefaultValueSql("SYSUTCDATETIME()");
 
+        // Performance & Multi-Tenant Query Indexes
         builder.HasIndex(a => a.TenantId);
         builder.HasIndex(a => a.TimestampUtc);
         builder.HasIndex(a => new { a.TenantId, a.TimestampUtc });
         builder.HasIndex(a => new { a.TenantId, a.Category, a.TimestampUtc });
         builder.HasIndex(a => new { a.TenantId, a.UserId });
+        builder.HasIndex(a => new { a.TenantId, a.UserId, a.TimestampUtc });
     }
 }

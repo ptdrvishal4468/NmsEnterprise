@@ -48,11 +48,12 @@ public class SyslogRepository : GenericRepository<SyslogMessage, Guid>, ISyslogR
 
         if (!string.IsNullOrWhiteSpace(searchKeyword))
         {
-            var keyword = searchKeyword.Trim().ToLower();
+            var keyword = searchKeyword.Trim();
+            // Sargable search using EF.Functions.Like without scalar LOWER() conversion
             query = query.Where(x =>
-                x.Message.ToLower().Contains(keyword) ||
-                (x.Hostname != null && x.Hostname.ToLower().Contains(keyword)) ||
-                (x.AppTag != null && x.AppTag.ToLower().Contains(keyword)));
+                EF.Functions.Like(x.Message, $"%{keyword}%") ||
+                (x.Hostname != null && EF.Functions.Like(x.Hostname, $"%{keyword}%")) ||
+                (x.AppTag != null && EF.Functions.Like(x.AppTag, $"%{keyword}%")));
         }
 
         if (startDateUtc.HasValue)

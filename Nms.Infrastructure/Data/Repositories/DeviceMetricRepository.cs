@@ -6,16 +6,11 @@ namespace Nms.Infrastructure.Data.Repositories;
 
 public class DeviceMetricRepository : GenericRepository<DeviceMetricRaw, long>, IDeviceMetricRepository
 {
-    private readonly NmsDbContext _dbContext;
-
-    public DeviceMetricRepository(NmsDbContext dbContext) : base(dbContext)
-    {
-        _dbContext = dbContext;
-    }
+    public DeviceMetricRepository(NmsDbContext dbContext) : base(dbContext) { }
 
     public async Task AddBulkAsync(IEnumerable<DeviceMetricRaw> metrics, CancellationToken cancellationToken = default)
     {
-        await _dbContext.Set<DeviceMetricRaw>().AddRangeAsync(metrics, cancellationToken);
+        await DbSet.AddRangeAsync(metrics, cancellationToken);
     }
 
     public async Task<IEnumerable<DeviceMetricRaw>> GetMetricsForDeviceAsync(
@@ -24,7 +19,7 @@ public class DeviceMetricRepository : GenericRepository<DeviceMetricRaw, long>, 
         DateTime toUtc,
         CancellationToken cancellationToken = default)
     {
-        return await _dbContext.Set<DeviceMetricRaw>()
+        return await DbSet
             .AsNoTracking()
             .Where(m => m.DeviceId == deviceId && m.TimestampUtc >= fromUtc && m.TimestampUtc <= toUtc)
             .OrderByDescending(m => m.TimestampUtc)

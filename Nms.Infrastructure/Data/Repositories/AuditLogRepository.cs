@@ -7,9 +7,7 @@ namespace Nms.Infrastructure.Data.Repositories;
 
 public class AuditLogRepository : GenericRepository<AuditLog, long>, IAuditLogRepository
 {
-    public AuditLogRepository(NmsDbContext context) : base(context)
-    {
-    }
+    public AuditLogRepository(NmsDbContext context) : base(context) { }
 
     public async Task<(IReadOnlyList<AuditLog> Items, int TotalCount)> SearchAuditLogsAsync(
         Guid tenantId,
@@ -40,7 +38,7 @@ public class AuditLogRepository : GenericRepository<AuditLog, long>, IAuditLogRe
             query = query.Where(a => a.UserId == userId.Value);
 
         if (!string.IsNullOrWhiteSpace(action))
-            query = query.Where(a => a.Action == action);
+            query = query.Where(a => a.Action == action.Trim());
 
         if (category.HasValue)
             query = query.Where(a => a.Category == category.Value);
@@ -49,18 +47,20 @@ public class AuditLogRepository : GenericRepository<AuditLog, long>, IAuditLogRe
             query = query.Where(a => a.Status == status.Value);
 
         if (!string.IsNullOrWhiteSpace(entityName))
-            query = query.Where(a => a.EntityName == entityName);
+            query = query.Where(a => a.EntityName == entityName.Trim());
 
         if (!string.IsNullOrWhiteSpace(entityId))
-            query = query.Where(a => a.EntityId == entityId);
+            query = query.Where(a => a.EntityId == entityId.Trim());
 
         if (!string.IsNullOrWhiteSpace(searchTerm))
         {
             var term = searchTerm.Trim();
-            query = query.Where(a => a.Action.Contains(term) ||
-                                     (a.Username != null && a.Username.Contains(term)) ||
-                                     (a.EntityName != null && a.EntityName.Contains(term)) ||
-                                     (a.Details != null && a.Details.Contains(term)));
+            // Sargable LIKE query using indexed column collation
+            query = query.Where(a =>
+                EF.Functions.Like(a.Action, $"%{term}%") ||
+                (a.Username != null && EF.Functions.Like(a.Username, $"%{term}%")) ||
+                (a.EntityName != null && EF.Functions.Like(a.EntityName, $"%{term}%")) ||
+                (a.Details != null && EF.Functions.Like(a.Details, $"%{term}%")));
         }
 
         var totalCount = await query.CountAsync(cancellationToken);
@@ -94,7 +94,7 @@ public class AuditLogRepository : GenericRepository<AuditLog, long>, IAuditLogRe
             query = query.Where(a => a.TimestampUtc <= toUtc.Value);
 
         if (!string.IsNullOrWhiteSpace(entityName))
-            query = query.Where(a => a.EntityName == entityName);
+            query = query.Where(a => a.EntityName == entityName.Trim());
 
         return await query
             .OrderByDescending(a => a.TimestampUtc)

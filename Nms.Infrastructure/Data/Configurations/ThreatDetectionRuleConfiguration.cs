@@ -27,5 +27,6 @@ public class ThreatDetectionRuleConfiguration : IEntityTypeConfiguration<ThreatD
 
         builder.HasIndex(r => new { r.TenantId, r.ThreatType }).IsUnique();
         builder.HasIndex(r => new { r.TenantId, r.IsEnabled });
+        builder.HasIndex(r => new { r.TenantId, r.IsEnabled, r.RuleName });
     }
 }

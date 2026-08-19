@@ -10,15 +10,30 @@ public class GetThreatSummaryQueryHandler : IRequestHandler<GetThreatSummaryQuer
 {
     private readonly IUnitOfWork _unitOfWork;
     private readonly ITenantContext _tenantContext;
+    private readonly ICacheService? _cacheService;
 
-    public GetThreatSummaryQueryHandler(IUnitOfWork unitOfWork, ITenantContext tenantContext)
+    public GetThreatSummaryQueryHandler(
+        IUnitOfWork unitOfWork,
+        ITenantContext tenantContext,
+        ICacheService? cacheService = null)
     {
         _unitOfWork = unitOfWork;
         _tenantContext = tenantContext;
+        _cacheService = cacheService;
     }
 
     public async Task<ThreatSummaryDto> Handle(GetThreatSummaryQuery request, CancellationToken cancellationToken)
     {
+        const string cacheKey = "dashboard:threats:summary";
+        if (_cacheService != null)
+        {
+            var cached = await _cacheService.GetAsync<ThreatSummaryDto>(cacheKey, cancellationToken);
+            if (cached != null)
+            {
+                return cached;
+            }
+        }
+
         var (activeIndicators, _) = await _unitOfWork.ThreatIndicators.GetPagedAsync(
             _tenantContext.TenantId,
             page: 1,
@@ -37,7 +52,7 @@ public class GetThreatSummaryQueryHandler : IRequestHandler<GetThreatSummaryQuer
             hasDrift: true,
             cancellationToken: cancellationToken);
 
-        return new ThreatSummaryDto
+        var result = new ThreatSummaryDto
         {
             TotalActiveThreats = activeIndicators.Count,
             CriticalThreats = activeIndicators.Count(i => i.Severity == ThreatSeverity.Critical),
@@ -49,5 +64,12 @@ public class GetThreatSummaryQueryHandler : IRequestHandler<GetThreatSummaryQuer
             PortScanThreats = activeIndicators.Count(i => i.ThreatType == ThreatType.PortScanIndicator),
             UnauthorizedAccessThreats = activeIndicators.Count(i => i.ThreatType == ThreatType.UnauthorizedAccess)
         };
+
+        if (_cacheService != null)
+        {
+            await _cacheService.SetAsync(cacheKey, result, TimeSpan.FromSeconds(30), cancellationToken);
+        }
+
+        return result;
     }
 }

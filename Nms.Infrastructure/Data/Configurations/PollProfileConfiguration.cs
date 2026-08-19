@@ -40,5 +40,6 @@ public class PollProfileConfiguration : IEntityTypeConfiguration<PollProfile>
             .HasDefaultValue(true);
 
         builder.HasIndex(p => new { p.TenantId, p.IsEnabled });
+        builder.HasIndex(p => new { p.TenantId, p.IsDefault, p.IsEnabled });
     }
 }
