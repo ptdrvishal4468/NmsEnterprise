@@ -4,6 +4,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Nms.Application.Common.Interfaces;
 using Nms.Domain.Interfaces;
+using Nms.Infrastructure.Caching;
 using Nms.Infrastructure.ConfigurationBackups;
 using Nms.Infrastructure.Connectivity;
 using Nms.Infrastructure.Cybersecurity.Adapters;
@@ -28,6 +29,7 @@ using Nms.Infrastructure.Ticketing.ServiceNow;
 using Nms.Infrastructure.Topology;
 using Nms.Infrastructure.Vulnerabilities.Options;
 using Nms.Infrastructure.Vulnerabilities.Providers;
+using StackExchange.Redis;
 
 namespace Nms.Infrastructure;
 
@@ -46,7 +48,7 @@ public static class DependencyInjection
         // 1. Interceptors
         services.AddScoped<AuditableEntityInterceptor>();
 
-        // 2. DbContext - Standard SQL Server Registration with Transient Resilience
+        // 2. DbContext - Connection-Pooled SQL Server Registration with Transient Resilience
         services.AddDbContext<NmsDbContext>((sp, options) =>
         {
             var interceptor = sp.GetRequiredService<AuditableEntityInterceptor>();
@@ -55,6 +57,7 @@ public static class DependencyInjection
                     sqlOptions =>
                     {
                         sqlOptions.MigrationsAssembly(typeof(NmsDbContext).Assembly.GetName().Name);
+                        sqlOptions.CommandTimeout(30);
                         sqlOptions.EnableRetryOnFailure(
                             maxRetryCount: 5,
                             maxRetryDelay: TimeSpan.FromSeconds(10),
@@ -88,7 +91,9 @@ public static class DependencyInjection
         services.AddTransient<ISnmpClientFactory, SnmpClientFactory>();
         services.AddScoped<ISnmpCollectorService, SnmpCollectorService>();
         services.AddScoped<ITelemetryEngine, TelemetryEngine>();
-        services.AddSingleton<IPollingQueue, PollingQueue>();
+        services.Configure<PollingQueueOptions>(configuration.GetSection(PollingQueueOptions.SectionName));
+        services.AddSingleton<IPollingQueue>(sp =>
+            new PollingQueue(sp.GetRequiredService<Microsoft.Extensions.Options.IOptions<PollingQueueOptions>>()));
         services.AddScoped<IPollScheduler, PollScheduler>();
         services.AddScoped<INetworkInterfaceRepository, NetworkInterfaceRepository>();
         services.AddScoped<IDeviceHealthHistoryRepository, DeviceHealthHistoryRepository>();
@@ -222,6 +227,35 @@ public static class DependencyInjection
         services.AddScoped<IThreatIndicatorRepository, ThreatIndicatorRepository>();
         services.AddScoped<IThreatDetectionRuleRepository, ThreatDetectionRuleRepository>();
         services.AddScoped<IConfigurationDriftRepository, ConfigurationDriftRepository>();
+
+
+        // 31. Caching Services
+        services.Configure<CacheOptions>(configuration.GetSection(CacheOptions.SectionName));
+
+        var redisConnectionString = configuration.GetConnectionString("Redis");
+        if (!string.IsNullOrWhiteSpace(redisConnectionString))
+        {
+            try
+            {
+                var multiplexer = ConnectionMultiplexer.Connect(redisConnectionString, options =>
+                {
+                    options.AbortOnConnectFail = false;
+                    options.ConnectRetry = 2;
+                });
+                services.AddSingleton<IConnectionMultiplexer>(multiplexer);
+            }
+            catch
+            {
+                // Fail-safe registration allows app to run even if Redis is temporarily offline during setup/tests
+                services.AddSingleton<IConnectionMultiplexer>(_ => null!);
+            }
+        }
+        else
+        {
+            services.AddSingleton<IConnectionMultiplexer>(_ => null!);
+        }
+
+        services.AddScoped<ICacheService, RedisCacheService>();
         return services;
     }
 }

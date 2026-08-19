@@ -11,32 +11,46 @@ public class DeviceRepository : GenericRepository<Device, Guid>, IDeviceReposito
 
     public async Task<Device?> GetByIpAddressAsync(string ipAddress, CancellationToken cancellationToken = default)
     {
-        return await DbSet.FirstOrDefaultAsync(d => d.IpAddress == ipAddress, cancellationToken);
+        return await DbSet
+            .AsNoTracking()
+            .FirstOrDefaultAsync(d => d.IpAddress == ipAddress.Trim(), cancellationToken);
     }
 
     public async Task<Device?> GetBySerialNumberAsync(string serialNumber, CancellationToken cancellationToken = default)
     {
-        return await DbSet.FirstOrDefaultAsync(d => d.SerialNumber == serialNumber, cancellationToken);
+        return await DbSet
+            .AsNoTracking()
+            .FirstOrDefaultAsync(d => d.SerialNumber == serialNumber.Trim(), cancellationToken);
     }
 
     public async Task<IReadOnlyList<Device>> GetDevicesByStatusAsync(DeviceStatus status, CancellationToken cancellationToken = default)
     {
-        return await DbSet.AsNoTracking().Where(d => d.Status == status).ToListAsync(cancellationToken);
+        return await DbSet
+            .AsNoTracking()
+            .Where(d => d.Status == status)
+            .ToListAsync(cancellationToken);
     }
 
     public async Task<IReadOnlyList<Device>> GetActiveDevicesForPollingAsync(CancellationToken cancellationToken = default)
     {
-        return await DbSet.AsNoTracking().Where(d => d.Status != DeviceStatus.Offline).ToListAsync(cancellationToken);
+        return await DbSet
+            .AsNoTracking()
+            .Where(d => d.Status != DeviceStatus.Offline)
+            .ToListAsync(cancellationToken);
     }
 
     public async Task<bool> ExistsByIpAddressAsync(string ipAddress, CancellationToken cancellationToken = default)
     {
-        return await DbSet.AnyAsync(d => d.IpAddress == ipAddress, cancellationToken);
+        return await DbSet
+            .AsNoTracking()
+            .AnyAsync(d => d.IpAddress == ipAddress.Trim(), cancellationToken);
     }
 
     public async Task<bool> ExistsByIpAddressExcludingIdAsync(string ipAddress, Guid excludeDeviceId, CancellationToken cancellationToken = default)
     {
-        return await DbSet.AnyAsync(d => d.IpAddress == ipAddress && d.Id != excludeDeviceId, cancellationToken);
+        return await DbSet
+            .AsNoTracking()
+            .AnyAsync(d => d.IpAddress == ipAddress.Trim() && d.Id != excludeDeviceId, cancellationToken);
     }
 
     public async Task<(IReadOnlyList<Device> Items, int TotalCount)> GetPagedAsync(
@@ -51,14 +65,15 @@ public class DeviceRepository : GenericRepository<Device, Guid>, IDeviceReposito
 
         if (!string.IsNullOrWhiteSpace(searchTerm))
         {
-            var term = searchTerm.Trim().ToLower();
+            var term = searchTerm.Trim();
+            // Sargable LIKE query using column collation
             query = query.Where(d =>
-                d.Name.ToLower().Contains(term) ||
-                d.IpAddress.Contains(term) ||
-                (d.Hostname != null && d.Hostname.ToLower().Contains(term)) ||
-                (d.Vendor != null && d.Vendor.ToLower().Contains(term)) ||
-                (d.Model != null && d.Model.ToLower().Contains(term)) ||
-                (d.SerialNumber != null && d.SerialNumber.ToLower().Contains(term)));
+                EF.Functions.Like(d.Name, $"%{term}%") ||
+                EF.Functions.Like(d.IpAddress, $"%{term}%") ||
+                (d.Hostname != null && EF.Functions.Like(d.Hostname, $"%{term}%")) ||
+                (d.Vendor != null && EF.Functions.Like(d.Vendor, $"%{term}%")) ||
+                (d.Model != null && EF.Functions.Like(d.Model, $"%{term}%")) ||
+                (d.SerialNumber != null && EF.Functions.Like(d.SerialNumber, $"%{term}%")));
         }
 
         if (deviceType.HasValue)

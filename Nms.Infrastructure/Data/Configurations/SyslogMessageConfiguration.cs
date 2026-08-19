@@ -42,18 +42,19 @@ public class SyslogMessageConfiguration : IEntityTypeConfiguration<SyslogMessage
         builder.Property(x => x.Message)
             .IsRequired();
 
-        // Optional relationship with Device
         builder.HasOne(x => x.Device)
             .WithMany()
             .HasForeignKey(x => x.DeviceId)
             .OnDelete(DeleteBehavior.SetNull);
 
-        // Performance composite indexes
+        // Performance & Multi-Tenant Composite Indexes
         builder.HasIndex(x => x.TenantId);
-        builder.HasIndex(x => x.TenantId, nameof(SyslogMessage.DeviceId));
-        builder.HasIndex(x => x.TenantId, nameof(SyslogMessage.TimestampUtc));
-        builder.HasIndex(x => x.TenantId, nameof(SyslogMessage.Severity));
-        builder.HasIndex(x => x.TenantId, nameof(SyslogMessage.Facility));
-        builder.HasIndex(x => x.TenantId, nameof(SyslogMessage.SourceIpAddress));
+        builder.HasIndex(x => new { x.TenantId, x.DeviceId });
+        builder.HasIndex(x => new { x.TenantId, x.TimestampUtc });
+        builder.HasIndex(x => new { x.TenantId, x.Severity });
+        builder.HasIndex(x => new { x.TenantId, x.Facility });
+        builder.HasIndex(x => new { x.TenantId, x.SourceIpAddress });
+        builder.HasIndex(x => new { x.TenantId, x.Severity, x.TimestampUtc });
+        builder.HasIndex(x => new { x.TenantId, x.DeviceId, x.TimestampUtc });
     }
 }

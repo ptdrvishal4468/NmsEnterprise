@@ -18,7 +18,24 @@ services:
     restart: always
 
   # --------------------------------------------------------------------------
-  # 2. .NET 10 NMS API Service
+  # 2. Redis Distributed Cache Container
+  # --------------------------------------------------------------------------
+  nms.cache:
+    image: redis:7-alpine
+    container_name: nms_redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+    restart: always
+
+  # --------------------------------------------------------------------------
+  # 3. .NET 10 NMS API Service
   # --------------------------------------------------------------------------
   nms.api:
     image: nms-api:latest
@@ -29,11 +46,14 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ConnectionStrings__DefaultConnection=Server=nms.database,1433;Database=NmsEnterpriseDb;User Id=sa;Password=YourSecurePass123!;TrustServerCertificate=True;
+      - ConnectionStrings__Redis=nms.cache:6379,abortConnect=false,connectTimeout=5000
     ports:
       - "5000:8080"
     depends_on:
       - nms.database
+      - nms.cache
     restart: on-failure
 
 volumes:
   sqlserver_data:
+  redis_data:

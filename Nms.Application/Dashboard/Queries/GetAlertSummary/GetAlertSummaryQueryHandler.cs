@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Nms.Application.Common.Interfaces;
 using Nms.Application.Dashboard.Dtos;
 using Nms.Domain.Enums;
 using Nms.Domain.Interfaces;
@@ -9,17 +10,30 @@ public class GetAlertSummaryQueryHandler : IRequestHandler<GetAlertSummaryQuery,
 {
     private readonly IAlertRepository _alertRepository;
     private readonly IAlertRuleRepository _alertRuleRepository;
+    private readonly ICacheService? _cacheService;
 
     public GetAlertSummaryQueryHandler(
         IAlertRepository alertRepository,
-        IAlertRuleRepository alertRuleRepository)
+        IAlertRuleRepository alertRuleRepository,
+        ICacheService? cacheService = null)
     {
         _alertRepository = alertRepository;
         _alertRuleRepository = alertRuleRepository;
+        _cacheService = cacheService;
     }
 
     public async Task<AlertSummaryDto> Handle(GetAlertSummaryQuery request, CancellationToken cancellationToken)
     {
+        var cacheKey = $"dashboard:alert-summary:{request.TopRulesLimit}";
+        if (_cacheService != null)
+        {
+            var cached = await _cacheService.GetAsync<AlertSummaryDto>(cacheKey, cancellationToken);
+            if (cached != null)
+            {
+                return cached;
+            }
+        }
+
         // 1. Fetch non-resolved alerts (Active, Acknowledged, Suppressed)
         var unresolvedAlerts = await _alertRepository.FindAsync(
             a => a.State != AlertState.Resolved,
@@ -54,7 +68,7 @@ public class GetAlertSummaryQueryHandler : IRequestHandler<GetAlertSummaryQuery,
                 g.Count()))
             .ToList();
 
-        return new AlertSummaryDto
+        var result = new AlertSummaryDto
         {
             TotalActiveAlerts = totalActive,
             TotalAcknowledgedAlerts = totalAcknowledged,
@@ -64,5 +78,12 @@ public class GetAlertSummaryQueryHandler : IRequestHandler<GetAlertSummaryQuery,
             TopFiringRules = topFiringRules,
             GeneratedAtUtc = DateTime.UtcNow
         };
+
+        if (_cacheService != null)
+        {
+            await _cacheService.SetAsync(cacheKey, result, TimeSpan.FromSeconds(30), cancellationToken);
+        }
+
+        return result;
     }
 }

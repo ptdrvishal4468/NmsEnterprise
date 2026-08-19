@@ -10,15 +10,18 @@ public class CreatePollProfileCommandHandler : IRequestHandler<CreatePollProfile
     private readonly IPollProfileRepository _repository;
     private readonly IUnitOfWork _unitOfWork;
     private readonly ITenantContext _tenantContext;
+    private readonly ICacheService? _cacheService;
 
     public CreatePollProfileCommandHandler(
         IPollProfileRepository repository,
         IUnitOfWork unitOfWork,
-        ITenantContext tenantContext)
+        ITenantContext tenantContext,
+        ICacheService? cacheService = null)
     {
         _repository = repository;
         _unitOfWork = unitOfWork;
         _tenantContext = tenantContext;
+        _cacheService = cacheService;
     }
 
     public async Task<Guid> Handle(CreatePollProfileCommand request, CancellationToken cancellationToken)
@@ -40,6 +43,11 @@ public class CreatePollProfileCommandHandler : IRequestHandler<CreatePollProfile
 
         await _repository.AddAsync(profile, cancellationToken);
         await _unitOfWork.SaveChangesAsync(cancellationToken);
+
+        if (_cacheService != null)
+        {
+            await _cacheService.RemoveByPrefixAsync("rules:poll-profiles", cancellationToken);
+        }
 
         return profile.Id;
     }

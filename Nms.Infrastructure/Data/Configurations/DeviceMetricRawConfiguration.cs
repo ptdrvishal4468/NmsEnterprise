@@ -10,7 +10,7 @@ public class DeviceMetricRawConfiguration : IEntityTypeConfiguration<DeviceMetri
     {
         builder.ToTable("DeviceMetricsRaw");
 
-        // PK MUST be Non-Clustered so TimestampUtc can hold the Clustered Index
+        // PK is Non-Clustered so TimestampUtc holds the Clustered Index
         builder.HasKey(m => m.Id)
                .IsClustered(false);
 
@@ -56,7 +56,8 @@ public class DeviceMetricRawConfiguration : IEntityTypeConfiguration<DeviceMetri
         builder.HasIndex(m => m.TimestampUtc)
                .IsClustered(true);
 
-        // Composite Non-Clustered Index for tenant-isolated device time-series queries
+        // Performance & Multi-Tenant Query Indexes
         builder.HasIndex(m => new { m.TenantId, m.DeviceId, m.TimestampUtc });
+        builder.HasIndex(m => new { m.TenantId, m.TimestampUtc });
     }
 }

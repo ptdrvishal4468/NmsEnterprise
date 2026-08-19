@@ -23,6 +23,9 @@ builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
+// 1. Register Global Exception Handling Middleware AT THE VERY TOP of the pipeline
+app.UseMiddleware<GlobalExceptionHandlingMiddleware>();
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -34,11 +37,8 @@ if (!app.Environment.IsEnvironment("Testing"))
     app.UseHttpsRedirection();
 }
 
-// 1. Authentication MUST execute first to extract User Claims from JWT
+// 2. Authentication MUST execute first to extract User Claims from JWT
 app.UseAuthentication();
-
-// 2. Register Global Exception Handling Middleware AT THE VERY TOP of the pipeline
-app.UseMiddleware<GlobalExceptionHandlingMiddleware>();
 
 // 3. TenantResolverMiddleware MUST execute after Authentication so it can extract tenant_id claims
 app.UseMiddleware<TenantResolverMiddleware>();

@@ -49,8 +49,10 @@ public class AlertConfiguration : IEntityTypeConfiguration<Alert>
             .HasForeignKey(a => a.DeviceId)
             .OnDelete(DeleteBehavior.Cascade);
 
+        // Performance & Multi-Tenant Query Indexes
         builder.HasIndex(a => new { a.TenantId, a.DeviceId, a.State });
         builder.HasIndex(a => new { a.TenantId, a.AlertRuleId, a.DeviceId, a.State });
         builder.HasIndex(a => new { a.TenantId, a.TriggeredAtUtc });
+        builder.HasIndex(a => new { a.TenantId, a.State, a.Severity, a.TriggeredAtUtc });
     }
 }

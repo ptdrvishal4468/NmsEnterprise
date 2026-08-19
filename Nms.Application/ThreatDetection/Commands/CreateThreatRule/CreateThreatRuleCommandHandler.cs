@@ -10,11 +10,16 @@ public class CreateThreatRuleCommandHandler : IRequestHandler<CreateThreatRuleCo
 {
     private readonly IUnitOfWork _unitOfWork;
     private readonly ITenantContext _tenantContext;
+    private readonly ICacheService? _cacheService;
 
-    public CreateThreatRuleCommandHandler(IUnitOfWork unitOfWork, ITenantContext tenantContext)
+    public CreateThreatRuleCommandHandler(
+        IUnitOfWork unitOfWork,
+        ITenantContext tenantContext,
+        ICacheService? cacheService = null)
     {
         _unitOfWork = unitOfWork;
         _tenantContext = tenantContext;
+        _cacheService = cacheService;
     }
 
     public async Task<ThreatDetectionRuleDto> Handle(CreateThreatRuleCommand request, CancellationToken cancellationToken)
@@ -33,6 +38,12 @@ public class CreateThreatRuleCommandHandler : IRequestHandler<CreateThreatRuleCo
 
         await _unitOfWork.ThreatDetectionRules.AddAsync(rule, cancellationToken);
         await _unitOfWork.SaveChangesAsync(cancellationToken);
+
+        if (_cacheService != null)
+        {
+            await _cacheService.RemoveByPrefixAsync("rules:threats", cancellationToken);
+            await _cacheService.RemoveByPrefixAsync("dashboard:threats", cancellationToken);
+        }
 
         return new ThreatDetectionRuleDto
         {

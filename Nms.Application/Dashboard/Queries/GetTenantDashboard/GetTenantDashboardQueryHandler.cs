@@ -14,6 +14,7 @@ public class GetTenantDashboardQueryHandler : IRequestHandler<GetTenantDashboard
     private readonly IDeviceHealthHistoryRepository _healthHistoryRepository;
     private readonly ITopologyLinkRepository _topologyLinkRepository;
     private readonly ITenantContext _tenantContext;
+    private readonly ICacheService? _cacheService;
 
     public GetTenantDashboardQueryHandler(
         ITenantRepository tenantRepository,
@@ -21,7 +22,8 @@ public class GetTenantDashboardQueryHandler : IRequestHandler<GetTenantDashboard
         IAlertRepository alertRepository,
         IDeviceHealthHistoryRepository healthHistoryRepository,
         ITopologyLinkRepository topologyLinkRepository,
-        ITenantContext tenantContext)
+        ITenantContext tenantContext,
+        ICacheService? cacheService = null)
     {
         _tenantRepository = tenantRepository;
         _deviceRepository = deviceRepository;
@@ -29,6 +31,7 @@ public class GetTenantDashboardQueryHandler : IRequestHandler<GetTenantDashboard
         _healthHistoryRepository = healthHistoryRepository;
         _topologyLinkRepository = topologyLinkRepository;
         _tenantContext = tenantContext;
+        _cacheService = cacheService;
     }
 
     public async Task<TenantDashboardDto> Handle(GetTenantDashboardQuery request, CancellationToken cancellationToken)
@@ -38,6 +41,16 @@ public class GetTenantDashboardQueryHandler : IRequestHandler<GetTenantDashboard
         if (targetTenantId == Guid.Empty)
         {
             throw new InvalidOperationException("Tenant context could not be resolved.");
+        }
+
+        var cacheKey = $"dashboard:tenant:{targetTenantId}";
+        if (_cacheService != null)
+        {
+            var cached = await _cacheService.GetAsync<TenantDashboardDto>(cacheKey, cancellationToken);
+            if (cached != null)
+            {
+                return cached;
+            }
         }
 
         var tenant = await _tenantRepository.GetByIdAsync(targetTenantId, cancellationToken)
@@ -93,7 +106,7 @@ public class GetTenantDashboardQueryHandler : IRequestHandler<GetTenantDashboard
         var links = await _topologyLinkRepository.GetLinksAsync(cancellationToken: cancellationToken);
         int totalTopologyLinks = links.Count;
 
-        return new TenantDashboardDto
+        var result = new TenantDashboardDto
         {
             TenantId = tenant.Id,
             TenantName = tenant.Name,
@@ -107,5 +120,12 @@ public class GetTenantDashboardQueryHandler : IRequestHandler<GetTenantDashboard
             TotalTopologyLinks = totalTopologyLinks,
             GeneratedAtUtc = DateTime.UtcNow
         };
+
+        if (_cacheService != null)
+        {
+            await _cacheService.SetAsync(cacheKey, result, TimeSpan.FromSeconds(30), cancellationToken);
+        }
+
+        return result;
     }
 }

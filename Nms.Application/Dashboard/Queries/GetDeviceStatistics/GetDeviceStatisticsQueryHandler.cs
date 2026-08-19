@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Nms.Application.Common.Interfaces;
 using Nms.Application.Dashboard.Dtos;
 using Nms.Domain.Interfaces;
 
@@ -7,14 +8,28 @@ namespace Nms.Application.Dashboard.Queries.GetDeviceStatistics;
 public class GetDeviceStatisticsQueryHandler : IRequestHandler<GetDeviceStatisticsQuery, DeviceStatisticsDto>
 {
     private readonly IDeviceRepository _deviceRepository;
+    private readonly ICacheService? _cacheService;
 
-    public GetDeviceStatisticsQueryHandler(IDeviceRepository deviceRepository)
+    public GetDeviceStatisticsQueryHandler(
+        IDeviceRepository deviceRepository,
+        ICacheService? cacheService = null)
     {
         _deviceRepository = deviceRepository;
+        _cacheService = cacheService;
     }
 
     public async Task<DeviceStatisticsDto> Handle(GetDeviceStatisticsQuery request, CancellationToken cancellationToken)
     {
+        const string cacheKey = "dashboard:device-statistics";
+        if (_cacheService != null)
+        {
+            var cached = await _cacheService.GetAsync<DeviceStatisticsDto>(cacheKey, cancellationToken);
+            if (cached != null)
+            {
+                return cached;
+            }
+        }
+
         var devices = await _deviceRepository.GetAllAsync(cancellationToken);
         int totalDevices = devices.Count;
 
@@ -38,7 +53,7 @@ public class GetDeviceStatisticsQueryHandler : IRequestHandler<GetDeviceStatisti
             .GroupBy(d => string.IsNullOrWhiteSpace(d.Site) ? "Unassigned" : d.Site.Trim())
             .ToDictionary(g => g.Key, g => g.Count());
 
-        return new DeviceStatisticsDto
+        var result = new DeviceStatisticsDto
         {
             TotalDevices = totalDevices,
             StatusDistribution = statusDistribution,
@@ -47,5 +62,12 @@ public class GetDeviceStatisticsQueryHandler : IRequestHandler<GetDeviceStatisti
             SiteDistribution = siteDistribution,
             GeneratedAtUtc = DateTime.UtcNow
         };
+
+        if (_cacheService != null)
+        {
+            await _cacheService.SetAsync(cacheKey, result, TimeSpan.FromSeconds(30), cancellationToken);
+        }
+
+        return result;
     }
 }

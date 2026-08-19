@@ -68,15 +68,13 @@ public class DeviceConfiguration : IEntityTypeConfiguration<Device>
                .HasConversion<int>()
                .HasDefaultValue(DeviceStatus.Unknown);
 
-        // Indexes
-        builder.HasIndex(d => new { d.TenantId, d.IpAddress })
-               .IsUnique();
-
+        // Performance & Multi-Tenant Query Indexes
+        builder.HasIndex(d => new { d.TenantId, d.IpAddress }).IsUnique();
         builder.HasIndex(d => new { d.TenantId, d.Status });
-
         builder.HasIndex(d => new { d.TenantId, d.SerialNumber });
-
         builder.HasIndex(d => new { d.TenantId, d.DeviceType });
+        builder.HasIndex(d => new { d.TenantId, d.CreatedAtUtc });
+        builder.HasIndex(d => new { d.TenantId, d.Status, d.DeviceType, d.CreatedAtUtc });
 
         builder.HasOne<Tenant>()
                .WithMany()

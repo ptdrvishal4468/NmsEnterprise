@@ -9,15 +9,18 @@ public class UpdatePollProfileCommandHandler : IRequestHandler<UpdatePollProfile
     private readonly IPollProfileRepository _repository;
     private readonly IUnitOfWork _unitOfWork;
     private readonly ITenantContext _tenantContext;
+    private readonly ICacheService? _cacheService;
 
     public UpdatePollProfileCommandHandler(
         IPollProfileRepository repository,
         IUnitOfWork unitOfWork,
-        ITenantContext tenantContext)
+        ITenantContext tenantContext,
+        ICacheService? cacheService = null)
     {
         _repository = repository;
         _unitOfWork = unitOfWork;
         _tenantContext = tenantContext;
+        _cacheService = cacheService;
     }
 
     public async Task<bool> Handle(UpdatePollProfileCommand request, CancellationToken cancellationToken)
@@ -38,6 +41,11 @@ public class UpdatePollProfileCommandHandler : IRequestHandler<UpdatePollProfile
 
         _repository.Update(profile);
         await _unitOfWork.SaveChangesAsync(cancellationToken);
+
+        if (_cacheService != null)
+        {
+            await _cacheService.RemoveByPrefixAsync("rules:poll-profiles", cancellationToken);
+        }
 
         return true;
     }

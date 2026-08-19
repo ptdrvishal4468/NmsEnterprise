@@ -10,15 +10,30 @@ public class GetThreatRulesPagedQueryHandler : IRequestHandler<GetThreatRulesPag
 {
     private readonly IUnitOfWork _unitOfWork;
     private readonly ITenantContext _tenantContext;
+    private readonly ICacheService? _cacheService;
 
-    public GetThreatRulesPagedQueryHandler(IUnitOfWork unitOfWork, ITenantContext tenantContext)
+    public GetThreatRulesPagedQueryHandler(
+        IUnitOfWork unitOfWork,
+        ITenantContext tenantContext,
+        ICacheService? cacheService = null)
     {
         _unitOfWork = unitOfWork;
         _tenantContext = tenantContext;
+        _cacheService = cacheService;
     }
 
     public async Task<PagedResult<ThreatDetectionRuleDto>> Handle(GetThreatRulesPagedQuery request, CancellationToken cancellationToken)
     {
+        var cacheKey = $"rules:threats:paged:{request.PageNumber}:{request.PageSize}";
+        if (_cacheService != null)
+        {
+            var cached = await _cacheService.GetAsync<PagedResult<ThreatDetectionRuleDto>>(cacheKey, cancellationToken);
+            if (cached != null)
+            {
+                return cached;
+            }
+        }
+
         var (items, totalCount) = await _unitOfWork.ThreatDetectionRules.GetPagedAsync(
             _tenantContext.TenantId,
             request.PageNumber,
@@ -38,6 +53,13 @@ public class GetThreatRulesPagedQueryHandler : IRequestHandler<GetThreatRulesPag
             Description = r.Description
         }).ToList();
 
-        return new PagedResult<ThreatDetectionRuleDto>(dtos, totalCount, request.PageNumber, request.PageSize);
+        var result = new PagedResult<ThreatDetectionRuleDto>(dtos, totalCount, request.PageNumber, request.PageSize);
+
+        if (_cacheService != null)
+        {
+            await _cacheService.SetAsync(cacheKey, result, TimeSpan.FromMinutes(15), cancellationToken);
+        }
+
+        return result;
     }
 }

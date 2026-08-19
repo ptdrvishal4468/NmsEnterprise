@@ -14,6 +14,7 @@ public class GetExecutiveDashboardQueryHandler : IRequestHandler<GetExecutiveDas
     private readonly ITopologyLinkRepository _topologyLinkRepository;
     private readonly IEventRepository _eventRepository;
     private readonly ITenantContext _tenantContext;
+    private readonly ICacheService? _cacheService;
 
     public GetExecutiveDashboardQueryHandler(
         IDeviceRepository deviceRepository,
@@ -21,7 +22,8 @@ public class GetExecutiveDashboardQueryHandler : IRequestHandler<GetExecutiveDas
         IDeviceHealthHistoryRepository healthHistoryRepository,
         ITopologyLinkRepository topologyLinkRepository,
         IEventRepository eventRepository,
-        ITenantContext tenantContext)
+        ITenantContext tenantContext,
+        ICacheService? cacheService = null)
     {
         _deviceRepository = deviceRepository;
         _alertRepository = alertRepository;
@@ -29,10 +31,21 @@ public class GetExecutiveDashboardQueryHandler : IRequestHandler<GetExecutiveDas
         _topologyLinkRepository = topologyLinkRepository;
         _eventRepository = eventRepository;
         _tenantContext = tenantContext;
+        _cacheService = cacheService;
     }
 
     public async Task<ExecutiveDashboardDto> Handle(GetExecutiveDashboardQuery request, CancellationToken cancellationToken)
     {
+        const string cacheKey = "dashboard:executive";
+        if (_cacheService != null)
+        {
+            var cached = await _cacheService.GetAsync<ExecutiveDashboardDto>(cacheKey, cancellationToken);
+            if (cached != null)
+            {
+                return cached;
+            }
+        }
+
         // 1. Devices summary using verified DeviceStatus enum
         var devices = await _deviceRepository.GetAllAsync(cancellationToken);
         int totalDevices = devices.Count;
@@ -95,7 +108,7 @@ public class GetExecutiveDashboardQueryHandler : IRequestHandler<GetExecutiveDas
             fromUtc: recentCutoff,
             cancellationToken: cancellationToken);
 
-        return new ExecutiveDashboardDto
+        var result = new ExecutiveDashboardDto
         {
             TotalDevices = totalDevices,
             OnlineDevices = onlineDevices,
@@ -111,5 +124,12 @@ public class GetExecutiveDashboardQueryHandler : IRequestHandler<GetExecutiveDas
             RecentEventsCount = recentEventsCount,
             GeneratedAtUtc = DateTime.UtcNow
         };
+
+        if (_cacheService != null)
+        {
+            await _cacheService.SetAsync(cacheKey, result, TimeSpan.FromSeconds(30), cancellationToken);
+        }
+
+        return result;
     }
 }

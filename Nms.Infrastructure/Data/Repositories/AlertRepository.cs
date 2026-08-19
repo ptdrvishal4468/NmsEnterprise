@@ -12,6 +12,7 @@ public class AlertRepository : GenericRepository<Alert, Guid>, IAlertRepository
     public async Task<Alert?> GetActiveAlertByRuleAndDeviceAsync(Guid alertRuleId, Guid deviceId, CancellationToken cancellationToken = default)
     {
         return await DbSet
+            .AsNoTracking()
             .FirstOrDefaultAsync(a =>
                 a.AlertRuleId == alertRuleId &&
                 a.DeviceId == deviceId &&
@@ -22,6 +23,7 @@ public class AlertRepository : GenericRepository<Alert, Guid>, IAlertRepository
     public async Task<IEnumerable<Alert>> GetActiveAlertsForDeviceAsync(Guid deviceId, CancellationToken cancellationToken = default)
     {
         return await DbSet
+            .AsNoTracking()
             .Where(a => a.DeviceId == deviceId && (a.State == AlertState.Active || a.State == AlertState.Acknowledged || a.State == AlertState.Suppressed))
             .ToListAsync(cancellationToken);
     }
@@ -34,7 +36,7 @@ public class AlertRepository : GenericRepository<Alert, Guid>, IAlertRepository
         AlertSeverity? severity = null,
         CancellationToken cancellationToken = default)
     {
-        var query = DbSet.AsQueryable();
+        IQueryable<Alert> query = DbSet.AsNoTracking();
 
         if (deviceId.HasValue)
         {

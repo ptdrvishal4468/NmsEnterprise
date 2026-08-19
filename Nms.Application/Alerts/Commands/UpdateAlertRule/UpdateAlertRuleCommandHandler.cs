@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using Nms.Application.Alerts.Dtos;
+using Nms.Application.Common.Interfaces;
 using Nms.Domain.Interfaces;
 
 namespace Nms.Application.Alerts.Commands.UpdateAlertRule;
@@ -8,11 +9,16 @@ public class UpdateAlertRuleCommandHandler : IRequestHandler<UpdateAlertRuleComm
 {
     private readonly IAlertRuleRepository _ruleRepository;
     private readonly IUnitOfWork _unitOfWork;
+    private readonly ICacheService? _cacheService;
 
-    public UpdateAlertRuleCommandHandler(IAlertRuleRepository ruleRepository, IUnitOfWork unitOfWork)
+    public UpdateAlertRuleCommandHandler(
+        IAlertRuleRepository ruleRepository,
+        IUnitOfWork unitOfWork,
+        ICacheService? cacheService = null)
     {
         _ruleRepository = ruleRepository;
         _unitOfWork = unitOfWork;
+        _cacheService = cacheService;
     }
 
     public async Task<AlertRuleDto> Handle(UpdateAlertRuleCommand request, CancellationToken cancellationToken)
@@ -31,6 +37,12 @@ public class UpdateAlertRuleCommandHandler : IRequestHandler<UpdateAlertRuleComm
 
         _ruleRepository.Update(rule);
         await _unitOfWork.SaveChangesAsync(cancellationToken);
+
+        if (_cacheService != null)
+        {
+            await _cacheService.RemoveByPrefixAsync("rules:alerts", cancellationToken);
+            await _cacheService.RemoveByPrefixAsync("dashboard:alerts", cancellationToken);
+        }
 
         return new AlertRuleDto(
             rule.Id,

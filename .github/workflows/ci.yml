@@ -12,6 +12,17 @@ jobs:
     name: Build & Run Test Suite
     runs-on: ubuntu-latest
 
+    services:
+      redis:
+        image: redis:7-alpine
+        ports:
+          - 6379:6379
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
     steps:
       - name: Checkout Source Code
         uses: actions/checkout@v4
@@ -114,7 +125,11 @@ jobs:
 
       # [PHASE 48 ENHANCEMENT] Threat Detection Subsystem Integrity Verification
       - name: Verify Threat Detection Infrastructure Integrity
-        run: dotnet test NmsEnterprise.slnx --no-build --configuration Release --filter "FullyQualifiedName~ThreatDetection"  
+        run: dotnet test NmsEnterprise.slnx --no-build --configuration Release --filter "FullyQualifiedName~ThreatDetection" 
+        
+      # [PHASE 49 ENHANCEMENT] Performance Optimization Subsystem Integrity Verification
+      - name: Verify Performance Optimization Subsystem Integrity
+        run: dotnet test NmsEnterprise.slnx --no-build --configuration Release --filter "FullyQualifiedName~Performance|FullyQualifiedName~Caching"  
 
       # [PHASE 23 ENHANCEMENT] Execute Tests with Cobertura Coverage Collection
       - name: Execute Unit and Integration Tests
