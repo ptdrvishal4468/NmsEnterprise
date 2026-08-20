@@ -131,6 +131,10 @@ jobs:
       - name: Verify Performance Optimization Subsystem Integrity
         run: dotnet test NmsEnterprise.slnx --no-build --configuration Release --filter "FullyQualifiedName~Performance|FullyQualifiedName~Caching"  
 
+      # [PHASE 50 ENHANCEMENT] Observability & Production Diagnostics Verification
+      - name: Verify Observability Infrastructure Integrity
+        run: dotnet test NmsEnterprise.slnx --no-build --configuration Release --filter "FullyQualifiedName~Observability"  
+
       # [PHASE 23 ENHANCEMENT] Execute Tests with Cobertura Coverage Collection
       - name: Execute Unit and Integration Tests
         run: >

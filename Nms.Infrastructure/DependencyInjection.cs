@@ -30,6 +30,13 @@ using Nms.Infrastructure.Topology;
 using Nms.Infrastructure.Vulnerabilities.Options;
 using Nms.Infrastructure.Vulnerabilities.Providers;
 using StackExchange.Redis;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
+using Nms.Infrastructure.Observability;
+using Nms.Infrastructure.Observability.Diagnostics;
+using Nms.Infrastructure.Observability.Health;
+using OpenTelemetry.Metrics;
+using OpenTelemetry.Resources;
+using OpenTelemetry.Trace;
 
 namespace Nms.Infrastructure;
 
@@ -256,6 +263,61 @@ public static class DependencyInjection
         }
 
         services.AddScoped<ICacheService, RedisCacheService>();
+
+        // 32. Observability & Health Checks
+        services.AddObservabilityInfrastructure(configuration);
+
+        return services;
+    }
+
+    private static IServiceCollection AddObservabilityInfrastructure(
+        this IServiceCollection services,
+        IConfiguration configuration)
+    {
+        var otelSection = configuration.GetSection(OpenTelemetryOptions.SectionName);
+        var otelOptions = otelSection.Get<OpenTelemetryOptions>() ?? new OpenTelemetryOptions();
+        services.Configure<OpenTelemetryOptions>(otelSection);
+
+        services.AddOpenTelemetry()
+            .ConfigureResource(resource => resource
+                .AddService(
+                    serviceName: otelOptions.ServiceName,
+                    serviceVersion: otelOptions.ServiceVersion))
+            .WithTracing(tracing =>
+            {
+                if (otelOptions.EnableTracing)
+                {
+                    tracing
+                        .AddSource(NmsDiagnostics.ServiceName, "NmsEnterprise.*")
+                        .AddHttpClientInstrumentation();
+
+                    if (otelOptions.EnableOtlpExporter && !string.IsNullOrWhiteSpace(otelOptions.OtlpEndpoint))
+                    {
+                        tracing.AddOtlpExporter(opt => opt.Endpoint = new Uri(otelOptions.OtlpEndpoint));
+                    }
+                }
+            })
+            .WithMetrics(metrics =>
+            {
+                if (otelOptions.EnableMetrics)
+                {
+                    metrics
+                        .AddMeter(NmsDiagnostics.ServiceName, "NmsEnterprise.*")
+                        .AddHttpClientInstrumentation()
+                        .AddRuntimeInstrumentation();
+
+                    if (otelOptions.EnableOtlpExporter && !string.IsNullOrWhiteSpace(otelOptions.OtlpEndpoint))
+                    {
+                        metrics.AddOtlpExporter(opt => opt.Endpoint = new Uri(otelOptions.OtlpEndpoint));
+                    }
+                }
+            });
+
+        services.AddHealthChecks()
+            .AddCheck("self", () => HealthCheckResult.Healthy("Liveness probe OK"), tags: ["live"])
+            .AddCheck<DatabaseHealthCheck>("database", tags: ["ready", "db"])
+            .AddCheck<RedisHealthCheck>("redis", tags: ["ready", "cache"]);
+
         return services;
     }
 }

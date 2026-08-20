@@ -2,6 +2,7 @@ using Nms.Api.HostedServices;
 using Nms.Api.Middleware;
 using Nms.Application;
 using Nms.Infrastructure;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -47,6 +48,16 @@ app.UseMiddleware<TenantResolverMiddleware>();
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.MapHealthChecks("/health/live", new HealthCheckOptions
+{
+    Predicate = check => check.Tags.Contains("live")
+});
+
+app.MapHealthChecks("/health/ready", new HealthCheckOptions
+{
+    Predicate = check => check.Tags.Contains("ready")
+});
 
 await app.RunAsync();
 
