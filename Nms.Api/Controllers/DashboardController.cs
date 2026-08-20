@@ -9,6 +9,7 @@ using Nms.Application.Dashboard.Queries.GetHealthSummary;
 using Nms.Application.Dashboard.Queries.GetTenantDashboard;
 using Nms.Domain.Constants;
 using Nms.Infrastructure.Security;
+using Nms.Application.Dashboard.Queries.GetPerformanceDashboard;
 
 namespace Nms.Api.Controllers;
 
@@ -94,6 +95,16 @@ public class DashboardController : ControllerBase
     {
         var query = new GetTenantDashboardQuery(tenantId);
         var result = await _sender.Send(query, cancellationToken);
+        return Ok(result);
+    }
+
+
+    [HttpGet("performance")]
+    [HasPermission(Permissions.Dashboard.View)]
+    [ProducesResponseType(typeof(PerformanceDashboardDto), StatusCodes.Status200OK)]
+    public async Task<ActionResult<PerformanceDashboardDto>> GetPerformanceDashboard(CancellationToken cancellationToken)
+    {
+        var result = await _sender.Send(new GetPerformanceDashboardQuery(), cancellationToken);
         return Ok(result);
     }
 }
