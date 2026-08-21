@@ -133,7 +133,11 @@ jobs:
 
       # [PHASE 50 ENHANCEMENT] Observability & Production Diagnostics Verification
       - name: Verify Observability Infrastructure Integrity
-        run: dotnet test NmsEnterprise.slnx --no-build --configuration Release --filter "FullyQualifiedName~Observability"  
+        run: dotnet test NmsEnterprise.slnx --no-build --configuration Release --filter "FullyQualifiedName~Observability" 
+        
+      # [PHASE 51 ENHANCEMENT] Container Image & Dockerfile Build Verification
+      - name: Verify Dockerfile & Container Build
+        run: docker build -f Nms.Api/Dockerfile -t nms-enterprise-api:ci-build-test .  
 
       # [PHASE 23 ENHANCEMENT] Execute Tests with Cobertura Coverage Collection
       - name: Execute Unit and Integration Tests
