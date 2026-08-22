@@ -5,10 +5,10 @@ services:
   nms.database:
     image: mcr.microsoft.com/mssql/server:2022-latest
     container_name: nms_sql_server
-    user: "0:0"
+    user: "0:0" # Grants root privileges to initialize master.mdf on Docker Desktop Windows volumes
     environment:
       - ACCEPT_EULA=Y
-      - MSSQL_SA_PASSWORD=${MSSQL_SA_PASSWORD:-YourSecurePass123!}
+      - MSSQL_SA_PASSWORD=${MSSQL_SA_PASSWORD}
       - MSSQL_PID=Express
     ports:
       - "${MSSQL_PORT:-1433}:1433"
@@ -50,9 +50,9 @@ services:
       dockerfile: Nms.Api/Dockerfile
     environment:
       - ASPNETCORE_ENVIRONMENT=${ASPNETCORE_ENVIRONMENT:-Development}
-      - ConnectionStrings__DefaultConnection=${DB_CONNECTION_STRING:-Server=nms.database,1433;Database=NmsEnterpriseDb;User Id=sa;Password=YourSecurePass123!;TrustServerCertificate=True;Pooling=true;Min Pool Size=5;Max Pool Size=1024;Connect Timeout=30;}
+      - ConnectionStrings__DefaultConnection=${DB_CONNECTION_STRING}
       - ConnectionStrings__Redis=${REDIS_CONNECTION_STRING:-nms.cache:6379,abortConnect=false,connectTimeout=5000}
-      - JwtSettings__Secret=${JWT_SECRET:-EnterpriseSuperSecretCryptographicSigningKey_Nms2026!#$}
+      - JwtSettings__Secret=${JWT_SECRET}
       - JwtSettings__Issuer=${JWT_ISSUER:-NmsEnterpriseApi}
       - JwtSettings__Audience=${JWT_AUDIENCE:-NmsEnterpriseClients}
       - OpenTelemetry__ServiceName=${OTEL_SERVICE_NAME:-NmsEnterprise.Api}
