@@ -40,6 +40,9 @@ jobs:
       - name: Execute Full Regression Suite
         run: dotnet test NmsEnterprise.slnx -c Release --no-build
 
+      - name: Validate Production Compose Manifest
+        run: docker compose -f docker-compose.prod.yml config  
+
       - name: Publish API Binary
         run: dotnet publish Nms.Api/Nms.Api.csproj -c Release -o ./release-package /p:UseAppHost=false
 
