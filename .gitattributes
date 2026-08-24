@@ -1,0 +1,21 @@
+# Auto-detect text files and normalize line endings to LF on commit
+* text=auto
+
+# Source code files
+*.cs text diff=csharp
+*.json text
+*.xml text
+*.md text
+
+# Shell scripts must always use LF (essential for Linux Docker containers)
+*.sh text eol=lf
+
+# Batch files must use CRLF
+*.bat text eol=crlf
+*.cmd text eol=crlf
+
+# Binary files
+*.dll binary
+*.exe binary
+*.png binary
+*.jpg binary
