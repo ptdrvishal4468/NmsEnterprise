@@ -6,10 +6,19 @@ on:
       - main
       - develop
       - 'feature/**'
+  pull_request:
+    branches:
+      - main
+      - develop    
+
+permissions:
+  contents: write
+  pull-requests: write
+  security-events: write
 
 jobs:
   build-and-test:
-    name: Build & Run Test Suite
+    name: Build & Full Regression Test Suite
     runs-on: ubuntu-latest
 
     services:
@@ -37,110 +46,19 @@ jobs:
       - name: Restore Dependencies
         run: dotnet restore NmsEnterprise.slnx
 
-      # [PHASE 22 ENHANCEMENT] Automated Security & Vulnerability Dependency Audit
-      - name: Audit Dependency Vulnerabilities
-        run: dotnet list NmsEnterprise.slnx package --vulnerable --include-transitive
-
-      # [PHASE 25 ENHANCEMENT] Automated Deprecated Dependency Inspection
-      - name: Audit Deprecated Dependencies
-        run: dotnet list NmsEnterprise.slnx package --deprecated --include-transitive 
-
       - name: Verify Code Formatting
         run: dotnet format NmsEnterprise.slnx --verify-no-changes --verbosity diagnostic
 
       # [PHASE 24 ENHANCEMENT] Native .NET Security & Code Analyzer Inspection
       - name: Build & Run Static Code Analysis
         run: dotnet build NmsEnterprise.slnx --no-restore --configuration Release /p:AnalysisLevel=latest /p:EnableNETAnalyzers=true /p:TreatWarningsAsErrors=true
-
-      # [PHASE 31 ENHANCEMENT] Notification Module Provider Integrity Verification
-      - name: Verify Notification Infrastructure Integrity
-        run: dotnet test NmsEnterprise.slnx --no-build --configuration Release --filter "FullyQualifiedName~Notifications"
-      
-      # [PHASE 32 ENHANCEMENT] Event Management Infrastructure Integrity Verification
-      - name: Verify Event Management Infrastructure Integrity
-        run: dotnet test NmsEnterprise.slnx --no-build --configuration Release --filter "FullyQualifiedName~Events"
-
-      # [PHASE 33 ENHANCEMENT] Syslog Server Infrastructure Integrity Verification
-      - name: Verify Syslog Server Infrastructure Integrity
-        run: dotnet test NmsEnterprise.slnx --no-build --configuration Release --filter "FullyQualifiedName~Syslog"
-
-      # [PHASE 34 ENHANCEMENT] SNMP Trap Receiver Infrastructure Integrity Verification
-      - name: Verify SNMP Trap Receiver Infrastructure Integrity
-        run: dotnet test NmsEnterprise.slnx --no-build --configuration Release --filter "FullyQualifiedName~Snmp"
-        
-      # [PHASE 35 ENHANCEMENT] Configuration Backup Infrastructure Integrity Verification
-      - name: Verify Configuration Backup Infrastructure Integrity
-        run: dotnet test NmsEnterprise.slnx --no-build --configuration Release --filter "FullyQualifiedName~ConfigurationBackup"
-        
-      # [PHASE 36 ENHANCEMENT] Configuration Restore Infrastructure & Safety Verification
-      - name: Verify Configuration Restore Infrastructure Integrity
-        run: dotnet test NmsEnterprise.slnx --no-build --configuration Release --filter "FullyQualifiedName~ConfigurationRestore"
-        
-      # [PHASE 37 ENHANCEMENT] Firmware & OS Management Infrastructure Integrity Verification
-      - name: Verify Firmware & OS Management Infrastructure Integrity
-        run: dotnet test NmsEnterprise.slnx --no-build --configuration Release --filter "FullyQualifiedName~Firmware"  
-
-      # [PHASE 38 ENHANCEMENT] Network Topology Infrastructure & Graph Integrity Verification
-      - name: Verify Network Topology Infrastructure Integrity
-        run: dotnet test NmsEnterprise.slnx --no-build --configuration Release --filter "FullyQualifiedName~Topology"  
-
-      # [PHASE 39 ENHANCEMENT] Dashboard APIs & Aggregation Integrity Verification
-      - name: Verify Dashboard Infrastructure Integrity
-        run: dotnet test NmsEnterprise.slnx --no-build --configuration Release --filter "FullyQualifiedName~Dashboard"  
-
-      # [PHASE 40 ENHANCEMENT] Reporting Engine Infrastructure & Output Integrity Verification
-      - name: Verify Reporting Infrastructure Integrity
-        run: dotnet test NmsEnterprise.slnx --no-build --configuration Release --filter "FullyQualifiedName~Reporting"
-        
-      # [PHASE 41 ENHANCEMENT] Audit & Compliance Infrastructure Integrity Verification
-      - name: Verify Audit & Compliance Infrastructure Integrity
-        run: dotnet test NmsEnterprise.slnx --no-build --configuration Release --filter "FullyQualifiedName~Auditing"
-        
-      # [PHASE 42 ENHANCEMENT] Asset Management Subsystem Integrity Verification
-      - name: Verify Asset Management Infrastructure Integrity
-        run: dotnet test NmsEnterprise.slnx --no-build --configuration Release --filter "FullyQualifiedName~Assets" 
-        
-      # [PHASE 43 ENHANCEMENT] Site & Location Management Subsystem Integrity Verification
-      - name: Verify Sites Infrastructure Integrity
-        run: dotnet test NmsEnterprise.slnx --no-build --configuration Release --filter "FullyQualifiedName~Sites"
-
-      - name: Verify Locations Infrastructure Integrity
-        run: dotnet test NmsEnterprise.slnx --no-build --configuration Release --filter "FullyQualifiedName~Locations"  
-
-      # [PHASE 44 ENHANCEMENT] Customer Management Subsystem Integrity Verification
-      - name: Verify Customer Management Infrastructure Integrity
-        run: dotnet test NmsEnterprise.slnx --no-build --configuration Release --filter "FullyQualifiedName~Customers" 
-        
-      # [PHASE 45 ENHANCEMENT] Ticketing Integration Subsystem Integrity Verification
-      - name: Verify Ticketing Integration Infrastructure Integrity
-        run: dotnet test NmsEnterprise.slnx --no-build --configuration Release --filter "FullyQualifiedName~Ticketing"
-        
-      # [PHASE 46 ENHANCEMENT] Cybersecurity Compliance Subsystem Integrity Verification
-      - name: Verify Cybersecurity Compliance Infrastructure Integrity
-        run: dotnet test NmsEnterprise.slnx --no-build --configuration Release --filter "FullyQualifiedName~Cybersecurity" 
-        
-      # [PHASE 47 ENHANCEMENT] Vulnerability & Firmware Analysis Subsystem Integrity Verification
-      - name: Verify Vulnerability & Firmware Analysis Infrastructure Integrity
-        run: dotnet test NmsEnterprise.slnx --no-build --configuration Release --filter "FullyQualifiedName~Vulnerabilities"  
-
-      # [PHASE 48 ENHANCEMENT] Threat Detection Subsystem Integrity Verification
-      - name: Verify Threat Detection Infrastructure Integrity
-        run: dotnet test NmsEnterprise.slnx --no-build --configuration Release --filter "FullyQualifiedName~ThreatDetection" 
-        
-      # [PHASE 49 ENHANCEMENT] Performance Optimization Subsystem Integrity Verification
-      - name: Verify Performance Optimization Subsystem Integrity
-        run: dotnet test NmsEnterprise.slnx --no-build --configuration Release --filter "FullyQualifiedName~Performance|FullyQualifiedName~Caching"  
-
-      # [PHASE 50 ENHANCEMENT] Observability & Production Diagnostics Verification
-      - name: Verify Observability Infrastructure Integrity
-        run: dotnet test NmsEnterprise.slnx --no-build --configuration Release --filter "FullyQualifiedName~Observability" 
-        
+   
       # [PHASE 51 ENHANCEMENT] Container Image & Dockerfile Build Verification
-      - name: Verify Dockerfile & Container Build
+      - name: Verify Container Image Build
         run: docker build -f Nms.Api/Dockerfile -t nms-enterprise-api:ci-build-test .  
 
       # [PHASE 23 ENHANCEMENT] Execute Tests with Cobertura Coverage Collection
-      - name: Execute Unit and Integration Tests
+      - name: Execute Full Test Suite & Collect Coverage
         run: >
           dotnet test NmsEnterprise.slnx 
           --no-build 
@@ -171,17 +89,62 @@ jobs:
             echo "Coverage summary generated successfully." >> $GITHUB_STEP_SUMMARY
           fi
 
-      - name: Upload Test Coverage Artifacts
+      - name: Upload Test Results and Coverage
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: test-coverage-results
+          name: test-and-coverage-results-${{ github.sha }}
           path: ./TestResults
           if-no-files-found: warn
+  
+  security-audit:
+    name: Dependency & Security Scanning
+    runs-on: ubuntu-latest
+    needs: build-and-test
+
+    steps:
+      - name: Checkout Source Code
+        uses: actions/checkout@v4
+
+      - name: Setup .NET 10 SDK
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: Audit Dependency Vulnerabilities
+        run: dotnet list NmsEnterprise.slnx package --vulnerable --include-transitive
+
+      - name: Audit Deprecated Dependencies
+        run: dotnet list NmsEnterprise.slnx package --deprecated --include-transitive
+
+  publish-build-artifacts:
+    name: Publish Application Artifacts
+    runs-on: ubuntu-latest
+    needs: [build-and-test, security-audit]
+    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop'
+
+    steps:
+      - name: Checkout Source Code
+        uses: actions/checkout@v4
+
+      - name: Setup .NET 10 SDK
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: Publish Nms.Api
+        run: dotnet publish Nms.Api/Nms.Api.csproj -c Release -o ./publish-output /p:UseAppHost=false
+
+      - name: Upload Published Application Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: nms-enterprise-api-release-${{ github.sha }}
+          path: ./publish-output
+          retention-days: 14
 
   auto-merge-to-develop:
     name: Auto-Merge Feature to Develop
-    needs: build-and-test
+    needs: [build-and-test, security-audit]
     if: startsWith(github.ref, 'refs/heads/feature/')
     runs-on: ubuntu-latest
 
