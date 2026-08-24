@@ -1,6 +1,6 @@
 # Enterprise Network Management & Cybersecurity Platform (NMS)
 
-A high-throughput, multi-tenant Enterprise Network Management System built using **.NET 10**, **Clean Architecture**, and **CQRS**. Designed for low-latency network telemetry monitoring (ICMP, SNMPv3, Syslog), real-time anomaly streaming, and security audit compliance.
+A high-throughput, multi-tenant Enterprise Network Management System built using **.NET 10**, **Clean Architecture**, and **CQRS**. Engineered for low-latency network telemetry monitoring (ICMP, SNMPv3, Syslog), real-time anomaly streaming, threat detection, automated configuration backup/restore, and enterprise compliance auditing.
 
 ---
 
@@ -8,27 +8,24 @@ A high-throughput, multi-tenant Enterprise Network Management System built using
 
 The solution strictly adheres to Clean Architecture principles:
 
-- **Nms.Domain**: Core enterprise logic, base aggregates, enums, domain exceptions, and specifications.
-- **Nms.Application**: Orchestration layer using CQRS commands/queries, validation behaviors, and DTOs.
-- **Nms.Infrastructure**: SQL Server persistence, EF Core mappings, Lextm SNMP collector, and background pollers.
-- **Nms.Api**: RESTful endpoints, custom authorization middleware, and SignalR real-time hubs.
+- **Nms.Domain**: Core enterprise entities, base aggregates, enums, domain exceptions, and specifications.
+- **Nms.Application**: Orchestration layer containing CQRS commands/queries (MediatR), pipeline validation behaviors (FluentValidation), DTOs, and interface contracts.
+- **Nms.Infrastructure**: SQL Server persistence (EF Core 10), Redis caching/token store, SNMP collector (SharpSnmpLib), SSH execution, Syslog/SNMP Trap UDP listeners, and background workers.
+- **Nms.Api**: RESTful endpoints, dynamic RBAC permission middleware, multi-tenant resolution, and health probes.
 
 ---
 
-## 🛠 Tech Stack
+## 🌐 Production Topology & Network Isolation (Phase 53)
 
-- **Backend Framework:** .NET 10 (C# 14) / ASP.NET Core Web API
-- **Persistence:** SQL Server Express 2022 / Entity Framework Core 9
-- **Networking & Polling:** SharpSnmpLib, System.Threading.Channels
-- **Validation & Pipeline:** FluentValidation
-- **Containerization:** Docker & Docker Compose
-- **Testing:** xUnit, FluentAssertions, NetArchTest.eNet
-
----
-
-## 🚀 Local Setup with Docker
-
-1. Clone the repository:
-   ```bash
-   git clone [https://github.com/ptdrvishal4468/NmsEnterprise.git](https://github.com/ptdrvishal4468/NmsEnterprise.git)
-   cd NmsEnterprise
+```text
+Client (Browser / REST API)
+   │
+   │ (HTTPS:443 / HTTP:80 Redirect)
+   ▼
+Nginx Reverse Proxy (`nms-reverse-proxy`)
+   │
+   │ (Internal HTTP:8080 - `nms-production-network`)
+   ▼
+NMS API Service (`nms-api`)
+   ├── SQL Server 2022 (`nms-sqlserver` - Internal Data & Backup Volumes)
+   └── Redis 7 (`nms-redis` - Internal Network, Authenticated, AOF Persistence)
