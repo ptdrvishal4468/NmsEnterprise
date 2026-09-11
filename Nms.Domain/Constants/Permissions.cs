@@ -1,0 +1,246 @@
+﻿namespace Nms.Domain.Constants;
+
+public static class Permissions
+{
+    public static class Users
+    {
+        public const string View = "Users.View";
+        public const string Create = "Users.Create";
+        public const string Update = "Users.Update";
+        public const string Delete = "Users.Delete";
+        public const string ManageRoles = "Users.ManageRoles";
+    }
+
+    public static class Roles
+    {
+        public const string View = "Roles.View";
+        public const string Create = "Roles.Create";
+        public const string Update = "Roles.Update";
+        public const string Delete = "Roles.Delete";
+        public const string AssignPermissions = "Roles.AssignPermissions";
+    }
+
+    public static class Devices
+    {
+        public const string View = "Devices.View";
+        public const string Create = "Devices.Create";
+        public const string Update = "Devices.Update";
+        public const string Delete = "Devices.Delete";
+        public const string Control = "Devices.Control";
+    }
+
+    public static class Telemetry
+    {
+        public const string View = "Telemetry.View";
+        public const string Poll = "Telemetry.Poll";
+        public const string Export = "Telemetry.Export";
+    }
+
+    public static class Tenants
+    {
+        public const string View = "Tenants.View";
+        public const string Create = "Tenants.Create";
+        public const string Update = "Tenants.Update";
+        public const string Delete = "Tenants.Delete";
+    }
+
+    public static class Discovery
+    {
+        public const string Scan = "Discovery.Scan";
+        public const string View = "Discovery.View";
+        public const string Import = "Discovery.Import";
+    }
+
+    public static class Interfaces
+    {
+        public const string View = "Interfaces.View";
+        public const string Manage = "Interfaces.Manage";
+        public const string Poll = "Interfaces.Poll";
+    }
+
+    public static class Health
+    {
+        public const string View = "Health.View";
+        public const string History = "Health.History";
+        public const string Evaluate = "Health.Evaluate";
+    }
+
+    public static class Alerts
+    {
+        public const string View = "Alerts.View";
+        public const string ManageRules = "Alerts.ManageRules";
+        public const string Acknowledge = "Alerts.Acknowledge";
+        public const string Suppress = "Alerts.Suppress";
+        public const string Resolve = "Alerts.Resolve";
+    }
+
+    public static class Notifications
+    {
+        public const string View = "Notifications.View";
+        public const string ManageTemplates = "Notifications.ManageTemplates";
+        public const string SendTest = "Notifications.SendTest";
+    }
+
+    public static class Events
+    {
+        public const string View = "Events.View";
+        public const string Record = "Events.Record";
+        public const string Manage = "Events.Manage";
+    }
+
+    public static class Syslog
+    {
+        public const string View = "Syslog.View";
+        public const string Search = "Syslog.Search";
+        public const string Manage = "Syslog.Manage";
+    }
+
+    public static class SnmpTrap
+    {
+        public const string View = "SnmpTrap.View";
+        public const string Manage = "SnmpTrap.Manage";
+        public const string Delete = "SnmpTrap.Delete";
+    }
+
+    public static class ConfigurationBackup
+    {
+        public const string View = "ConfigurationBackup.View";
+        public const string Create = "ConfigurationBackup.Create";
+        public const string Delete = "ConfigurationBackup.Delete";
+        public const string Download = "ConfigurationBackup.Download";
+        public const string Schedule = "ConfigurationBackup.Schedule";
+        public const string Restore = "ConfigurationBackup.Restore";
+    }
+
+    public static class Firmware
+    {
+        public const string View = "Firmware.View";
+        public const string ManageBaselines = "Firmware.ManageBaselines";
+        public const string ManagePlans = "Firmware.ManagePlans";
+    }
+
+    public static class Topology
+    {
+        public const string View = "Topology.View";
+        public const string Discover = "Topology.Discover";
+        public const string Manage = "Topology.Manage";
+    }
+
+    public static class Dashboard
+    {
+        public const string View = "Dashboard.View";
+        public const string ViewExecutive = "Dashboard.ViewExecutive";
+        public const string ViewTenant = "Dashboard.ViewTenant";
+    }
+
+    public static class Reports
+    {
+        public const string Generate = "Reports.Generate";
+        public const string ManageSchedules = "Reports.ManageSchedules";
+    }
+
+    public static class Audit
+    {
+        public const string View = "Audit.View";
+        public const string Search = "Audit.Search";
+        public const string Export = "Audit.Export";
+        public const string ComplianceReport = "Audit.ComplianceReport";
+    }
+    public static class Assets
+    {
+        public const string View = "Assets.View";
+        public const string Create = "Assets.Create";
+        public const string Update = "Assets.Update";
+        public const string Delete = "Assets.Delete";
+        public const string ManageLifecycle = "Assets.ManageLifecycle";
+    }
+
+    public static class Sites
+    {
+        public const string View = "Sites.View";
+        public const string Create = "Sites.Create";
+        public const string Update = "Sites.Update";
+        public const string Delete = "Sites.Delete";
+    }
+
+    public static class Locations
+    {
+        public const string View = "Locations.View";
+        public const string Create = "Locations.Create";
+        public const string Update = "Locations.Update";
+        public const string Delete = "Locations.Delete";
+    }
+
+    public static class Customers
+    {
+        public const string View = "Customers.View";
+        public const string Create = "Customers.Create";
+        public const string Update = "Customers.Update";
+        public const string Delete = "Customers.Delete";
+    }
+
+    public static class Ticketing
+    {
+        public const string View = "Ticketing.View";
+        public const string Create = "Ticketing.Create";
+        public const string Update = "Ticketing.Update";
+        public const string Delete = "Ticketing.Delete";
+        public const string Sync = "Ticketing.Sync";
+    }
+    public static class Cybersecurity
+    {
+        public const string View = "Cybersecurity.View";
+        public const string ManagePolicies = "Cybersecurity.ManagePolicies";
+        public const string Evaluate = "Cybersecurity.Evaluate";
+    }
+
+    public static class Vulnerabilities
+    {
+        public const string View = "Vulnerabilities.View";
+        public const string Manage = "Vulnerabilities.Manage";
+        public const string Analyze = "Vulnerabilities.Analyze";
+        public const string Recommendations = "Vulnerabilities.Recommendations";
+    }
+    public static class ThreatDetection
+    {
+        public const string View = "Permissions.ThreatDetection.View";
+        public const string Manage = "Permissions.ThreatDetection.Manage";
+        public const string Analyze = "Permissions.ThreatDetection.Analyze";
+    }
+    /// <summary>
+    /// Helper method to retrieve all predefined permissions for seeding and validation.
+    /// </summary>
+    public static IReadOnlyList<string> GetAllPermissions()
+    {
+        return new List<string>
+        {
+            Users.View, Users.Create, Users.Update, Users.Delete, Users.ManageRoles,
+            Roles.View, Roles.Create, Roles.Update, Roles.Delete, Roles.AssignPermissions,
+            Devices.View, Devices.Create, Devices.Update, Devices.Delete, Devices.Control,
+            Telemetry.View, Telemetry.Poll, Telemetry.Export,
+            Tenants.View, Tenants.Create, Tenants.Update, Tenants.Delete,
+            Discovery.Scan, Discovery.View, Discovery.Import,
+            Interfaces.View, Interfaces.Manage, Interfaces.Poll,
+            Health.View, Health.History, Health.Evaluate,
+            Alerts.View, Alerts.ManageRules, Alerts.Acknowledge, Alerts.Suppress, Alerts.Resolve,
+            Notifications.View, Notifications.ManageTemplates, Notifications.SendTest,
+            Events.View, Events.Record, Events.Manage,
+            Syslog.View, Syslog.Search, Syslog.Manage,
+            SnmpTrap.View, SnmpTrap.Manage, SnmpTrap.Delete,
+            ConfigurationBackup.View, ConfigurationBackup.Create, ConfigurationBackup.Delete, ConfigurationBackup.Download, ConfigurationBackup.Schedule, ConfigurationBackup.Restore,
+            Firmware.View, Firmware.ManageBaselines, Firmware.ManagePlans,
+            Topology.View, Topology.Discover, Topology.Manage,
+            Dashboard.View, Dashboard.ViewExecutive, Dashboard.ViewTenant,
+            Reports.Generate, Reports.ManageSchedules,
+            Audit.View, Audit.Search, Audit.Export, Audit.ComplianceReport,
+            Assets.View, Assets.Create, Assets.Update, Assets.Delete, Assets.ManageLifecycle,
+            Sites.View, Sites.Create, Sites.Update, Sites.Delete,
+            Locations.View, Locations.Create, Locations.Update, Locations.Delete,
+            Customers.View, Customers.Create, Customers.Update, Customers.Delete,
+            Ticketing.View, Ticketing.Create, Ticketing.Update, Ticketing.Delete, Ticketing.Sync,
+            Cybersecurity.View, Cybersecurity.ManagePolicies, Cybersecurity.Evaluate,
+            Vulnerabilities.View, Vulnerabilities.Manage, Vulnerabilities.Analyze, Vulnerabilities.Recommendations,
+            ThreatDetection.View, ThreatDetection.Manage, ThreatDetection.Analyze
+        };
+    }
+}

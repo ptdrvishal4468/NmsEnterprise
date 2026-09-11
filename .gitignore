@@ -11,6 +11,8 @@
 *.userprefs
 *.suo
 *.cache
+*.swp
+*~
 
 ## ============================================================================
 ## Test Results & Coverage Reports
@@ -19,19 +21,38 @@ TestResults/
 *.trx
 *.coverage
 *.coveragexml
+*.cobertura.xml
 
 ## ============================================================================
-## Local Environment & Secret Safeguards
+## Local Environment & Secret Safeguards (Phase 51)
 ## ============================================================================
 appsettings.Development.json
 appsettings.Local.json
 *.env
+.env
+.env.*
+!.env.example
+!.env.production.example
 *.pfx
 *.cer
+*.key
+*.crt
+*.pem
+deploy/certs/*
+!deploy/certs/.gitkeep
+**/secrets/
 
 ## ============================================================================
-## Docker & OS Noise
+## Database & Backup Safeguards
 ## ============================================================================
-.dockerignore
+*.bak
+*.mdf
+*.ldf
+
+## ============================================================================
+## Docker & OS Temporary Artifacts
+## ============================================================================
 .DS_Store
 thumbs.db
+ehthumbs.db
+Desktop.ini

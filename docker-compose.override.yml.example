@@ -1,0 +1,27 @@
+# ============================================================================
+# Docker Compose Local Development Override Template
+# ============================================================================
+# Usage:
+# 1. Copy this file to 'docker-compose.override.yml'
+# 2. Docker Compose automatically merges 'docker-compose.override.yml' with 'docker-compose.yml'
+# 3. Adjust exposed ports, local mount points, or debugging environment variables as needed
+# ============================================================================
+
+services:
+  nms.database:
+    # Expose SQL Server port directly for local SSMS / Azure Data Studio connections
+    ports:
+      - "1433:1433"
+
+  nms.cache:
+    # Expose Redis port directly for local Redis Insight / redis-cli connections
+    ports:
+      - "6379:6379"
+
+  nms.api:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - Logging__LogLevel__Default=Debug
+      - Logging__LogLevel__Microsoft.AspNetCore=Information
+    ports:
+      - "5000:8080"

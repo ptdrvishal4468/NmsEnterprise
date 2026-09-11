@@ -1,41 +1,78 @@
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using Microsoft.AspNetCore.HttpOverrides;
+using Nms.Api.HostedServices;
+using Nms.Api.Middleware;
+using Nms.Application;
+using Nms.Infrastructure;
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-builder.Services.AddOpenApi();
+// Forwarded Headers configuration for reverse proxy TLS offloading
+builder.Services.Configure<ForwardedHeadersOptions>(options =>
+{
+    options.ForwardedHeaders = ForwardedHeaders.XForwardedFor |
+                               ForwardedHeaders.XForwardedProto |
+                               ForwardedHeaders.XForwardedHost;
+    options.KnownIPNetworks.Clear();
+    options.KnownProxies.Clear();
+});
+
+// Bootstrap Application & Infrastructure Layers
+builder.Services.AddApplicationLayer();
+builder.Services.AddInfrastructureLayer(builder.Configuration);
+
+// Register Hosted Services
+builder.Services.AddHostedService<SnmpPollingBackgroundService>();
+builder.Services.AddHostedService<IcmpPollingBackgroundService>();
+builder.Services.AddHostedService<SyslogListenerBackgroundService>();
+builder.Services.AddHostedService<SnmpTrapListenerBackgroundService>();
+builder.Services.AddHostedService<BackupSchedulerBackgroundService>();
+builder.Services.AddHostedService<ReportSchedulerBackgroundService>();
+
+builder.Services.AddControllers();
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+// 1. Forwarded headers MUST execute at the very start so downstream middleware sees correct scheme/IP
+app.UseForwardedHeaders();
+
+// 2. Register Global Exception Handling Middleware AT THE VERY TOP of the pipeline
+app.UseMiddleware<GlobalExceptionHandlingMiddleware>();
+
 if (app.Environment.IsDevelopment())
 {
-    app.MapOpenApi();
+    app.UseSwagger();
+    app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
-
-var summaries = new[]
+if (!app.Environment.IsEnvironment("Testing"))
 {
-    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-};
-
-app.MapGet("/weatherforecast", () =>
-{
-    var forecast =  Enumerable.Range(1, 5).Select(index =>
-        new WeatherForecast
-        (
-            DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-            Random.Shared.Next(-20, 55),
-            summaries[Random.Shared.Next(summaries.Length)]
-        ))
-        .ToArray();
-    return forecast;
-})
-.WithName("GetWeatherForecast");
-
-app.Run();
-
-record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
-{
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
+    app.UseHttpsRedirection();
 }
+
+// 3. Authentication MUST execute first to extract User Claims from JWT
+app.UseAuthentication();
+
+// 4. TenantResolverMiddleware MUST execute after Authentication so it can extract tenant_id claims
+app.UseMiddleware<TenantResolverMiddleware>();
+
+// 5. Authorization executes after TenantContext is established
+app.UseAuthorization();
+
+app.MapControllers();
+
+app.MapHealthChecks("/health/live", new HealthCheckOptions
+{
+    Predicate = check => check.Tags.Contains("live")
+});
+
+app.MapHealthChecks("/health/ready", new HealthCheckOptions
+{
+    Predicate = check => check.Tags.Contains("ready")
+});
+
+await app.RunAsync();
+
+public partial class Program { }

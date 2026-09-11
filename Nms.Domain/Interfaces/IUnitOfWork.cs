@@ -1,0 +1,61 @@
+﻿namespace Nms.Domain.Interfaces;
+
+/// <summary>
+/// Unit of Work pattern interface managing database transaction boundaries.
+/// </summary>
+public interface IUnitOfWork : IDisposable
+{
+    IAssetRepository Assets { get; }
+    IDeviceRepository Devices { get; }
+    IReachabilityHistoryRepository ReachabilityHistories { get; }
+    IEventRepository Events { get; }
+    ISyslogRepository Syslogs { get; }
+    ISnmpTrapRepository SnmpTraps { get; }
+    IConfigurationBackupRepository ConfigurationBackups { get; }
+    IBackupScheduleRepository BackupSchedules { get; }
+    IConfigurationRestoreLogRepository ConfigurationRestoreLogs { get; }
+    IFirmwareBaselineRepository FirmwareBaselines { get; }
+    IFirmwareUpgradePlanRepository FirmwareUpgradePlans { get; }
+    ITopologyLinkRepository TopologyLinks { get; }
+    IScheduledReportRepository ScheduledReports { get; }
+    IScheduledReportExecutionLogRepository ScheduledReportExecutionLogs { get; }
+    IAuditLogRepository AuditLogs { get; }
+    ISiteRepository Sites { get; }
+    IBuildingRepository Buildings { get; }
+    IFloorRepository Floors { get; }
+    IRoomRepository Rooms { get; }
+    IRackRepository Racks { get; }
+    ICustomerRepository Customers { get; }
+    ICustomerContactRepository CustomerContacts { get; }
+    ITicketRepository Tickets { get; }
+    ITicketSyncLogRepository TicketSyncLogs { get; }
+    ICompliancePolicyRepository CompliancePolicies { get; }
+    IDeviceComplianceScanRepository DeviceComplianceScans { get; }
+    IVulnerabilityRepository Vulnerabilities { get; }
+    ISecurityAdvisoryRepository SecurityAdvisories { get; }
+    IDeviceVulnerabilityMatchRepository DeviceVulnerabilityMatches { get; }
+    IFirmwareUpgradeRecommendationRepository FirmwareUpgradeRecommendations { get; }
+    IThreatIndicatorRepository ThreatIndicators { get; }
+    IThreatDetectionRuleRepository ThreatDetectionRules { get; }
+    IConfigurationDriftRepository ConfigurationDrifts { get; }
+
+    /// <summary>
+    /// Asynchronously commits all pending tracking changes to the database context.
+    /// </summary>
+    Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Begins a formal database transaction for multi-step operations.
+    /// </summary>
+    Task BeginTransactionAsync(CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Commits the active database transaction.
+    /// </summary>
+    Task CommitTransactionAsync(CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Rolls back the active database transaction upon failure.
+    /// </summary>
+    Task RollbackTransactionAsync(CancellationToken cancellationToken = default);
+}

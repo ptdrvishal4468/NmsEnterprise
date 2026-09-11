@@ -8,15 +8,18 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.0" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.0">
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="10.0.10">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
+    <PackageReference Include="SSH.NET" Version="2026.0.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="7.0.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Nms.Application\Nms.Application.csproj" />
     <ProjectReference Include="..\Nms.Infrastructure\Nms.Infrastructure.csproj" />
+    <ProjectReference Include="..\Nms.Domain\Nms.Domain.csproj" />
   </ItemGroup>
 
 </Project>
